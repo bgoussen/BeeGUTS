@@ -32,7 +32,11 @@
 #'
 #' @examples
 #' test <- dataGUTS(file_location = file.choose(), test_type = 'Acute_Oral', k_sr = 0.6)
-dataGUTS <- function(file_location = NULL, test_type = NULL, bee_species = "Honey_Bee", ...) { # Possibility to add non default ksR, and kca
+dataGUTS <- function(file_location = NULL,
+                     test_type = NULL,
+                     bee_species = "Honey_Bee",
+                     ...) { # Possibility to add non default ksR, and kca
+
   # Ensure a correct filename and a correct types is entered
   if (is.null(file_location) || !file.exists(file_location) ||
       (!grepl("\\.txt$", file_location) && !grepl("\\.csv$", file_location)) ) {
@@ -72,21 +76,28 @@ dataGUTS <- function(file_location = NULL, test_type = NULL, bee_species = "Hone
 
   # Recalculate the concentrations based on the experiment type
   if(test_type == "Acute_Oral") {
-    concModel <- concAO(tbConc[1,-1], expTime = max(tbSurv[,1]), ...)
+    dfConcModel <- concAO(tbConc[1,-1], expTime = max(tbSurv[,1]), ...)
     } else if(test_type == "Acute_Contact") {
-    concModel <- concAC(tbConc[1,-1], expTime = max(tbSurv[,1]), ...)
+    dfConcModel <- concAC(tbConc[1,-1], expTime = max(tbSurv[,1]), ...)
     } else {
-    concModel <- data.frame(time = tbConc[,1], conc = tbConc[,2:ncol(tbConc)])
+    dfConcModel <- data.frame(time = tbConc[,1], conc = tbConc[,2:ncol(tbConc)])
   }
 
+  # Transform into long data
+  tbSurv_long <- tidyr::gather(tbSurv, Treatment, NSurv, -SurvivalTime)
+  tbConc_long <- tidyr::gather(tbConc, Treatment, Conc, -SurvivalTime)
+  dfConcModel_long <- tidyr::gather(dfConcModel, Treatment, Conc, -SurvivalTime)
 
   # Return
   lsOut <- list(survData = tbSurv,
+                survData_long = tbSurv_long,
                 concData = tbConc,
+                concData_long = tbConc_long,
                 unitData = chUnits,
                 typeData = test_type,
                 beeSpecies = bee_species,
-                concModel = concModel)
+                concModel = dfConcModel,
+                concModel_long = dfConcModel_long)
   class(lsOut) <- "beeSurvData"
   return(lsOut)
 }
