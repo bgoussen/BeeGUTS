@@ -31,7 +31,9 @@
 #' @export
 #'
 #' @examples
-#' test <- dataGUTS(file_location = file.choose(), test_type = 'Acute_Oral', k_sr = 0.6)
+#' \dontrun{
+#' lsData <- dataGUTS(file_location = file.choose(), test_type = 'Acute_Oral', k_sr = 0.6)
+#' }
 dataGUTS <- function(file_location = NULL,
                      test_type = NULL,
                      bee_species = "Honey_Bee",

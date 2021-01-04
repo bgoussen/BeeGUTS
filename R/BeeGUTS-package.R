@@ -5,6 +5,7 @@
 #' @docType package
 #' @name BeeGUTS-package
 #' @aliases BeeGUTS
+#' @useDynLib BeeGUTS, .registration = TRUE
 #' @import methods
 #' @import Rcpp
 #' @importFrom rstan sampling
