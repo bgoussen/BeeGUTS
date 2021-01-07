@@ -2,11 +2,15 @@ Package: BeeGUTS
 Title: General Unified Threshold model of Survival for Bees using Bayesian inference
 Version: 0.0.0.9000
 Authors@R: 
+    c(
     person(given = "Benoit",
            family = "Goussen",
            role = c("aut", "cre"),
            email = "benoit.goussen@ibacon.com",
-           comment = c(ORCID = "0000-0001-7204-7981"))
+           comment = c(ORCID = "0000-0001-7204-7981")),
+    person("Bayer AG",
+    role = "cph")
+     )
 Description: Tools to calibrate, validate, and make predictions with the 
     General Unified Threshold model of Survival adapted for Bee species.
 License: GPL-3
@@ -26,7 +30,9 @@ Imports:
     data.table,
     tidyr,
     ggplot2,
-    cowplot
+    cowplot,
+    dplyr,
+    magrittr
 LinkingTo: 
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),
