@@ -1,0 +1,18 @@
+Beta cyflumethrin chronic 479053
+All concentrations in ug/bee/day
+Survival time [d]	Control	T1	T2	T3	T4	T5
+0	120	120	120	120	120	120
+1	120	118	117	112	115	94
+2	120	118	115	112	98	88
+3	120	118	114	106	83	27
+4	119	118	113	103	67	9
+5	119	118	112	100	43	3
+6	119	118	109	97	37	0
+7	118	118	109	97	33	0
+8	118	118	109	95	29	0
+9	118	118	109	94	20	0
+10	117	118	107	91	17	0
+Concentration unit: ug/bee/day
+Concentration time [d]	Control	T1	T2	T3	T4	T5
+0	0	3	7	12	41	68
+10	0	3	7	12	41	68

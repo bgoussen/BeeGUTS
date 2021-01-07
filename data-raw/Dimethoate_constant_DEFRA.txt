@@ -1,0 +1,18 @@
+DEFRA data Dimethoate chronic
+10 day exposure through food. Conc in ug ai/ml
+Survival time [d]	Control	T1	T2	T3	T4	T5
+0	100	100	100	99	100	100
+1	100	100	100	99	93	77
+2	100	100	100	99	93	0
+3	100	100	100	95	69	0
+4	100	94	100	62	9	0
+5	100	93	93	53	5	0
+6	100	93	87	38	5	0
+7	100	90	82	30	0	0
+8	96	86	75	22	0	0
+9	93	80	66	19	0	0
+10	90	75	62	16	0	0
+Concentration unit:	ug ai/ml
+Concentration time [d]	Control	T1	T2	T3	T4	T5
+0	0	0.25	0.5	1	2	6
+10	0	0.25	0.5	1	2	6

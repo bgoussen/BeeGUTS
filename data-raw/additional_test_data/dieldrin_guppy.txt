@@ -1,0 +1,13 @@
+Long acute toxicity test for guppy (Poecilia reticulata) exposed to the insecticide dieldrin. Data from: Bedaux and Kooijman (1994) (DOI 10.1007/BF00469427).		
+Survival time [d]	Control	T1	T2	T3	T4	T5	T6	T7
+0	20	20	20	20	20	20	20	20
+1	20	20	20	20	18	18	17	5
+2	20	20	19	17	15	9	6	0
+3	20	20	19	15	9	2	1	0
+4	20	20	19	14	4	1	0	0
+5	20	20	18	12	4	0	0	0
+6	20	19	18	9	3	0	0	0
+7	20	18	18	8	2	0	0	0
+Concentration unit:	ug/L							
+Concentration time [d]	Control	T1	T2	T3	T4	T5	T6	T7
+0	0	3.2	5.6	10	18	32	56	100

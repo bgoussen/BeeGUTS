@@ -1,0 +1,21 @@
+Imidacloprid oral exposure chronic 600686
+3 rep with 10 bees in control and treatment
+daily survival over a 10 day period. Conc in mg ai /kg feeding solution
+Dimethoate as a positive control
+Imidacloprid chronic
+Survival time [d]	Control	T1	T2	T3	T4	T5	T6
+0	30	30	30	30	30	30	30
+1	30	30	30	30	30	30	30
+2	30	30	30	30	29	28	26
+3	30	30	30	30	29	28	20
+4	30	30	30	30	29	28	18
+5	30	30	30	30	29	28	14
+6	30	30	30	30	29	28	12
+7	30	30	30	30	29	28	10
+8	30	30	30	30	29	27	10
+9	30	30	30	30	29	27	10
+10	30	30	30	30	27	26	10
+Concentration unit:	mg ai /kg feeding solution
+Concentration time [d]	Control	T1	T2	T3	T4	T5	T6
+0	0	0.05	0.1	0.2	0.4	0.8	1.6
+10	0	0.05	0.1	0.2	0.4	0.8	1.6

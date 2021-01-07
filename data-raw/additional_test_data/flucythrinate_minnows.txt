@@ -1,0 +1,10 @@
+Fathead minnows exposed to flucythrinate, constant exposure. Data from the fathead minnow database. This data set runs into single-dose runaway for SD.
+Survival time [d]	Control	T1	T2	T3	T4	T5
+0	20	20	20	20	20	20
+1	20	20	20	20	19	0
+2	20	20	20	19	12	0
+3	20	20	20	19	8	0
+4	20	20	20	19	3	0
+Concentration unit:	nM					
+Concentration time [d]	Control	T1	T2	T3	T4	T5
+0	0	0.107	0.284	0.427	0.924	1.63

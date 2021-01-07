@@ -1,0 +1,18 @@
+Spirotetramat chronic test, report nr 572046
+concentrations in ug/bee/day
+Survival time [d]	Control	T1	T2	T3	T4	T5
+0	40	40	40	40	40	40
+1	40	40	40	40	40	40
+2	40	40	40	40	40	40
+3	40	40	40	40	40	40
+4	40	40	40	40	39	39
+5	40	40	40	40	38	39
+6	40	40	40	40	36	28
+7	40	40	39	38	30	14
+8	40	40	39	38	19	7
+9	40	40	39	35	13	4
+10	40	40	39	32	11	1
+Concentration unit:	ug/bee/day
+Concentration time [d]	Control	T1	T2	T3	T4	T5
+0	0	0.17	0.28	0.46	0.94	2.47
+10	0	0.17	0.28	0.46	0.94	2.47

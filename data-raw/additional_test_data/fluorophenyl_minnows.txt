@@ -1,0 +1,9 @@
+Fathead minnows exposed to fluorophenyl, constant exposure. Data from the fathead minnow database. This data set runs into slow kinetics for SD and IT.
+Survival time [d]	Control	T1	T2	T3	T4	T5
+0	10	10	10	10	10	9
+2	10	10	10	10	8	8
+3	10	10	10	9	4	5
+4	10	10	9	7	4	2
+Concentration unit:	uM					
+Concentration time [d]	Control	T1	T2	T3	T4	T5
+0	0	1.794461	3.103933	4.704399	6.401862	8.39032

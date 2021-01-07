@@ -1,0 +1,32 @@
+Data set B of the GUTS ring test. Gammarus pulex exposed to propiconazole, pulsed exposure.		
+Survival time [d]	Control	close pulses	wide pulses	constant
+0	60	70	70	70
+1	59	50	57	70
+2	58	49	53	69
+3	58	49	52	69
+4	57	45	50	68
+5	57	45	46	66
+6	56	45	45	65
+7	56	42	44	64
+8	56	38	40	60
+9	55	37	38	55
+10	54	36	37	54
+Concentration unit:	uM			
+Concentration time [d]	Control	close pulses	wide pulses	constant
+0	0	30.56	28.98	4.93
+0.96	0	27.93	27.66	4.69
+1	0	0	0	4.69
+1.96	0	0.26	0.27	4.58
+2.96	0	0.21	0.26	4.58
+3	0	27.69	0.26	4.58
+3.96	0	26.49	0.26	4.54
+4	0	0	0.26	4.54
+4.96	0	0.18	0.25	4.58
+4.97	0	0.18	0.25	4.71
+5.96	0	0.18	0.03	4.71
+6.96	0	0.14	0	4.6
+7	0	0.14	26.98	4.6
+7.96	0	0.18	26.28	4.59
+8	0	0.18	0	4.59
+9	0	0	0.12	4.46
+9.96	0	0	0.12	4.51

@@ -1,0 +1,10 @@
+Data set C of the GUTS ring test. Fathead minnows exposed to diazinon.
+Survival time [d]	Control	T1	T2	T3	T4	T5
+0	20	20	20	20	20	20
+1	20	20	20	18	15	4
+2	20	20	20	16	11	2
+3	20	20	20	16	10	2
+4	20	20	20	16	8	1
+Concentration unit:	mg/L					
+Concentration time [d]	Control	T1	T2	T3	T4	T5
+0	0	2.61	4.43	6.8	10.1	17.2

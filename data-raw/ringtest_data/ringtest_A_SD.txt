@@ -1,0 +1,12 @@
+Data set A for the GUTS ring test. Hypothetical data set constructed with SD.
+Survival time [d]	Control	T1	T2	T3	T4	T5
+0	20	20	20	20	20	20
+1	20	20	20	20	18	5
+2	20	20	19	11	4	0
+3	20	20	15	2	1	0
+4	19	20	11	0	0	0
+5	19	20	5	0	0	0
+6	18	20	3	0	0	0
+Concentration unit:	uM					
+Concentration time [d]	Control	T1	T2	T3	T4	T5
+0	0	2	4	6	8	16

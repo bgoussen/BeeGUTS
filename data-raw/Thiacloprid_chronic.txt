@@ -1,0 +1,25 @@
+Bayer Thiacloprid chronic 475374
+Chronic exposure, conc in mg ai /kg diet
+Control + 5 treatments, daily survival counts over 10 days
+10 replicates of 10 bees
+Survival time [d]	Control	T1	T2	T3	T4	T5
+0	100	100	100	100	100	100
+1	100	100	100	100	99	96
+2	98	100	100	98	96	75
+3	95	99	99	98	92	66
+4	94	99	99	93	89	61
+5	93	99	99	93	87	58
+6	93	99	99	93	81	48
+7	93	99	99	92	76	35
+8	93	98	99	91	71	26
+9	93	98	99	91	61	15
+10	93	97	98	89	49	7
+Concentration unit:	mg ai /kg diet
+Concentration time [d]	Control	T1	T2	T3	T4	T5
+0	0	10	17	29	49	84
+1	0	10	17	29	49	84
+2	0	10	17	29	49	84
+3	0	10	17	29	49	84
+4	0	10	17	29	49	84
+5	0	10	17	29	49	84
+10	0	10	17	29	49	84

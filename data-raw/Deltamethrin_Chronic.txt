@@ -1,0 +1,20 @@
+Deltamethrin oral exposure chronic 477250
+10 rep with 10 bees in control, 4 rep with 10 bees in treatment
+daily survival over a 10 day period. Conc in mg ai/kg
+Deltamethrin chronic
+Survival time [d]	Control	T1	T2	T3	T4	T5
+0	100	40	40	40	40	40
+1	100	40	40	38	27	26
+2	100	39	40	22	3	0
+3	100	38	40	22	2	0
+4	100	38	40	22	0	0
+5	100	38	40	22	0	0
+6	100	38	40	21	0	0
+7	100	38	40	21	0	0
+8	100	38	40	20	0	0
+9	99	38	40	20	0	0
+10	99	38	40	20	0	0
+Concentration unit: mg ai/kg	
+Concentration time [d]	Control	T1	T2	T3	T4	T5
+0	0	2	6	18	54	162
+10	0	2	6	18	54	162
