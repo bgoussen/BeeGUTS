@@ -41,3 +41,5 @@ LinkingTo:
     rstan (>= 2.18.1),
     StanHeaders (>= 2.18.0)
 SystemRequirements: GNU make
+URL: https://github.com/bgoussen/BeeGUTS
+BugReports: https://github.com/bgoussen/BeeGUTS/issues
