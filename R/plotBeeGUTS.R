@@ -158,7 +158,7 @@ plot.beeSurvFit <- function(x,
 #'
 #' @examples
 #' data(fitBetacyfluthrin_Chronic)
-#' traceplot(fitBetaCyfluthrin_Chronic)
+#' traceplot(fitBetacyfluthrin_Chronic)
 traceplot <- function(object, ..., incWarmup_trace = TRUE, incWarmup_dens = FALSE){
   UseMethod("traceplot")
 }
