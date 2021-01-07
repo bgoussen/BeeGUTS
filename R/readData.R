@@ -32,7 +32,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' lsData <- dataGUTS(file_location = file.choose(), test_type = 'Acute_Oral', k_sr = 0.6)
+#' file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
+#' lsData <- dataGUTS(file_location = file_location, test_type = 'Chronic_Oral')
 #' }
 dataGUTS <- function(file_location = NULL,
                      test_type = NULL,
@@ -82,7 +83,7 @@ dataGUTS <- function(file_location = NULL,
     } else if(test_type == "Acute_Contact") {
     dfConcModel <- concAC(tbConc[1,-1], expTime = max(tbSurv[,1]), ...)
     } else {
-    dfConcModel <- data.frame(time = tbConc[,1], conc = tbConc[,2:ncol(tbConc)])
+    dfConcModel <- data.frame(SurvivalTime = tbConc[,1], tbConc[,2:ncol(tbConc)])
   }
 
   # Transform into long data
@@ -122,7 +123,7 @@ dataGUTS <- function(file_location = NULL,
 #'
 #' @examples conc <- concAO(cExt = cbind(3.5, 6, 8, 10), cTime = 0.25, expTime = 4)
 concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625) {
-  timePoint <- seq(0, expTime, 0.05)
+  timePoint <- seq(0, expTime, 0.1)
   cExt <- cExt[rep(seq_len(nrow(cExt)), each = length(timePoint)),] # Expend cExt to allow concentration calculation for all time points
   out <- (cExt * (timePoint / cTime) * (timePoint <= cTime))  + (cExt * exp(-k_sr * (timePoint - cTime)) * (timePoint > cTime))
   return(data.frame(SurvivalTime = timePoint, out))
@@ -140,7 +141,7 @@ concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625) {
 #'
 #' @examples conc <- concAC(cbind(3.1, 4, 6, 8), 4)
 concAC <- function(cExt, expTime, k_ca = 0.4) {
-  timePoint <- seq(0, expTime, 0.05)
+  timePoint <- seq(0, expTime, 0.1)
   cExt <- cExt[rep(seq_len(nrow(cExt)), each = length(timePoint)),] # Expend cExt to allow concentration calculation for all time points
   out <-cExt * exp(-k_ca * timePoint)
   return(data.frame(SurvivalTime = timePoint, out))
