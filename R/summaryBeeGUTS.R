@@ -33,14 +33,14 @@ summary.beeSurvFit <- function(object, ...) {
                   mean = lsData_fit$zwMean_log10,
                   sd = lsData_fit$zwSD_log10)
 
-   kk <- 10^qnorm(p = c(0.5, 0.025, 0.975),
-                  mean = lsData_fit$kkMean_log10,
-                  sd = lsData_fit$kkSD_log10)
+   bw <- 10^qnorm(p = c(0.5, 0.025, 0.975),
+                  mean = lsData_fit$bwMean_log10,
+                  sd = lsData_fit$bwSD_log10)
 
-   outPrior <- data.frame(parameters = c("hb", "kd", "zw", "kk"),
-                     median = c(hb[1], kd[1], zw[1], kk[1]),
-                     Q2.5 = c(hb[2], kd[2], zw[2], kk[2]),
-                     Q97.5 = c(hb[3], kd[3], zw[3], kk[3]))
+   outPrior <- data.frame(parameters = c("hb", "kd", "zw", "bw"),
+                     median = c(hb[1], kd[1], zw[1], bw[1]),
+                     Q2.5 = c(hb[2], kd[2], zw[2], bw[2]),
+                     Q97.5 = c(hb[3], kd[3], zw[3], bw[3]))
 
  } else if (object$modelType == "IT") {
 
@@ -78,14 +78,14 @@ summary.beeSurvFit <- function(object, ...) {
     zw_inf95 <- 10^tmpRes[["zw_log10", "2.5%"]]
     zw_sup95 <- 10^tmpRes[["zw_log10", "97.5%"]]
 
-    kk_med <- 10^tmpRes[["kk_log10", "50%"]]
-    kk_inf95 <- 10^tmpRes[["kk_log10", "2.5%"]]
-    kk_sup95 <- 10^tmpRes[["kk_log10", "97.5%"]]
+    bw_med <- 10^tmpRes[["bw_log10", "50%"]]
+    bw_inf95 <- 10^tmpRes[["bw_log10", "2.5%"]]
+    bw_sup95 <- 10^tmpRes[["bw_log10", "97.5%"]]
 
-    outPost <- data.frame(parameters = c("hb", "kd", "zw", "kk"),
-                      median = c(hb_med, kd_med, zw_med, kk_med),
-                      Q2.5 = c(hb_inf95, kd_inf95, zw_inf95, kk_inf95),
-                      Q97.5 = c(hb_sup95, kd_sup95, zw_sup95, kk_sup95))
+    outPost <- data.frame(parameters = c("hb", "kd", "zw", "bw"),
+                      median = c(hb_med, kd_med, zw_med, bw_med),
+                      Q2.5 = c(hb_inf95, kd_inf95, zw_inf95, bw_inf95),
+                      Q97.5 = c(hb_sup95, kd_sup95, zw_sup95, bw_sup95))
 
 
   } else if (object$modelType == "IT") {
