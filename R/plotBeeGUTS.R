@@ -170,14 +170,14 @@ traceplot <- function(object, ..., incWarmup_trace = TRUE, incWarmup_dens = FALS
 traceplot.beeSurvFit <- function(object, ..., incWarmup_trace = TRUE, incWarmup_dens = FALSE) {
   if (object$modelType == "SD") {
     ggTrace <- rstan::stan_trace(object$stanFit,
-                                 pars = c("hb_log10", "kd_log10", "zw_log10", "kk_log10"),
+                                 pars = c("hb_log10", "kd_log10", "zw_log10", "bw_log10"),
                                  inc_warmup = incWarmup_trace,
                                  nrow = 4,
                                  ...) +
       ggplot2::ggtitle("Traces")
       ggplot2::theme(legend.position = "none")
     ggDens <- rstan::stan_dens(object$stanFit,
-                               pars = c("hb_log10", "kd_log10", "zw_log10", "kk_log10"),
+                               pars = c("hb_log10", "kd_log10", "zw_log10", "bw_log10"),
                                inc_warmup = incWarmup_dens,
                                nrow = 4,
                                separate_chains = TRUE,
