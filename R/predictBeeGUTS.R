@@ -29,7 +29,7 @@ predict.beeSurvFit <- function(object,
                       model_type = object$modelType)
   class(morseObject) <- "survFit"
 
-  for(i in 1:x$setupMCMC$nChains) {
+  for(i in 1:object$setupMCMC$nChains) {
     colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "z_log10", "kk_log10")
   }
 
