@@ -2,6 +2,7 @@
 
 S3method(plot,beeSurvData)
 S3method(plot,beeSurvFit)
+S3method(predict,beeSurvFit)
 S3method(summary,beeSurvFit)
 S3method(traceplot,beeSurvFit)
 export(concAC)

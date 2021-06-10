@@ -27,7 +27,7 @@
 #' data(betacyfluthrinChronic)
 #' fit <- fitBeeGUTS(betacyfluthrinChronic, modelType = "SD", nIter = 1000)
 #' }
-fitBeeGUTS <- function(data,
+fitBeeGUTS <- function(data, # CHECK CORRECT DATA OBJECT IS USED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                        modelType = NULL,
                        distribution = "loglogistic",
                        priorsList = NULL,
