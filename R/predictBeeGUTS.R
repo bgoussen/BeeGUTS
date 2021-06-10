@@ -15,7 +15,8 @@
 #'
 #' @examples
 #' #' \dontrun{
-#' prediction <- predict.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
+#' data(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
+#' prediction <- predict(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
 #' }
 predict.beeSurvFit <- function(object,
                            dataPredict,
