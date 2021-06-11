@@ -1,5 +1,9 @@
 #' Predict method for \code{beeSurvFit} objects
 #'
+#' @description This is the generic \code{predict} S3 method for the \code{beeSurvFit}
+#' class. It predict the survival over time for the concentration profiles entered by the user.
+#' No concentration reconstructions are performed here.
+#'
 #' @param object An object of class \code{beeSurvFit}
 #' @param dataPredict Data to predict in the format XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{morse} (e.g.
@@ -16,7 +20,7 @@
 #' @examples
 #' #' \dontrun{
 #' dataPredict <- data.frame(time = c(1:10, 1:10, 1:10), conc = c(rep(5, 10), rep(10, 10), rep(15, 10)), replicate = c(rep("rep1", 10), rep("rep2", 10), rep("rep3", 10)), NSurv = c(rep(5, 10), rep(10, 10), rep(15, 10)))
-#'data(fitBetacyfluthrin_Chronic)
+#' data(fitBetacyfluthrin_Chronic)
 #' prediction <- predict(fitBetacyfluthrin_Chronic, dataPredict)
 #' }
 predict.beeSurvFit <- function(object,
