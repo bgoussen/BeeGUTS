@@ -51,6 +51,8 @@ predict.beeSurvFit <- function(object,
   # Return
   lsOut <- list(parsPost = outSummary$Qposteriors,
                 modelType = object$modelType,
+                unitData = object$data$unitData,
+                beeSpecies = object$data$beeSpecies,
                 setupMCMC = object$setupMCMC,
                 sim = outMorse$df_quantile
                 )
