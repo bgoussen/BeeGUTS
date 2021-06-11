@@ -139,6 +139,70 @@ plot.beeSurvFit <- function(x,
 }
 
 
+
+#' Plotting method for \code{beeSurvPred} objects
+#'
+#' @description This is the generic \code{plot} S3 method for the \code{beeSurvPred}
+#' class. It plots the predicted number of survivors for the exposure concentration entered by the user.
+#'
+#' @param x An object of class \code{beeSurvPred}
+#' @param xlab A character string for the label of the x-axis
+#' @param ylab1 A character string for the label of the y-axis of the survivor plots
+#' @param ylab2 A character string for the label of the y-axis of the concentration plots
+#' @param main A character string for the title label plot
+#' @param ... Additional parameters to generic plot functions (not used)
+#'
+#' @return
+#'
+#' @import ggplot2
+#' @importFrom stats quantile
+#'
+#' @export
+#'
+#' @examples
+#' dataPredict <- data.frame(time = c(1:10, 1:10, 1:10), conc = c(rep(5, 10), rep(10, 10), rep(15, 10)), replicate = c(rep("rep1", 10), rep("rep2", 10), rep("rep3", 10)), NSurv = c(rep(5, 10), rep(10, 10), rep(15, 10)))
+#' data(fitBetacyfluthrin_Chronic)
+#' prediction <- predict(fitBetacyfluthrin_Chronic, dataPredict)
+#' plot(predictions)
+plot.beeSurvPred <- function(x,
+                            ...,
+                            xlab = "Time [d]",
+                            ylab1 = "Survival probability",
+                            ylab2 = "Concentration",
+                            main = paste("Predictions results for a BeeGUTS", x$modelType,"calibrated for",
+                                         x$beeSpecies) ) {
+  # Check for correct class
+  if (!is(x,"beeSurvPred")) {
+    stop("plot.beeSurvPred: an object of class 'beeSurvPred' is expected")
+  }
+
+  ggSurv <- ggplot(data = x$sim, aes(x = time, y = q50,  group = replicate)) +
+    geom_line(color = "blue") +
+    geom_ribbon( aes(x= time, ymin = qinf95, ymax = qsup95, group = replicate), fill = "blue", alpha = 0.2)+
+    scale_y_continuous(limits = c(0,1)) +
+    xlab(xlab) +
+    ylab(ylab1) +
+    facet_grid(~replicate) +
+    theme(
+      strip.background = element_blank(),
+      strip.text.x = element_blank()
+    )
+
+  ggConc <- ggplot(data = x$sim, aes(x = time, y = conc)) +
+    geom_line() +
+    xlab(xlab) +
+    ylab(paste0(ylab2,"\n", x$unitData)) +
+    ggtitle(main) +
+    facet_grid(~replicate) +
+    theme(axis.title.x=element_blank(),
+          axis.text.x=element_blank())
+
+  ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
+  return(ggOut)
+}
+
+
+
 #' Plotting method for traces and densities for \code{beeSurvFit} objects
 #'
 #' @description This is the generic \code{traceplot} S3 method for the \code{beeSurvFit}
