@@ -20,37 +20,36 @@
 #'
 #' @examples
 #' dataValidate <- betacyfluthrinChronic
-#' object1 <- validate
-#' object2 <- fitBetacyfluthrin_Chronic
-#'  plot(validationBetacyfluthrin_Chronic)
-plot.beeSurvValidation <- function(object1,object2, dataValidate,
+#' data(fitBetacyfluthrin_Chronic)
+#' validate <- validate(fitBetacyfluthrin_Chronic, dataValidate)
+#'  plot(validate)
+plot.beeSurvValidation <- function(x,
                             ...,
                             xlab = "Time [d]",
                             ylab1 = "Number of survivors",
                             ylab2 = "Concentration",
-                            main = paste("Validation results for a", object2$data$typeData, "test on",
-                                         object2$data$beeSpecies) ) {
+                            main = paste("Validation results for a", x$data$typeData, "test on",
+                                         x$data$beeSpecies) ) {
   # Check for correct class
-  if (!is(object1,"beeSurvValid")) {
+  if (!is(x,"beeSurvValid")) {
     stop("plot.beeSurvValidation: an object of class 'beeSurvValid' is expected")
   }
 
-  # Check for correct class
-  if (!is(object2,"beeSurvFit")) {
-    stop("plot.beeSurvValidation: an object of class 'beeSurvValid' is expected")
-  }
-
+### Correct the extraction from the respective parts of the object
+  ### Transfer from Pobability of survival to Number of survivors
   # Extract data
   ### from the experimental data
   dfDataSurv_long <- as.data.frame(dataValidate$data$survData_long)
   dfDataConc_long <- as.data.frame(dataValidate$data$concData_long)
 
   ### simulated data from the beeSurvValid object
-  dfModelConc_long <- as.data.frame(object1$sim$conc) ## extract simulated data from the object
-  dfDataSurv_long$simQ50 <- object1$sim$q50
-  dfDataSurv_long$simQinf95 <- object1$sim$qinf95
-  dfDataSurv_long$simQsup95 <- object1$sim$qsup95
+  dfModelConc_long <- as.data.frame(object$sim$conc) ## extract simulated data from the object
+  dfDataSurv_long$simQ50 <- object$sim$q50
+  dfDataSurv_long$simQinf95 <- object$sim$qinf95
+  dfDataSurv_long$simQsup95 <- object$sim$qsup95
   yLimits <- c(0, max(dfDataSurv_long$NSurv, dfDataSurv_long$simQsup95))
+  
+  ### Compare with the prediction plot (but keep in mind the lower y-axis is Number of survivors
 
   ggSurv <- ggplot(data = dfDataSurv_long, aes(x=SurvivalTime, y = NSurv)) +
     geom_point() +
@@ -65,7 +64,8 @@ plot.beeSurvValidation <- function(object1,object2, dataValidate,
       strip.background = element_blank(),
       strip.text.x = element_blank()
     )
-
+  
+ 
   ggConc <- ggplot(data = dfModelConc_long, aes(x=SurvivalTime, y = Conc)) +
     geom_line() +
     geom_point(data = dfDataConc_long) +
