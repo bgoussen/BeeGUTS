@@ -18,8 +18,8 @@
 #' @export
 #'
 #' @examples
-#' #' \dontrun{
-#' dataPredict <- data.frame(time = c(1:10, 1:10, 1:10), conc = c(rep(5, 10), rep(10, 10), rep(15, 10)), replicate = c(rep("rep1", 10), rep("rep2", 10), rep("rep3", 10)), NSurv = c(rep(5, 10), rep(10, 10), rep(15, 10)))
+#' \dontrun{
+#' dataPredict <- data.frame(time = c(1:10, 1:10, 1:10), conc = c(rep(5, 10), rep(10, 10), rep(15, 10)), replicate = c(rep("rep1", 10), rep("rep2", 10), rep("rep3", 10)))
 #' data(fitBetacyfluthrin_Chronic)
 #' prediction <- predict(fitBetacyfluthrin_Chronic, dataPredict)
 #' }
@@ -34,12 +34,26 @@ predict.beeSurvFit <- function(object,
 
 
   # Transform
-  morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "zw_log10", "bw_log10")),
-                      model_type = object$modelType)
-  class(morseObject) <- "survFit"
 
-  for(i in 1:object$setupMCMC$nChains) {
-    colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "z_log10", "kk_log10")
+  if(object$modelType == "SD"){
+    morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "zw_log10", "bw_log10")),
+                        model_type = object$modelType)
+    class(morseObject) <- "survFit"
+
+    for(i in 1:object$setupMCMC$nChains) {
+      colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "z_log10", "kk_log10")
+    }
+  }
+  else if(object$modelType == "IT") {
+    morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "mw_log10", "beta_log10")),
+                        model_type = object$modelType)
+    class(morseObject) <- "survFit"
+
+    for(i in 1:object$setupMCMC$nChains) {
+      colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "alpha_log10", "beta_log10")
+    }
+  } else {
+    stop("Wrong model type. Model type should be 'SD' or 'IT'")
   }
 
   # Perform predictions using the morse package
