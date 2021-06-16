@@ -15,9 +15,9 @@
 #'
 #' @examples
 #' #' \dontrun{
-#' dataValidate <- betacyfluthrinChronic
-#' object <- fitBetacyfluthrin_Chronic
-#' validate <- validate.beeSurvFit(object, dataValidate)
+#' data(betacyfluthrinChronic)
+#' data(fitBetacyfluthrin_Chronic)
+#' validate <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
 #' }
 validate.beeSurvFit <- function(object,
                                dataValidate,
@@ -29,18 +29,21 @@ validate.beeSurvFit <- function(object,
   }
 
   ### we prepare experimental dataset for
-  time <- dataValidate$survData_long$SurvivalTime
-  conc <- dataValidate$survData_long$Treatment
-  NSurv <- dataValidate$survData_long$NSurv
-  data <- data.frame(time, conc, replicate=NA, NSurv)
-  data$replicate <- c(rep("rep1", nrow(dataValidate)))  ## do we have replicates at all in our standard experimental data?
+#  time <- dataValidate$survData_long$SurvivalTime
+#  conc <- dataValidate$concModel_long$Conc
+#  NSurv <- dataValidate$survData_long$NSurv
+#  data <- data.frame(time, conc, replicate=NA, NSurv)
+#  data$replicate <- "rep1"  ## do we have replicates at all in our standard experimental data?
 
+  data <- dplyr::full_join(dataValidate$survData_long, dataValidate$concModel_long, by =c("SurvivalTime", "Treatment"))
+  colnames(data) <- c("time", "replicate", "Nsurv", "conc")
   ## we run the predict.beeSurvFit function based on the experimental data and the fit object
-  lsOut <- predict.beeSurvFit(fitBetacyfluthrin_Chronic, data)
+  lsOut <- predict(object, data)
 
 
   class(lsOut) <- "beeSurvValid"
 
   return(lsOut)
 }
+
 
