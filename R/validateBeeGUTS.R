@@ -17,7 +17,7 @@
 #' #' \dontrun{
 #' data(betacyfluthrinChronic)
 #' data(fitBetacyfluthrin_Chronic)
-#' validate <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
+#' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
 #' }
 validate.beeSurvFit <- function(object,
                                dataValidate,
@@ -28,22 +28,50 @@ validate.beeSurvFit <- function(object,
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
 
-  ### we prepare experimental dataset for
-#  time <- dataValidate$survData_long$SurvivalTime
-#  conc <- dataValidate$concModel_long$Conc
-#  NSurv <- dataValidate$survData_long$NSurv
-#  data <- data.frame(time, conc, replicate=NA, NSurv)
-#  data$replicate <- "rep1"  ## do we have replicates at all in our standard experimental data?
-
+  ### prepare experimental dataset for
   data <- dplyr::full_join(dataValidate$survData_long, dataValidate$concModel_long, by =c("SurvivalTime", "Treatment"))
   colnames(data) <- c("time", "replicate", "Nsurv", "conc")
-  ## we run the predict.beeSurvFit function based on the experimental data and the fit object
-  lsOut <- predict(object, data)
+
+  ## run prediction with morse::predict_Nsurv_ode function
+  if(object$modelType == "SD"){
+    morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "zw_log10", "bw_log10")),
+                        model_type = object$modelType)
+    class(morseObject) <- "survFit"
+
+    for(i in 1:object$setupMCMC$nChains) {
+      colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "z_log10", "kk_log10")
+    }
+  }
+  else if(object$modelType == "IT") {
+    morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "mw_log10", "beta_log10")),
+                        model_type = object$modelType)
+    class(morseObject) <- "survFit"
+
+    for(i in 1:object$setupMCMC$nChains) {
+      colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "alpha_log10", "beta_log10")
+    }
+  } else {
+    stop("Wrong model type. Model type should be 'SD' or 'IT'")
+  }
+
+  # Perform predictions using the morse package
+  outMorse <- morse::predict_Nsurv_ode(morseObject, data, hb_value = FALSE, hb_valueFORCED  = 0, ...)
+
+  # Calculate summary to embed mean posteriors values with outputs
+  invisible(utils::capture.output(outSummary <- summary(object)))
+
+  # Return
+  lsOut <- list(parsPost = outSummary$Qposteriors,
+                modelType = object$modelType,
+                unitData = object$data$unitData,
+                beeSpecies = object$data$beeSpecies,
+                setupMCMC = object$setupMCMC,
+                sim = outMorse$df_quantile
+  )
 
 
   class(lsOut) <- "beeSurvValid"
 
   return(lsOut)
 }
-
 
