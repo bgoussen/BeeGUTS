@@ -23,7 +23,7 @@
 #' data(fitBetacyfluthrin_Chronic)
 #' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, dataValidate)
 #' object <- validation
-#'  plot.beeSurvValidation(validation, dataValidate)
+#' plot.beeSurvValidation(validation, dataValidate)
 plot.beeSurvValidation <- function(object, dataValidate,
                             ...,
                             xlab = "Time [d]",
@@ -45,6 +45,50 @@ plot.beeSurvValidation <- function(object, dataValidate,
    dfDataConc_long <- as.data.frame(dataValidate$concData_long)
   yLimits <- c(0, max(object$sim$NSurv, object$sim$Nsurv_qsup95_check))
 
+
+  #############################################################################################################
+  ### Calculations of PPC, NMRSE, SPPE applying the morse function predict_Nsurv_check
+
+  library(dplyr)
+  df_global <- object$sim %>%
+    mutate(ppc_matching_valid = ifelse(Nsurv_qinf95_valid > Nsurv | Nsurv_qsup95_valid < Nsurv, 0, 1),
+           SE_id = (Nsurv - Nsurv_q50_valid)^2)
+
+
+
+  df_ppc <- df_global %>%
+    select(Nsurv, time, Nsurv_q50_valid, Nsurv_q50_check, replicate, ppc_matching_valid) %>%
+    group_by(replicate) %>%
+    summarise(PPC = mean(ppc_matching_valid)*100)
+
+  percent_ppc_timeserie <- sum(df_global$ppc_matching_valid) / nrow(df_global) * 100
+
+  # NRMSE
+  df_nrmse <- df_global %>%
+    select(Nsurv, time, Nsurv_q50_valid, Nsurv_q50_check, replicate, SE_id) %>%
+    group_by(replicate) %>%
+    summarise(NRMSE = sqrt(mean(SE_id)) / mean(Nsurv) * 100)
+
+  nrmse <- sqrt(mean(df_global$SE_id)) / mean(df_global$Nsurv) * 100
+
+
+  # SPPE
+
+  df_sppe <- df_global %>%
+    select(Nsurv, time, Nsurv_q50_valid, Nsurv_q50_check, replicate) %>%
+    group_by(replicate) %>%
+    arrange(replicate,time) %>%
+    summarise(SPPE = (last(Nsurv) - last(Nsurv_q50_valid)) / first(Nsurv) * 100 )
+
+
+  EFSA_criteria <- as.data.frame(df_ppc)
+  EFSA_criteria$PPC_global <- ""
+  EFSA_criteria$PPC_global[1] <- percent_ppc_timeserie
+  EFSA_criteria$NRMSE <- as.data.frame(df_nrmse$NRMSE)
+  EFSA_criteria$NRMSE_global <- ""
+  EFSA_criteria$NRMSE_global[1] <- nrmse
+  EFSA_criteria$SPPE <- as.data.frame(df_sppe$SPPE)
+  ###############################################
 
   ggSurv <- ggplot(data = object$sim, aes(x = time, y = Nsurv_q50_valid,  group = replicate)) + ## should be transfer in NSurv, group = Treatment
     geom_line(color = "blue") +
@@ -70,11 +114,15 @@ plot.beeSurvValidation <- function(object, dataValidate,
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank())
 
-  ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
+ #table <- ggplot(data = dfDataConc_long, aes(x=SurvivalTime, y = Conc)) + annotation_custom(gridExtra::tableGrob(EFSA_criteria), xmin=35, xmax=50, ymin=-2.5, ymax=-1)
+  table <- gridExtra::tableGrob(EFSA_criteria, rows=NULL)
 
-  ### add calculations of PPC, NMRSE, SPPE
+  ggOut1 <- cowplot::plot_grid(ggConc, ggSurv, align = "v",nrow = 2)
+  ggOut <- cowplot::plot_grid(ggOut1, table, nrow = 2)
 
 
+
+#############################################################################
   return(ggOut)
 }
 
