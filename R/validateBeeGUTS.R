@@ -20,8 +20,8 @@
 #' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
 #' }
 validate.beeSurvFit <- function(object,
-                               dataValidate,
-                               ...) {
+                                dataValidate,
+                                ...) {
 
   # Check for correct class
   if (!is(object,"beeSurvFit")) {
@@ -41,8 +41,7 @@ validate.beeSurvFit <- function(object,
     for(i in 1:object$setupMCMC$nChains) {
       colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "z_log10", "kk_log10")
     }
-  }
-  else if(object$modelType == "IT") {
+  } else if(object$modelType == "IT") {
     morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "mw_log10", "beta_log10")),
                         model_type = object$modelType)
     class(morseObject) <- "survFit"
