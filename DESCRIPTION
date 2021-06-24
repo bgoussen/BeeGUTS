@@ -8,8 +8,12 @@ Authors@R:
            role = c("aut", "cre"),
            email = "benoit.goussen@ibacon.com",
            comment = c(ORCID = "0000-0001-7204-7981")),
+    person(given = "Liubov",
+           family = "Zakharova",
+           role = c("ctb"),
+           email = "liubov.zakharova@ibacon.com"),
     person("Bayer AG",
-    role = "cph")
+           role = "cph")
      )
 Description: Tools to calibrate, validate, and make predictions with the 
     General Unified Threshold model of Survival adapted for Bee species.
