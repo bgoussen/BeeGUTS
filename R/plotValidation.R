@@ -19,11 +19,10 @@
 #' @export
 #'
 #' @examples
-#' dataValidate <- betacyfluthrinChronic
-#' data(fitBetacyfluthrin_Chronic)
-#' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, dataValidate)
-#' object <- validation
-#' plot.beeSurvValidation(validation, dataValidate)
+#' data(betacyfluthrinChronic) # Load dataset for validation
+#' data(fitBetacyfluthrin_Chronic) # Load fit object
+#' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
+#' plot(validation, betacyfluthrinChronic)
 plot.beeSurvValidation <- function(object, dataValidate,
                             ...,
                             xlab = "Time [d]",
