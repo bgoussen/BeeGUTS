@@ -48,9 +48,9 @@ summary.beeSurvFit <- function(object, ...) {
                   mean = lsData_fit$mwMean_log10,
                   sd = lsData_fit$mwSD_log10)
 
-   beta <- 10^qnorm(p = c(0.5, 0.025, 0.975),
-                  mean = lsData_fit$betaMean_log10,
-                  sd = lsData_fit$betaSD_log10)
+   beta <- 10^qunif(p = c(0.5, 0.025, 0.975),
+                  min = lsData_fit$betaMin_log10,
+                  max = lsData_fit$betaMax_log10)
 
    outPrior <- data.frame(parameters = c("hb", "kd", "mw", "beta"),
                           median = c(hb[1], kd[1], mw[1], beta[1]),
