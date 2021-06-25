@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' #' \dontrun{
+#' \dontrun{
 #' data(betacyfluthrinChronic)
 #' data(fitBetacyfluthrin_Chronic)
 #' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
