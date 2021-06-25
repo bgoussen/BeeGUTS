@@ -12,9 +12,8 @@
 #' @param ... Additional parameters to generic plot functions (not used)
 #'
 #' @return
-
+#'
 #' @import ggplot2
-#' @import gridExtra
 #' @importFrom stats quantile
 #'
 #' @export
