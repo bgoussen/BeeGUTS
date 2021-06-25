@@ -18,7 +18,7 @@
 #' data(betacyfluthrinChronic)
 #' data(fitBetacyfluthrin_Chronic)
 #' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
-#' }
+
 validate.beeSurvFit <- function(object,
                                 dataValidate,
                                 ...) {
@@ -71,7 +71,8 @@ validate.beeSurvFit <- function(object,
                 typeData = object$data$typeData,
                 setupMCMC = object$setupMCMC,
                 sim = outMorse$df_quantile,
-                EFSA = EFSA_Criteria
+                EFSA = EFSA_Criteria,
+                data = dataValidate$concData_long
   )
 
 
