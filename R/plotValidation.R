@@ -1,6 +1,6 @@
 #' Plotting method for \code{beeSurvValid} objects
 #'
-#' @description This is the generic \code{plot} S3 method for the \code{beeSurvValidation}
+#' @description This is the generic \code{plot} S3 method for the \code{beeSurvFit}
 #' class. It plots the number of survivors as a function of time as well as the reconstructed
 #' concentrations for \code{"Acute_Oral"} and \code{"Acute_Contact"} test types.
 #'
