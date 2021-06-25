@@ -12,6 +12,10 @@
 #' @param ... Additional parameters to generic plot functions (not used)
 #'
 #' @return
+<<<<<<< HEAD
+=======
+#'
+>>>>>>> e2b236d99db8505549475229c820abaabaad7bc7
 #' @import ggplot2 gridExtra
 #' @importFrom stats quantile
 #'
