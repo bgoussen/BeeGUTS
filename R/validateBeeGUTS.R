@@ -1,5 +1,8 @@
 #' Validate method for \code{beeSurvFit} objects
 #'
+#' @description This is the generic \code{validate} S3 method for the \code{beeSurvFit}
+#' class. It predict the survival over time for the concentration profiles entered by the user.
+#'
 #' @param object An object of class \code{beeSurvFit}
 #' @param dataValidate Data to validate in the format of the experimental data used for fit (dataGUTS)
 #' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{morse} (e.g.
@@ -57,7 +60,7 @@ validate.beeSurvFit <- function(object,
   outMorse <- morse::predict_Nsurv_ode(morseObject, data, hb_value = FALSE, hb_valueFORCED  = 0, ...)
 
 
-  # Calculate EFSA criteria usinf the morse package
+  # Calculate EFSA criteria using the morse package
   EFSA_Criteria <- morse::predict_Nsurv_check(outMorse, ...)
 
   # Calculate summary to embed mean posteriors values with outputs

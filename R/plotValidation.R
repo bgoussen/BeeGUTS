@@ -1,10 +1,10 @@
-#' Plotting method for \code{beeSurvValidation} xs
+#' Plotting method for \code{beeSurvValid} objects
 #'
 #' @description This is the generic \code{plot} S3 method for the \code{beeSurvValidation}
 #' class. It plots the number of survivors as a function of time as well as the reconstructed
 #' concentrations for \code{"Acute_Oral"} and \code{"Acute_Contact"} test types.
 #'
-#' @param x An x of class \code{beeSurvValidation}
+#' @param x An x of class \code{beeSurvValid}
 #' @param xlab A character string for the label of the x-axis
 #' @param ylab1 A character string for the label of the y-axis of the survivor plots
 #' @param ylab2 A character string for the label of the y-axis of the concentration plots
@@ -13,15 +13,15 @@
 #'
 #' @return
 #'
-#' @import ggplot2
+#' @import ggplot2 gridExtra
 #' @importFrom stats quantile
 #'
 #' @export
 #'
 #' @examples
-#' data(betacyfluthrinChronic) # Load dataset for validation
-#' data(fitBetacyfluthrin_Chronic) # Load fit x
-#' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
+#' dataValidate <- data(betacyfluthrinChronic) # Load dataset for validation
+#' data(fitBetacyfluthrin_Chronic)
+#' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, dataValidate)
 #' plot.beeSurvValidation(validation)
 plot.beeSurvValidation <- function(x,
                             ...,
