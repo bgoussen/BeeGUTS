@@ -19,9 +19,9 @@
 #' @export
 #'
 #' @examples
-#' dataValidate <- data(betacyfluthrinChronic) # Load dataset for validation
+#' data(betacyfluthrinChronic) # Load dataset for validation
 #' data(fitBetacyfluthrin_Chronic)
-#' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, dataValidate)
+#' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
 #' plot.beeSurvValidation(validation)
 plot.beeSurvValidation <- function(x,
                             ...,
