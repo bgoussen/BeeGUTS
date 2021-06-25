@@ -68,6 +68,7 @@ validate.beeSurvFit <- function(object,
                 modelType = object$modelType,
                 unitData = object$data$unitData,
                 beeSpecies = object$data$beeSpecies,
+                typeData = object$data$typeData,
                 setupMCMC = object$setupMCMC,
                 sim = outMorse$df_quantile,
                 EFSA = EFSA_Criteria
