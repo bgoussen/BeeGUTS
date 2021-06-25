@@ -13,8 +13,7 @@
 #'
 #' @return
 #'
-#' @import ggplot2 
-#' @import gridExtra
+#' @import ggplot2 gridExtra
 #' @importFrom stats quantile
 #'
 #' @export
