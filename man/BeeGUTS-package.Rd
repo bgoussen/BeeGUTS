@@ -4,10 +4,28 @@
 \name{BeeGUTS-package}
 \alias{BeeGUTS-package}
 \alias{BeeGUTS}
-\title{The 'BeeGUTS' package.}
+\title{'BeeGUTS' package; a package to perform GUTS modelling for Bee experiments.}
 \description{
-A DESCRIPTION OF THE PACKAGE
+Provide tools to analyse the survival toxicity tests performed for
+bee species. It can be used to fit a Toxicokinetic-Toxicodynamic (TKTD) model
+adapted for bee standard studies (acute oral, acute contact, and chronic oral studies).
+The TKTD model used is the General Unified Threshold model of Survival (GUTS).
+
+The package follows the concept and assumptions presented in Baas et al (submitted)
 }
 \references{
-Stan Development Team (2020). RStan: the R interface to Stan. R package version 2.21.2. https://mc-stan.org
+Baas, J., Goussen, B., Miles, M., Preuss, T.G., Roessing, I. (submitted).
+BeeGUTS – new integrative TKTD model for honey bees approach moving from single point estimates of toxicity and exposure to a holistic link between exposure and effect.
+
+Jager, T., Albert, C., Preuss, T.G. and Ashauer, R. (2011). General Unified Thresold model of Survivial - a toxicokinetic-toxicodynamic fremework for ecotoxicology.
+\url{https://dx.doi.org/10.1021/es103092a}
+
+Jager, T. and Ashauer, R. (2018). Modelling survival under chemical stress. A comprehensive guide to the GUTS framework. Version 1.0
+\url{https://leanpub.com/guts_book}
+
+EFSA PPR Scientific Opinion (2018). Scientific Opinion on the state of the art of Toxicokinetic/Toxicodynamic (TKTD) effect models for regulatory risk assessment of pesticides for aquatic organisms.
+\url{https://www.efsa.europa.eu/en/efsajournal/pub/5377}
+
+Stan Development Team (2020). RStan: the R interface to Stan. R package version 2.21.2.
+\url{https://mc-stan.org}
 }

@@ -26,3 +26,10 @@ If \code{FALSE}, parameter \code{hb} is set to a fixed value. The default is \co
 This is the generic \code{validate} S3 method for the \code{beeSurvFit}
 class. It predict the survival over time for the concentration profiles entered by the user.
 }
+\examples{
+\dontrun{
+data(betacyfluthrinChronic)
+data(fitBetacyfluthrin_Chronic)
+validation <- validate(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
+}
+}

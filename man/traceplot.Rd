@@ -21,7 +21,7 @@ in the traceplot (default TRUE)}
 in the density plot (default FALSE)}
 }
 \value{
-
+A graphic with the traceplots and densities of the fit
 }
 \description{
 This is the generic \code{traceplot} S3 method for the \code{beeSurvFit}

@@ -11,7 +11,7 @@
 #' @param main A character string for the title label plot
 #' @param ... Additional parameters to generic plot function (not used)
 #'
-#' @return
+#' @return A graphic with the inputed data
 #'
 #' @import ggplot2
 #'
@@ -75,7 +75,7 @@ plot.beeSurvData <- function(x,
 #' @param main A character string for the title label plot
 #' @param ... Additional parameters to generic plot functions (not used)
 #'
-#' @return
+#' @return A graphic with the results of the fit
 #'
 #' @import ggplot2
 #' @importFrom stats quantile
@@ -146,14 +146,14 @@ plot.beeSurvFit <- function(x,
 #' class. It plots the number of survivors as a function of time as well as the reconstructed
 #' concentrations for \code{"Acute_Oral"} and \code{"Acute_Contact"} test types.
 #'
-#' @param x An x of class \code{beeSurvValid}
+#' @param x An object of class \code{beeSurvValid}
 #' @param xlab A character string for the label of the x-axis
 #' @param ylab1 A character string for the label of the y-axis of the survivor plots
 #' @param ylab2 A character string for the label of the y-axis of the concentration plots
 #' @param main A character string for the title label plot
 #' @param ... Additional parameters to generic plot functions (not used)
 #'
-#' @return
+#' @return A graphic with the results of the validation
 #'
 #' @import ggplot2
 #' @importFrom stats quantile
@@ -225,8 +225,6 @@ plot.beeSurvValidation <- function(x,
 
 
 
-
-
 #' Plotting method for \code{beeSurvPred} objects
 #'
 #' @description This is the generic \code{plot} S3 method for the \code{beeSurvPred}
@@ -239,7 +237,7 @@ plot.beeSurvValidation <- function(x,
 #' @param main A character string for the title label plot
 #' @param ... Additional parameters to generic plot functions (not used)
 #'
-#' @return
+#' @return A graphic with results of the forward prediction
 #'
 #' @import ggplot2
 #' @importFrom stats quantile
@@ -304,7 +302,7 @@ plot.beeSurvPred <- function(x,
 #' @param incWarmup_dens A logical indicating whether the warmup iterations should be plotted
 #' in the density plot (default FALSE)
 #'
-#' @return
+#' @return A graphic with the traceplots and densities of the fit
 #' @export
 #'
 #' @examples
