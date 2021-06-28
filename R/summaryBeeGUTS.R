@@ -6,7 +6,7 @@
 #' @param object An object of class \code{beeSurvFit}
 #' @param ... Additional arguments to be parsed to the generic \code{summary} method (not used)
 #'
-#' @return
+#' @return A summary of the \code{beeSurvFit} object
 #' @export
 #'
 #' @examples
