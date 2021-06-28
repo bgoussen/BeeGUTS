@@ -48,6 +48,7 @@ validate <- function(object,
 #' data(betacyfluthrinChronic)
 #' data(fitBetacyfluthrin_Chronic)
 #' validation <- validate(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
+#' }
 
 validate.beeSurvFit <- function(object,
                                 dataValidate,

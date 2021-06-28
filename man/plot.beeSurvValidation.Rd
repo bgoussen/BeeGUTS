@@ -15,7 +15,7 @@
 )
 }
 \arguments{
-\item{x}{An x of class \code{beeSurvValid}}
+\item{x}{An object of class \code{beeSurvValid}}
 
 \item{...}{Additional parameters to generic plot functions (not used)}
 
@@ -28,7 +28,7 @@
 \item{main}{A character string for the title label plot}
 }
 \value{
-
+A graphic with the results of the validation
 }
 \description{
 This is the generic \code{plot} S3 method for the \code{beeSurvValid}

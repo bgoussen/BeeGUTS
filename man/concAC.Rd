@@ -2,7 +2,7 @@
 % Please edit documentation in R/readData.R
 \name{concAC}
 \alias{concAC}
-\title{Title}
+\title{Recalculate the concentrations for the acute contact tests for bees}
 \usage{
 concAC(cExt, expTime, k_ca = 0.4)
 }
@@ -14,10 +14,11 @@ concAC(cExt, expTime, k_ca = 0.4)
 \item{k_ca}{Contact availability rate (d-1), default is 0.4}
 }
 \value{
-
+A data frame containing a column with the time points and a column with the
+recalculated concentrations
 }
 \description{
-Title
+Recalculate the concentrations for the acute contact tests for bees
 }
 \examples{
 conc <- concAC(cbind(3.1, 4, 6, 8), 4)

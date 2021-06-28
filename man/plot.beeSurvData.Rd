@@ -27,7 +27,7 @@
 \item{main}{A character string for the title label plot}
 }
 \value{
-
+A graphic with the inputed data
 }
 \description{
 This is the generic \code{plot} S3 method for the \code{beeSurvData}

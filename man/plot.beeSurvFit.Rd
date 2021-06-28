@@ -28,7 +28,7 @@
 \item{main}{A character string for the title label plot}
 }
 \value{
-
+A graphic with the results of the fit
 }
 \description{
 This is the generic \code{plot} S3 method for the \code{beeSurvFit}

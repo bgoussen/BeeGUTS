@@ -2,7 +2,7 @@
 % Please edit documentation in R/readData.R
 \name{concAO}
 \alias{concAO}
-\title{Title}
+\title{Recalculate concentration for the acute oral tests for bees}
 \usage{
 concAO(cExt, cTime = 0.25, expTime, k_sr = 0.625)
 }
@@ -16,10 +16,11 @@ concAO(cExt, cTime = 0.25, expTime, k_sr = 0.625)
 \item{k_sr}{Stomach release rate (d-1), default is 0.625}
 }
 \value{
-
+A data frame containing a column with the time points and a column with the
+recalculated concentrations
 }
 \description{
-Title
+Recalculate concentration for the acute oral tests for bees
 }
 \examples{
 conc <- concAO(cExt = cbind(3.5, 6, 8, 10), cTime = 0.25, expTime = 4)

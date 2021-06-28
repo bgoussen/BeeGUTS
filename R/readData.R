@@ -1,24 +1,31 @@
 #' Read and format the data for the BeeGUTS model
 #'
-#' @description DESCRIPTION TO COMPLETE
+#' @description Read data from a \code{text} or \code{csv} file and recalculate the
+#' exposure profile depending on the type of experiment (acute oral, acute contact, chronic oral).
 #'
 #' @param file_location Location of a text file containing two datasets, one for the survival data,
-#' and one for the concentration data. Both datasets must contain the same number of column in the same order.
-#' The following columns must be included:
+#' and one for the concentration data. Both datasets must be included in the same file and contain the same number of column in the same order.
+#' The following columns must be included in the survival dataset:
 #' \itemize{
-#'     \item \code{Survival time [d]}: a vector of time in days
+#'     \item \code{Survival time \[d\]}: a vector of time in days
 #'     \item \code{Control} A vector of number of survivors for the control
 #'     \item \code{T1} - \code{Tn} A vector of number of survivors for the treatments
 #'     T1 to Tn, one column per treatment.
 #'     }
+#' A line containing the \code{Concentration unit} must be included directly after the end of
+#' the last row of the survival data.
+#'
+#' The following columns must be included in the concentration dataset
 #' \itemize{
-#'     \item \code{Concentration time [d]}: a vector of time in days.
+#'     \item \code{Concentration time \[d\]}: a vector of time in days.
 #'     \item \code{Control} A vector of concentrations for the control
 #'     \item \code{T1} - \code{Tn} A vector of concentration for the treatments
 #'     T1 to Tn, one column per treatment.
 #'     }
 #'     For the \code{Acute_Oral} and \code{Acute_Contact}, only the initial
 #'     exposure concentration at time 0 is required.
+#'
+#' See detail section for example
 #'
 #' @param test_type the test type amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
 #' @param bee_species the bee type. At the moment only "Honey_Bee" is supported
@@ -27,7 +34,34 @@
 #'  \code{k_ca =} contact availability rate (d-1), default is 0.4), or
 #'  \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
 #'
-#' @return DESCRIPTION TO COMPLETE
+#' @return An object of class \code{beeSurvData}, which is a list with the following information:
+#' \item{survData}{A table containing the survival data as entered by the user in the input file}
+#' \item{survData_long}{A data frame containing the survival data in long format for model purposes}
+#' \item{concData}{A table containing the concentration data as entered by the user in the input file}
+#' \item{concData_long}{A data frame containing concentration data in long format}
+#' \item{unitData}{A character vector containing the units of the data as entered in the line \code{Concentration unit}
+#' of the input file}
+#' \item{typeData}{A character vector containing the type of experiment}
+#' \item{beeSpecies}{A character vector containing the type bee}
+#' \item{concModel}{A data frame containing the concentration data as recalculated by the model}
+#' \item{concModel_long}{A data frame containing the concentration data as recalculated by the model in a long format}
+#'
+#' @details
+#' #' Example of formatting of the input file for a chronic oral study
+#' \tabular{lllllll}{
+#' Survival time \[d\] \tab	Control	\tab T1	\tab T2	\tab T3	\tab T4	\tab T5 \cr
+#' 0	\tab 120	\tab 120	\tab 120	\tab 120	\tab 120	\tab 120 \cr
+#' 1	\tab 120	\tab 118	\tab 117	\tab 112	\tab 115	\tab 94 \cr
+#' 2	\tab 120	\tab 118	\tab 115	\tab 112	\tab 98	\tab 88 \cr
+#' 3	\tab 120	\tab 118	\tab 114	\tab 106	\tab 83	\tab 27 \cr
+#' 4	\tab 119	\tab 118	\tab 113	\tab 103	\tab 67	\tab 9 \cr
+#' 5	\tab 119	\tab 118	\tab 112	\tab 100	\tab 43	\tab 3 \cr
+#' Concentration unit: ug/bee/day \tab\tab\tab\tab\tab\tab \cr
+#' Concentration time \[d\]	\tab Control	\tab T1	\tab T2	\tab T3	\tab T4	\tab T5 \cr
+#' 0	\tab 0	\tab 3	\tab 7	\tab 12	\tab 41	\tab 68 \cr
+#' 5	\tab 0	\tab 3	\tab 7	\tab 12	\tab 41	\tab 68
+#' }
+#'
 #' @export
 #'
 #' @examples
@@ -108,17 +142,17 @@ dataGUTS <- function(file_location = NULL,
 
 # Internal
 # Sub-function to recalculate the concentrations based on the type of test and species
+
 # Acute oral tests
-
-
-#' Title
+#' Recalculate concentration for the acute oral tests for bees
 #'
 #' @param cExt A dataframe of concentrations at time 0 concentration applied
 #' @param cTime The duration of exposure in days, default is 0.25 d
 #' @param k_sr Stomach release rate (d-1), default is 0.625
 #' @param expTime The duration of the experiment in days
 #'
-#' @return
+#' @return A data frame containing a column with the time points and a column with the
+#' recalculated concentrations
 #' @export
 #'
 #' @examples conc <- concAO(cExt = cbind(3.5, 6, 8, 10), cTime = 0.25, expTime = 4)
@@ -130,13 +164,14 @@ concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625) {
 }
 
 # Acute contact test
-#' Title
+#' Recalculate the concentrations for the acute contact tests for bees
 #'
 #' @param cExt The concentration applied
 #' @param expTime The duration of the experiment in days
 #' @param k_ca Contact availability rate (d-1), default is 0.4
 #'
-#' @return
+#' @return A data frame containing a column with the time points and a column with the
+#' recalculated concentrations
 #' @export
 #'
 #' @examples conc <- concAC(cbind(3.1, 4, 6, 8), 4)

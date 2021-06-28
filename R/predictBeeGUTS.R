@@ -5,7 +5,13 @@
 #' No concentration reconstructions are performed here.
 #'
 #' @param object An object of class \code{beeSurvFit}
-#' @param dataPredict Data to predict in the format XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+#' @param dataPredict Data to predict in the format as a dataframe containing the
+#' following column:
+#' \itemize{
+#'     \item \code{time}: A vector of time in days
+#'     \item \code{conc}: A vector of number of survivors of same length
+#'     \item \code{replicate} A vector replicate name
+#' }
 #' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{morse} (e.g.
 #'  \code{mcmc_size = 1000} is to be used to reduce the number of mcmc samples in order to speed up
 #'  the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
@@ -19,13 +25,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' dataPredict <- data.frame(time = c(1:10, 1:10, 1:10), conc = c(rep(5, 10), rep(10, 10), rep(15, 10)), replicate = c(rep("rep1", 10), rep("rep2", 10), rep("rep3", 10)))
+#' dataPredict <- data.frame(time = c(1:5, 1:15),
+#'                           conc = c(rep(5, 5), rep(15, 15)),
+#'                           replicate = c(rep("rep1", 5), rep("rep3", 15)))
 #' data(fitBetacyfluthrin_Chronic)
 #' prediction <- predict(fitBetacyfluthrin_Chronic, dataPredict)
 #' }
 predict.beeSurvFit <- function(object,
-                           dataPredict,
-                           ...) {
+                               dataPredict,
+                               ...) {
 
   # Check for correct class
   if (!is(object,"beeSurvFit")) {
@@ -68,7 +76,7 @@ predict.beeSurvFit <- function(object,
                 beeSpecies = object$data$beeSpecies,
                 setupMCMC = object$setupMCMC,
                 sim = outMorse$df_quantile
-                )
+  )
   class(lsOut) <- "beeSurvPred"
 
   return(lsOut)
