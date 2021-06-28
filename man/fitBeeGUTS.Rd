@@ -9,7 +9,7 @@ fitBeeGUTS(
   modelType = NULL,
   distribution = "loglogistic",
   priorsList = NULL,
-  parallel = FALSE,
+  parallel = TRUE,
   nCores = parallel::detectCores() - 1L,
   nChains = 3,
   nIter = 2000,

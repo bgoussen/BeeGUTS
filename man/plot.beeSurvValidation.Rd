@@ -5,17 +5,18 @@
 \title{Plotting method for \code{beeSurvValidation} objects}
 \usage{
 \method{plot}{beeSurvValidation}(
-  object,
-  dataValidate,
+  x,
   ...,
   xlab = "Time [d]",
   ylab1 = "Number of survivors",
   ylab2 = "Concentration",
-  main = paste("Validation results for a BeeGUTS", dataValidate$typeData,
-    "calibrated for", dataValidate$beeSpecies)
+  main = paste("Validation results for a BeeGUTS", x$typeData, "calibrated for",
+    x$beeSpecies)
 )
 }
 \arguments{
+\item{x}{An x of class \code{beeSurvValid}}
+
 \item{...}{Additional parameters to generic plot functions (not used)}
 
 \item{xlab}{A character string for the label of the x-axis}
@@ -25,21 +26,18 @@
 \item{ylab2}{A character string for the label of the y-axis of the concentration plots}
 
 \item{main}{A character string for the title label plot}
-
-\item{x}{An object of class \code{beeSurvValidation}}
 }
 \value{
 
 }
 \description{
-This is the generic \code{plot} S3 method for the \code{beeSurvValidation}
+This is the generic \code{plot} S3 method for the \code{beeSurvValid}
 class. It plots the number of survivors as a function of time as well as the reconstructed
 concentrations for \code{"Acute_Oral"} and \code{"Acute_Contact"} test types.
 }
 \examples{
-dataValidate <- betacyfluthrinChronic
+data(betacyfluthrinChronic) # Load dataset for validation
 data(fitBetacyfluthrin_Chronic)
-validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, dataValidate)
-object <- validation
-plot.beeSurvValidation(validation, dataValidate)
+validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
+plot(validation)
 }

@@ -1,4 +1,4 @@
-#' Plotting method for \code{beeSurvValid} objects
+#' Plotting method for \code{beeSurvValidation} objects
 #'
 #' @description This is the generic \code{plot} S3 method for the \code{beeSurvValid}
 #' class. It plots the number of survivors as a function of time as well as the reconstructed
@@ -21,8 +21,8 @@
 #' @examples
 #' data(betacyfluthrinChronic) # Load dataset for validation
 #' data(fitBetacyfluthrin_Chronic)
-#' validation <- validate.beeSurvFit(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
-#' plot.beeSurvValidation(validation)
+#' validation <- validate(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
+#' plot(validation)
 plot.beeSurvValidation <- function(x,
                             ...,
                             xlab = "Time [d]",
@@ -31,8 +31,8 @@ plot.beeSurvValidation <- function(x,
                             main = paste("Validation results for a BeeGUTS", x$typeData, "calibrated for",
                                          x$beeSpecies) ) {
   # Check for correct class
-  if (!is(x,"beeSurvValid")) {
-    stop("plot.beeSurvValidation: an x of class 'beeSurvValid' is expected")
+  if (!is(x,"beeSurvValidation")) {
+    stop("plot.beeSurvValidation: an object of class 'beeSurvValidation' is expected")
   }
 
   yLimits <- c(0, max(x$sim$NSurv, x$sim$Nsurv_qsup95_check))
