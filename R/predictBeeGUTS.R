@@ -20,7 +20,8 @@
 #' If \code{FALSE}, parameter \code{hb} is set to a fixed value. The default is \code{FALSE}.
 #'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
 #'
-#' @return
+#' @return A \code{beeSurvPred} object containing the results of the forwards prediction
+#' @importFrom morse predict_ode
 #' @export
 #'
 #' @examples

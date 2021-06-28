@@ -20,7 +20,7 @@ If \code{FALSE}, parameter \code{hb} is set to a fixed value. The default is \co
 \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}}
 }
 \value{
-
+A \code{beeSurvValidation} object with the results of the validation
 }
 \description{
 This is the generic \code{validate} S3 method for the \code{beeSurvFit}

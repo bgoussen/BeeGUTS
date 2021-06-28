@@ -40,7 +40,8 @@ validate <- function(object,
 #' If \code{FALSE}, parameter \code{hb} is set to a fixed value. The default is \code{FALSE}.
 #'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
 #'
-#' @return
+#' @return A \code{beeSurvValidation} object with the results of the validation
+#' @importFrom morse predict_Nsurv_ode predict_Nsurv_check
 #' @export
 #'
 #' @examples
