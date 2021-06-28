@@ -12,7 +12,7 @@
 \item{...}{Additional arguments to be parsed to the generic \code{summary} method (not used)}
 }
 \value{
-
+A summary of the \code{beeSurvFit} object
 }
 \description{
 This is the generic \code{summary} S3 method for the \code{beeSurvFit} class.
