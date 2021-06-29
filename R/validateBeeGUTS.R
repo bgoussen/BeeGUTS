@@ -86,11 +86,11 @@ validate.beeSurvFit <- function(object,
   }
 
   # Perform predictions using the morse package
-  outMorse <- morse::predict_Nsurv_ode(morseObject, data, hb_value = FALSE, hb_valueFORCED  = 0, ...)
+  outMorse <- morse:::predict_Nsurv_ode.survFit(morseObject, data, hb_value = FALSE, hb_valueFORCED  = 0, ...)
 
 
   # Calculate EFSA criteria using the morse package
-  EFSA_Criteria <- morse::predict_Nsurv_check(outMorse, ...)
+  EFSA_Criteria <- morse:::predict_Nsurv_check.survFitPredict_Nsurv(outMorse, ...)
 
   # Calculate summary to embed mean posteriors values with outputs
   invisible(utils::capture.output(outSummary <- summary(object)))
