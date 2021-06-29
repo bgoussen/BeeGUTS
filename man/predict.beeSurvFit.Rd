@@ -31,7 +31,8 @@ A \code{beeSurvPred} object containing the results of the forwards prediction
 \description{
 This is the generic \code{predict} S3 method for the \code{beeSurvFit}
 class. It predict the survival over time for the concentration profiles entered by the user.
-No concentration reconstructions are performed here.
+No concentration reconstructions are performed here. Functions \code{\link[morse:predict_ode]{morse::predict_ode()}}
+from the \code{morse} package is used. This might be changed in a future update
 }
 \examples{
 \dontrun{

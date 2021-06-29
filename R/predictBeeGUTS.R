@@ -2,7 +2,8 @@
 #'
 #' @description This is the generic \code{predict} S3 method for the \code{beeSurvFit}
 #' class. It predict the survival over time for the concentration profiles entered by the user.
-#' No concentration reconstructions are performed here.
+#' No concentration reconstructions are performed here. Functions [morse::predict_ode()]
+#' from the \code{morse} package is used. This might be changed in a future update
 #'
 #' @param object An object of class \code{beeSurvFit}
 #' @param dataPredict Data to predict in the format as a dataframe containing the
@@ -41,6 +42,10 @@ predict.beeSurvFit <- function(object,
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
 
+  ## Get functions from the "morse" package.
+  # Used in this way to avoid issues linked to the loading of a dependancy of "morse"
+  # that is not needed here.
+  morse_predict_ode <- utils::getFromNamespace("predict_ode", "morse")
 
   # Transform
 
@@ -65,7 +70,7 @@ predict.beeSurvFit <- function(object,
   }
 
   # Perform predictions using the morse package
-  outMorse <- morse:::predict_ode.survFit(morseObject, dataPredict, hb_value = FALSE, hb_valueFORCED  = 0, ...)
+  outMorse <- morse_predict_ode(morseObject, dataPredict, hb_value = FALSE, hb_valueFORCED  = 0, ...)
 
   # Calculate summary to embed mean posteriors values with outputs
   invisible(utils::capture.output(outSummary <- summary(object)))

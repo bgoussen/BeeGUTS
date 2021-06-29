@@ -25,6 +25,8 @@ A \code{beeSurvValidation} object with the results of the validation
 \description{
 This is the generic \code{validate} S3 method for the \code{beeSurvFit}
 class. It predict the survival over time for the concentration profiles entered by the user.
+Functions \code{\link[morse:predict]{morse::predict_Nsurv_ode()}} and \code{\link[morse:predict_check]{morse::predict_Nsurv_check()}}
+from the \code{morse} package are used. This might be changed in a future update
 }
 \examples{
 \dontrun{
