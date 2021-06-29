@@ -65,7 +65,7 @@ predict.beeSurvFit <- function(object,
   }
 
   # Perform predictions using the morse package
-  outMorse <- morse::predict_ode(morseObject, dataPredict, hb_value = FALSE, hb_valueFORCED  = 0, ...)
+  outMorse <- morse:::predict_ode.survFit(morseObject, dataPredict, hb_value = FALSE, hb_valueFORCED  = 0, ...)
 
   # Calculate summary to embed mean posteriors values with outputs
   invisible(utils::capture.output(outSummary <- summary(object)))
