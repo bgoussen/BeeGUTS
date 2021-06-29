@@ -21,7 +21,7 @@
 #' BeeGUTS – new integrative TKTD model for honey bees approach moving from single point estimates of toxicity and exposure to a holistic link between exposure and effect.
 #'
 #' Jager, T., Albert, C., Preuss, T.G. and Ashauer, R. (2011). General Unified Thresold model of Survivial - a toxicokinetic-toxicodynamic fremework for ecotoxicology.
-#' \url{https://dx.doi.org/10.1021/es103092a}
+#' \doi{10.1021/es103092a}
 #'
 #' Jager, T. and Ashauer, R. (2018). Modelling survival under chemical stress. A comprehensive guide to the GUTS framework. Version 1.0
 #' \url{https://leanpub.com/guts_book}
