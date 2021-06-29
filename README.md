@@ -6,6 +6,7 @@
 
 <!-- badges: start -->
 [![R build status](https://github.com/bgoussen/BeeGUTS/workflows/R-CMD-check/badge.svg)](https://github.com/bgoussen/BeeGUTS/actions)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 ### Issue tracking
