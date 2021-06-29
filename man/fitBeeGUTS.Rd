@@ -105,5 +105,5 @@ fit <- fitBeeGUTS(betacyfluthrinChronic, modelType = "SD", nIter = 1000)
 \references{
 Delignette-Muller, M.L., Ruiz P. and Veber P. (2017).
 Robust fit of toxicokinetic-toxicodynamic models using prior knowledge contained in the design of survival toxicity tests.
-\url{https://dx.doi.org/10.1021/acs.est.6b05326}
+\doi{10.1021/acs.est.6b05326}
 }
