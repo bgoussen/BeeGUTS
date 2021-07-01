@@ -22,7 +22,6 @@
 #'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
 #'
 #' @return A \code{beeSurvPred} object containing the results of the forwards prediction
-#' @importFrom morse predict_ode
 #' @export
 #'
 #' @examples
@@ -45,7 +44,7 @@ predict.beeSurvFit <- function(object,
   ## Get functions from the "morse" package.
   # Used in this way to avoid issues linked to the loading of a dependancy of "morse"
   # that is not needed here.
-  morse_predict_ode <- utils::getFromNamespace("predict_ode", "morse")
+  #morse_predict_ode <- utils::getFromNamespace("predict_ode", "morse")
 
   # Transform
 
@@ -70,7 +69,7 @@ predict.beeSurvFit <- function(object,
   }
 
   # Perform predictions using the morse package
-  outMorse <- morse_predict_ode(morseObject, dataPredict, hb_value = FALSE, hb_valueFORCED  = 0, ...)
+  outMorse <- predict_ode(morseObject, dataPredict, hb_value = FALSE, hb_valueFORCED  = 0, ...)
 
   # Calculate summary to embed mean posteriors values with outputs
   invisible(utils::capture.output(outSummary <- summary(object)))
