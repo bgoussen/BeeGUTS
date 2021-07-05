@@ -16,7 +16,8 @@ Authors@R:
            role = "cph")
      )
 Description: Tools to calibrate, validate, and make predictions with the 
-    General Unified Threshold model of Survival adapted for Bee species.
+    General Unified Threshold model of Survival adapted for Bee species. The 
+    authors are grateful to Bayer A.G. for its financial support.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
