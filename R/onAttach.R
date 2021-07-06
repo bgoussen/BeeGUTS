@@ -16,4 +16,7 @@
   packageStartupMessage("       widely applicable information criterion (WAIC).")
 }
 
+.onUnload <- function (libpath) { library.dynam.unload("BeeGUTS", libpath)}
 # nocov end
+
+
