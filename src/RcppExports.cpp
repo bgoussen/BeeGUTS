@@ -7,14 +7,12 @@
 using namespace Rcpp;
 
 
-RcppExport void gutsredsd_free();
 RcppExport SEXP _rcpp_module_boot_stan_fit4GUTS_IT_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4GUTS_SD_mod();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_stan_fit4GUTS_IT_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4GUTS_IT_mod, 0},
     {"_rcpp_module_boot_stan_fit4GUTS_SD_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4GUTS_SD_mod, 0},
-    {"gutsredsd_free", (DL_FUNC) &gutsredsd_free, 0},
     {NULL, NULL, 0}
 };
 
