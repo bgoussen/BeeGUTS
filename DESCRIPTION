@@ -38,7 +38,8 @@ Imports:
     dplyr,
     magrittr,
     utils,
-    gridExtra
+    gridExtra,
+    odeGUTS
 LinkingTo: 
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),

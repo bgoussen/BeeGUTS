@@ -61,12 +61,6 @@ validate.beeSurvFit <- function(object,
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
 
-  ## Get functions from the "morse" package.
-  # Used in this way to avoid issues linked to the loading of a dependancy of "morse"
-  # that is not needed here.
-  #morse_predict_Nsurv_ode <- utils::getFromNamespace("predict_Nsurv_ode", "morse")
-  #morse_predict_Nsurv_check <- utils::getFromNamespace("predict_Nsurv_check", "morse")
-
   ### prepare experimental dataset for
   data <- dplyr::full_join(dataValidate$survData_long, dataValidate$concModel_long, by =c("SurvivalTime", "Treatment"))
   colnames(data) <- c("time", "replicate", "Nsurv", "conc")
@@ -93,11 +87,11 @@ validate.beeSurvFit <- function(object,
   }
 
   # Perform predictions using the morse package
-  outMorse <- predict_Nsurv_ode(morseObject, data, hb_value = FALSE, hb_valueFORCED  = 0, ...)
+  outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, data, hb_value = FALSE, hb_valueFORCED  = 0, ...)
 
 
   # Calculate EFSA criteria using the morse package
-  EFSA_Criteria <- predict_Nsurv_check(outMorse, ...)
+  EFSA_Criteria <- odeGUTS::predict_Nsurv_check(outMorse, ...)
 
   # Calculate summary to embed mean posteriors values with outputs
   invisible(utils::capture.output(outSummary <- summary(object)))
