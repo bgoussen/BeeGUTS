@@ -37,6 +37,9 @@ plot.beeSurvData <- function(x,
   dfDataConc_long <- as.data.frame(x$concData_long)
   dfModelConc_long <- as.data.frame(x$concModel_long)
 
+  # Change the layout of the plots in order to use plotly so as to
+  # have interactivity (to in the end switch datasets)
+
   ggSurv <- ggplot(data = dfDataSurv_long, aes(x=SurvivalTime, y = NSurv)) +
     geom_point() +
     xlab(xlab) +
@@ -57,8 +60,17 @@ plot.beeSurvData <- function(x,
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank())
 
-  ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
-  return(ggOut)
+  # ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
+  ggSurvy <- ggplotly(ggSurv)
+  ggConcy <- ggplotly(ggConc)
+  x <- list(title = "Time [d]")
+  y1 <- list(title = "Nsurv")
+  y2 <- list(title = paste0(ylab2,"\n", x$unitData))
+  ggConcy %>% layout(xaxis = x, yaxis = y2)
+  ggSurvy %>% layout(xaxis = x, yaxis = y1)
+  subplots <- subplot(ggConcy, ggSurvy, nrows = 2, margin=0.03, heights = c(0.4,0.4))
+  return(subplots)
+}
 }
 
 
