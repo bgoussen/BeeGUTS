@@ -26,17 +26,22 @@ dataFitStan <- function(data,
   lsOUT <- unlist(list(priors, odeControl), recursive = FALSE)
 
   # Prepare data
-  ## Number of groups
-  lsOUT$nGroup <- length(unique(data$survData_long$Treatment))
+  ## Number of groups.
+  ## Different datasets are treated as additional groups
+  nDatasets <- data$nDatasets
+  nGroups <- c()
+  for (i in 1:nDatasets) {nGroups<-append(nGroups,length(unique(data$survData_long[[i]]$Treatment)))}
+  lsOUT$nGroup <- sum(nGroups)
 
+  # join the datasets to treat everything as a single group
   # Concentrations
-  dataConc <- data$concModel_long %>%
+  dataConc <- dplyr::bind_rows(data$concModel_long) %>%
     dplyr::filter(!is.na(Conc)) %>%
-    dplyr::arrange(Treatment, SurvivalTime) %>%
+    dplyr::arrange(Dataset, Treatment, SurvivalTime) %>%
     dplyr::mutate(idAll = dplyr::row_number() )
 
   dataConc_id = dataConc %>%
-    dplyr::group_by(Treatment) %>%
+    dplyr::group_by(Dataset, Treatment) %>%
     dplyr::summarise(idC_lw = min(idAll),
                      idC_up = max(idAll))
 
@@ -51,17 +56,17 @@ dataFitStan <- function(data,
   lsOUT$idC_up <- dataConc_id$idC_up
 
   # Survival
-  dataNsurv <- data$survData_long %>%
+  dataNsurv <- dplyr::bind_rows(data$survData_long) %>%
     dplyr::filter(!is.na(NSurv)) %>%
-    dplyr::arrange(Treatment, SurvivalTime) %>%
+    dplyr::arrange(Dataset, Treatment, SurvivalTime) %>%
     dplyr::mutate(idAll = dplyr::row_number() ) %>%
-    dplyr::group_by(Treatment) %>%
+    dplyr::group_by(Dataset, Treatment) %>%
     dplyr::mutate(Nprec = ifelse( SurvivalTime == min(SurvivalTime), NSurv, dplyr::lag(NSurv) ),
                   Ninit = max(NSurv)) %>%  # since it is grouped by replicate
     dplyr::ungroup()
 
   dataNsurv_id = dataNsurv %>%
-    dplyr::group_by(Treatment) %>%
+    dplyr::group_by(Dataset, Treatment) %>%
     dplyr::summarise(idS_lw = min(idAll),
                      idS_up = max(idAll))
 
@@ -87,8 +92,12 @@ dataFitStan <- function(data,
 priorsBeeGUTS <- function(x, modelType = NULL){
 
   # Remove time = 0
-  dataSurv <- dplyr::filter(x$survData_long, SurvivalTime != 0)
-  dataConc <- dplyr::filter(x$concModel_long, SurvivalTime != 0)
+  dataSurv <- dplyr::bind_rows(x$survData_long)
+  dataSurv <- dplyr::filter(dataSurv, SurvivalTime != 0)
+  dataConc <- dplyr::bind_rows(x$concModel_long)
+  dataConc <- dplyr::filter(dataConc, SurvivalTime != 0)
+  #dataSurv <- dplyr::filter(x$survData_long, SurvivalTime != 0)
+  #dataConc <- dplyr::filter(x$concModel_long, SurvivalTime != 0)
 
   # Parameter calculation of concentration min and max
   concMin <- 1e-6 # here consider minimal concentration for prior to be close to 0. Original: min(data$conc[data$conc != 0], na.rm = TRUE) # to remove 0 and NA

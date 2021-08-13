@@ -106,19 +106,22 @@ dataGUTS <- function(file_locations = NULL,
 
   # Load the survival data from the file
   # Check where the survival data starts and ends for each file
-  for (i in 1:length(file_location)){
+  nDatasets <- length(file_location)
+  for (i in 1:nDatasets){
     rawData <- readLines(file_location[i])
     skipLine_surv <- grep("Survival", rawData)
     nrowLine_surv <- grep("Concentration unit", rawData)
     # Load the survival data
     tbSurv_aux <- data.table::fread(file_location[i], skip = skipLine_surv, header = T, nrow = nrowLine_surv - (skipLine_surv + 1L) )
     colnames(tbSurv_aux)[1] <- c("SurvivalTime") # Set unique name for time column
+    tbSurv_aux$Dataset <- i
     tbSurv <- append(tbSurv, list(tbSurv_aux))
     # Load the concentration data from the file
     # Check where the concentration data starts and ends
     skipLine_conc <- grep("Concentration time", rawData)
     # Load the concentration data
     tbConc_aux <- data.table::fread(file_location[i], skip = skipLine_conc, header = T)
+    tbConc_aux$Dataset <- i
     colnames(tbConc_aux)[1] <- c("SurvivalTime")
     tbConc <- append(tbConc, list(tbConc_aux))
     if (ncol(tbSurv_aux)  != ncol(tbConc_aux)) {
@@ -139,9 +142,9 @@ dataGUTS <- function(file_locations = NULL,
     dfConcModel <- append(dfConcModel, list(dfConcModel_aux))
 
     # Transform into long data
-    tbSurv_long_aux <- tidyr::gather(tbSurv_aux, Treatment, NSurv, -SurvivalTime)
-    tbConc_long_aux <- tidyr::gather(tbConc_aux, Treatment, Conc, -SurvivalTime)
-    dfConcModel_long_aux <- tidyr::gather(dfConcModel_aux, Treatment, Conc, -SurvivalTime)
+    tbSurv_long_aux <- tidyr::gather(tbSurv_aux, Treatment, NSurv, -SurvivalTime, -Dataset)
+    tbConc_long_aux <- tidyr::gather(tbConc_aux, Treatment, Conc, -SurvivalTime, -Dataset)
+    dfConcModel_long_aux <- tidyr::gather(dfConcModel_aux, Treatment, Conc, -SurvivalTime, -Dataset)
 
     tbSurv_long <- append(tbSurv_long, list(tbSurv_long_aux))
     tbConc_long <- append(tbConc_long, list(tbConc_long_aux))
@@ -150,7 +153,8 @@ dataGUTS <- function(file_locations = NULL,
 
 
   # Return
-  lsOut <- list(survData = tbSurv,
+  lsOut <- list(nDatasets = nDatasets,
+                survData = tbSurv,
                 survData_long = tbSurv_long,
                 concData = tbConc,
                 concData_long = tbConc_long,
