@@ -18,8 +18,14 @@ Ideas from the internet on how to display all the plots for multiple datasets
 1) Having a dropdown menu to choose the dataset
 see this: https://stackoverflow.com/questions/66141967/r-switching-between-graphs
 Official tutorial from Plotly: https://plotly.com/r/dropdowns/
+  * This might require to use directly plotly for all the plotting so that
+    there are no conversion issues with ggplot2 (see point2)
 
-2) ...
+2)Something else than plotly, apparently there are several issues when converting a
+ggplot2 plot into plotly, especially in terms of having the right axis and the right
+titles
+
+3) Have some sort of app to display plots (Shiny?)
 
 Implementation for the fitting:
 Not to disrupt the current framework, the various datasets could be treated in the 

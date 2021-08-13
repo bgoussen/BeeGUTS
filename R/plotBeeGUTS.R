@@ -31,47 +31,57 @@ plot.beeSurvData <- function(x,
     if (!is(x,"beeSurvData")) {
     stop("plot.beeSurvData: an object of class 'beeSurvData' is expected")
   }
+  plotlist <- list()  # list of plots to be returned
+  for (i in 1:length(x$survData_long)){
+      # Extract data
+      dfDataSurv_long <- as.data.frame(x$survData_long[[i]])
+      dfDataConc_long <- as.data.frame(x$concData_long[[i]])
+      dfModelConc_long <- as.data.frame(x$concModel_long[[i]])
 
-  # Extract data
-  dfDataSurv_long <- as.data.frame(x$survData_long)
-  dfDataConc_long <- as.data.frame(x$concData_long)
-  dfModelConc_long <- as.data.frame(x$concModel_long)
+      ggSurv <- ggplot(data = dfDataSurv_long, aes(x=SurvivalTime, y = NSurv)) +
+        geom_point() +
+        xlab(xlab) +
+        ylab(ylab1) +
+        facet_grid(~Treatment) +
+        theme(
+          strip.background = element_blank(),
+          strip.text.x = element_blank()
+       )
+
+      ggConc <- ggplot(data = dfModelConc_long, aes(x=SurvivalTime, y = Conc)) +
+        geom_line() +
+        geom_point(data = dfDataConc_long) +
+        xlab(xlab) +
+        ylab(paste0(ylab2,"\n", x$unitData)) +
+        ggtitle(main) +
+        facet_grid(~Treatment) +
+        theme(axis.title.x=element_blank(),
+             axis.text.x=element_blank())
+
+      ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
+      plotlist <- append(plotlist, list(ggOut))
+  }
+  # return(ggOut)
 
   # Change the layout of the plots in order to use plotly so as to
   # have interactivity (to in the end switch datasets)
-
-  ggSurv <- ggplot(data = dfDataSurv_long, aes(x=SurvivalTime, y = NSurv)) +
-    geom_point() +
-    xlab(xlab) +
-    ylab(ylab1) +
-    facet_grid(~Treatment) +
-    theme(
-      strip.background = element_blank(),
-      strip.text.x = element_blank()
-    )
-
-  ggConc <- ggplot(data = dfModelConc_long, aes(x=SurvivalTime, y = Conc)) +
-    geom_line() +
-    geom_point(data = dfDataConc_long) +
-    xlab(xlab) +
-    ylab(paste0(ylab2,"\n", x$unitData)) +
-    ggtitle(main) +
-    facet_grid(~Treatment) +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank())
-
-  # ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
-  ggSurvy <- ggplotly(ggSurv)
-  ggConcy <- ggplotly(ggConc)
-  x <- list(title = "Time [d]")
-  y1 <- list(title = "Nsurv")
-  y2 <- list(title = paste0(ylab2,"\n", x$unitData))
-  ggConcy %>% layout(xaxis = x, yaxis = y2)
-  ggSurvy %>% layout(xaxis = x, yaxis = y1)
-  subplots <- subplot(ggConcy, ggSurvy, nrows = 2, margin=0.03, heights = c(0.4,0.4))
-  return(subplots)
+  # this is a test using plotly but does not work very well
+  # x <- list(title = "Time [d]")
+  # y1 <- list(title = "Nsurv")
+  # y2 <- list(title = paste0(ylab2,"\n", x$unitData))
+  # ggSurvy <- ggplotly(ggSurv + ylab(" ") + xlab(" "))
+  # ggConcy <- ggplotly(ggConc + ylab(" ") + xlab(" "))
+  # ggConcy %>% layout(xaxis = x, yaxis = y2)#, margin = list(l = 75, b =50))
+  # ggSurvy %>% layout(xaxis = x, yaxis = y1)#, margin = list(l = 75, b =50))
+  # #return(ggConcy)
+  # subplots <- subplot(ggConcy, ggSurvy, nrows = 2, margin=0.03,heights = c(0.4,0.4), titleX = TRUE, titleY = TRUE)
+  # #layout(subplots, xaxis=list(title=x))
+  # #, titleY = TRUE,nrows = 2, margin=0.03, )%>%
+  #    #layout(xaxis = list(title = x, anchor="y2"), yaxis = c(yy2,y1))
+  # return(subplots)
+  return(plotlist)
 }
-}
+
 
 
 #' Plotting method for \code{beeSurvFit} objects
