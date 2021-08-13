@@ -163,9 +163,9 @@ dataGUTS <- function(file_locations = NULL,
 
   # This is to keep the compatibility with the current code if there is a single file passed
   # TODO: Remove once all the changes have been implemented
-  if (length(file_location)==1){
-      for (name in names(lsOut)) {lsOut[name]<-lsOut[name][[1]]}
-  }
+  #if (length(file_location)==1){
+  #    for (name in names(lsOut)) {lsOut[name]<-lsOut[name][[1]]}
+  #}
 
   return(lsOut)
 }
