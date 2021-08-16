@@ -3,7 +3,7 @@
 #' @description Read data from a \code{text} or \code{csv} file and recalculate the
 #' exposure profile depending on the type of experiment (acute oral, acute contact, chronic oral).
 #'
-#' @param file_locations (List of) Locations of text files containing each two datasets, one for the survival data,
+#' @param file_locations List of Locations of text files containing each two datasets, one for the survival data,
 #' and one for the concentration data. Both datasets must be included in the same file and contain the same number of column in the same order.
 #' The following columns must be included in the survival dataset:
 #' \itemize{
@@ -36,6 +36,7 @@
 #'  \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
 #'
 #' @return An object of class \code{beeSurvData}, which is a list with the following information:
+#' \item{nDatasets}{Number of files passed to the function}
 #' \item{survData}{A table containing the survival data as entered by the user in the input file}
 #' \item{survData_long}{A data frame containing the survival data in long format for model purposes}
 #' \item{concData}{A table containing the concentration data as entered by the user in the input file}
@@ -46,8 +47,12 @@
 #' \item{beeSpecies}{A character vector containing the type bee}
 #' \item{concModel}{A data frame containing the concentration data as recalculated by the model}
 #' \item{concModel_long}{A data frame containing the concentration data as recalculated by the model in a long format}
+#' Each element of the list is itself a list to account for multiple files that can be passed as input.
 #'
 #' @details
+#' The filename must begin with name of the chemical substance being tested and
+#' each word of the filename should be separated via an underscore '_'.
+#'
 #' #' Example of formatting of the input file for a chronic oral study
 #' \tabular{lllllll}{
 #' Survival time \[d\] \tab	Control	\tab T1	\tab T2	\tab T3	\tab T4	\tab T5 \cr
@@ -149,8 +154,10 @@ dataGUTS <- function(file_location = NULL,
     # Recalculate the concentrations based on the experiment type
     if(test_type[i] == "Acute_Oral") {
       dfConcModel_aux <- concAO(tbConc_aux[1,-1], expTime = max(tbSurv_aux[,1]), ...)
+      dfConcModel_aux$Dataset <- i # reallocate the column because it gets overwritten
     } else if(test_type[i] == "Acute_Contact") {
       dfConcModel_aux <- concAC(tbConc_aux[1,-1], expTime = max(tbSurv_aux[,1]), ...)
+      dfConcModel_aux$Dataset <- i # reallocate the column because it gets overwritten
     } else {
       dfConcModel_aux <- data.frame(SurvivalTime = tbConc_aux[,1], tbConc_aux[,2:ncol(tbConc_aux)])
     }
