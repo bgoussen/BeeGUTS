@@ -74,7 +74,7 @@ dataGUTS <- function(file_location = NULL,
                      test_type = NULL,
                      bee_species = "Honey_Bee",
                      ...) { # Possibility to add non default ksR, and kca
-  print(file_location)
+
   ## check that file_location and test_types have the same length
   if (length(file_location) != length(test_type)){
     stop("Mismatch between number of files and number of tests.")
@@ -100,7 +100,8 @@ dataGUTS <- function(file_location = NULL,
   tbSurv_long <- list()
   tbConc_long <- list()
   chUnits <- list()
-  bee_species <- as.list(rep(bee_species, length(file_location)))
+  # use single value for now
+  bee_species <- bee_species #as.list(rep(bee_species, length(file_location)))
   dfConcModel <- list()
   dfConcModel_long <- list()
 
