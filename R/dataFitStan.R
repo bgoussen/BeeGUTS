@@ -55,6 +55,7 @@ dataFitStan <- function(data,
   lsOUT$idC_lw <- dataConc_id$idC_lw
   lsOUT$idC_up <- dataConc_id$idC_up
 
+  # join the datasets to treat everything as a single group
   # Survival
   dataNsurv <- dplyr::bind_rows(data$survData_long) %>%
     dplyr::filter(!is.na(NSurv)) %>%
