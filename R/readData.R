@@ -70,11 +70,11 @@
 #' file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
 #' lsData <- dataGUTS(file_location = c(file_location), test_type = c('Chronic_Oral'))
 #' }
-dataGUTS <- function(file_locations = NULL,
-                     test_types = NULL,
+dataGUTS <- function(file_location = NULL,
+                     test_type = NULL,
                      bee_species = "Honey_Bee",
                      ...) { # Possibility to add non default ksR, and kca
-
+  print(file_location)
   ## check that file_location and test_types have the same length
   if (length(file_location) != length(test_type)){
     stop("Mismatch between number of files and number of tests.")
