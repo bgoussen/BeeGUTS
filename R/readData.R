@@ -79,6 +79,7 @@ dataGUTS <- function(file_location = NULL,
   if (length(file_location) != length(test_type)){
     stop("Mismatch between number of files and number of tests.")
   }
+  name_chemical <- c() # array to store the name of the chemical extracted from the filename
   for (i in 1:length(file_location)){
     # Ensure a correct filename and a correct types is entered
     if (is.null(file_location[i]) || !file.exists(file_location[i]) ||
@@ -88,10 +89,20 @@ dataGUTS <- function(file_location = NULL,
     if (is.null(test_type[i]) ||  !(test_type[i] %in% c("Acute_Oral", "Acute_Contact", "Chronic_Oral"))) {
       stop("You need to specifiy a correct data 'test_type' amongst 'Acute_Oral', 'Acute_Contact', or 'Chronic_Oral'.")
     }
+    # sanity check on the inserted chemical species
+    splitpath <- strsplit(strsplit(file_location[i], "_")[[1]],"/")[[1]]
+    name_chemical <- append(name_chemical, splitpath[length(splitpath)])
   }
   if (is.null(bee_species) ||  !(bee_species %in% c("Honey_Bee"))) {
     stop("You need to specifiy a correct 'bee_species' amongst 'HoneyBee'.
          Other types of bees are not yet implemented.")
+  }
+  # check that there are no multiple entries in the bee_species argument
+  if (length(bee_species) > 1){
+    warning("You entered multiple entries for the bee species. Only one is required.
+            Calibration on different species is not possible.
+            Using only the first entry.")
+    bee_species <- bee_species[[1]] # to make sure that the entry is always a string even if a list is passed
   }
 
   # Empty arrays for the objects to be returned. Values for each test are appended
@@ -130,7 +141,10 @@ dataGUTS <- function(file_location = NULL,
          columns in the concentration dataset")
     }
     # Load the units
-    chUnits <- append(chUnits, rawData[nrowLine_surv])
+    # TODO: insert code to extract exact value of units
+    # TODO: recalculate if units are different for different tests
+    # remove all possible whitespaces and substitute with simple whitespace
+    chUnits <- append(chUnits, gsub("[[:blank:]]", " ",rawData[nrowLine_surv]))
 
     # Recalculate the concentrations based on the experiment type
     if(test_type[i] == "Acute_Oral") {
@@ -152,6 +166,23 @@ dataGUTS <- function(file_location = NULL,
     dfConcModel_long <- append(dfConcModel_long, list(dfConcModel_long_aux))
   }
 
+  ## TODO: This part has to be improved substantially. Needs to account for all
+  ##       possible ways to write the units in the experimental data file.
+  units_check <- length(unique(chUnits)) == 1
+  if (!units_check){
+    warning("!!! IMPORTANT NOTE !!!
+            Check the units in the data file. There seems to be a mismatch.
+            You can continue with the fit, but the results might be incorrect.")
+  }
+  ## TODO: Find a good strategy to ensure safety checks
+  ## to ensure using the same chemical species
+  chemical_check <- length(unique(tolower(name_chemical))) == 1
+  if (!chemical_check){
+    warning("!!! IMPORTANT NOTE !!!
+              Make sure you know what you are doing.
+              Chemical species extracted from filename of the two files does not match.
+              The data will continue to be read, but there might be inconsistencies.")
+  }
 
   # Return
   lsOut <- list(nDatasets = nDatasets,
