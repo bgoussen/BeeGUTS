@@ -7,9 +7,9 @@ packages <- c("BeeGUTS", "odeGUTS", "dplyr","methods", "Rcpp",
               "utils", "gridExtra", "plotly")
 sapply(packages, function(X) do.call("require", list(X)))
 
-f1 <- "C:/Users/roc/Documents/R/win-library/4.0/BeeGUTS/extdata/betacyfluthrin_chronic_ug.txt"
-f2 <- "C:/Users/roc/Documents/BeeGUTS/BeeGUTS/data-raw/metribuzin_chronic_ug.txt"
-f3 <- "C:/Users/roc/Documents/BeeGUTS/BeeGUTS/data-raw/fenoxaprop_chronic_ug.txt"
+f1 <- "./data-raw/betacyfluthrin_chronic_ug.txt"
+f2 <- "./data-raw/metribuzin_chronic_ug.txt"
+f3 <- "./data-raw/fenoxaprop_chronic_ug.txt"
 
 t1 <- "Chronic_Oral"
 t2 <- "Chronic_Oral"
