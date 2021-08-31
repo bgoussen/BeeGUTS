@@ -11,7 +11,7 @@
 
 \item{dataValidate}{Data to validate in the format of the experimental data used for fit (dataGUTS)}
 
-\item{...}{Additional arguments to be parsed to the  \code{predict.survFit} method from \code{morse} (e.g.
+\item{...}{Additional arguments to be parsed to the  \code{predict.survFit} method from \code{odeGUTS} (e.g.
 \code{mcmc_size = 1000} is to be used to reduce the number of mcmc samples in order to speed up
 the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
 is 1000. If all MCMC is wanted, set argument to \code{NULL}.,
@@ -25,8 +25,6 @@ A \code{beeSurvValidation} object with the results of the validation
 \description{
 This is the generic \code{validate} S3 method for the \code{beeSurvFit}
 class. It predict the survival over time for the concentration profiles entered by the user.
-Functions \code{\link[morse:predict]{morse::predict_Nsurv_ode()}} and \code{\link[morse:predict_check]{morse::predict_Nsurv_check()}}
-from the \code{morse} package are used. This might be changed in a future update
 }
 \examples{
 \dontrun{
