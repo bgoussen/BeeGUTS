@@ -12,14 +12,7 @@ dataGUTS(
 )
 }
 \arguments{
-\item{bee_species}{the bee type. At the moment only "Honey_Bee" is supported}
-
-\item{...}{Optional arguments to be passed to the concentration reconstruction (e.g.
-\code{k_sr =} for the stomach release rate (d-1), default is 0.625,
-\code{k_ca =} contact availability rate (d-1), default is 0.4), or
-\code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d}
-
-\item{file_locations}{List of Locations of text files containing each two datasets, one for the survival data,
+\item{file_location}{List of Locations of text files containing each two datasets, one for the survival data,
 and one for the concentration data. Both datasets must be included in the same file and contain the same number of column in the same order.
 The following columns must be included in the survival dataset:
 \itemize{
@@ -43,8 +36,15 @@ exposure concentration at time 0 is required.
 
 See detail section for example}
 
-\item{test_types}{list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
+\item{test_type}{list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
 this list must have the same length of the list of file locations}
+
+\item{bee_species}{the bee type. At the moment only "Honey_Bee" is supported}
+
+\item{...}{Optional arguments to be passed to the concentration reconstruction (e.g.
+\code{k_sr =} for the stomach release rate (d-1), default is 0.625,
+\code{k_ca =} contact availability rate (d-1), default is 0.4), or
+\code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d}
 }
 \value{
 An object of class \code{beeSurvData}, which is a list with the following information:
