@@ -3,7 +3,7 @@
 #' @description Read data from a \code{text} or \code{csv} file and recalculate the
 #' exposure profile depending on the type of experiment (acute oral, acute contact, chronic oral).
 #'
-#' @param file_locations List of Locations of text files containing each two datasets, one for the survival data,
+#' @param file_location List of Locations of text files containing each two datasets, one for the survival data,
 #' and one for the concentration data. Both datasets must be included in the same file and contain the same number of column in the same order.
 #' The following columns must be included in the survival dataset:
 #' \itemize{
@@ -27,7 +27,7 @@
 #'
 #' See detail section for example
 #'
-#' @param test_types list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
+#' @param test_type list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
 #' this list must have the same length of the list of file locations
 #' @param bee_species the bee type. At the moment only "Honey_Bee" is supported
 #' @param ... Optional arguments to be passed to the concentration reconstruction (e.g.

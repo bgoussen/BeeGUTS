@@ -20,14 +20,14 @@ t3 <- "Chronic_Oral"
 ## because there is a large number of concentration intervals to be accounted
 
 # FOR TESTING ONLY, mixing files with different chemicals and different units
-file_location <- c(f1,f2)
-test_type <- c(t1,t2)
+file_location <- f1
+test_type <- t1
 
 calibdata <- dataGUTS(file_location = file_location, test_type = test_type, bee_species = "Honey_Bee")
 plot(calibdata)
 
 #very small value of iterations to speedup the fit for testing purposes
-fit<-fitBeeGUTS(calibdata, modelType = "SD", nIter = 200)
+fit<-fitBeeGUTS(calibdata, modelType = "SD", nIter = 1000)
 plot(fit)
 
 valdata <- dataGUTS(f3, "Chronic_Oral")
