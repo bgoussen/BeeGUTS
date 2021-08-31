@@ -58,9 +58,16 @@ validate.beeSurvFit <- function(object,
   if (!is(object,"beeSurvFit")) {
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
+  # Ugly fix to keep the validate function the same
+  # Validation data is always a single file, so collapse the list
+  if (length(dataValidate$nDatasets)==1){
+    for (name in names(dataValidate)) {dataValidate[name]<-dataValidate[name][[1]]}
+  }
 
   ### prepare experimental dataset for
-  data <- dplyr::full_join(dataValidate$survData_long, dataValidate$concModel_long, by =c("SurvivalTime", "Treatment"))
+  data <- dplyr::full_join(dplyr::select(dataValidate$survData_long,!Dataset),
+                           dplyr::select(dataValidate$concModel_long, !Dataset),
+                           by =c("SurvivalTime", "Treatment"))
   colnames(data) <- c("time", "replicate", "Nsurv", "conc")
 
   ## run prediction with odeGUTS::predict_Nsurv_ode function

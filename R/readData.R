@@ -3,7 +3,7 @@
 #' @description Read data from a \code{text} or \code{csv} file and recalculate the
 #' exposure profile depending on the type of experiment (acute oral, acute contact, chronic oral).
 #'
-#' @param file_location Location of a text file containing two datasets, one for the survival data,
+#' @param file_location List of Locations of text files containing each two datasets, one for the survival data,
 #' and one for the concentration data. Both datasets must be included in the same file and contain the same number of column in the same order.
 #' The following columns must be included in the survival dataset:
 #' \itemize{
@@ -27,7 +27,8 @@
 #'
 #' See detail section for example
 #'
-#' @param test_type the test type amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
+#' @param test_type list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
+#' this list must have the same length of the list of file locations
 #' @param bee_species the bee type. At the moment only "Honey_Bee" is supported
 #' @param ... Optional arguments to be passed to the concentration reconstruction (e.g.
 #'  \code{k_sr =} for the stomach release rate (d-1), default is 0.625,
@@ -35,6 +36,7 @@
 #'  \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
 #'
 #' @return An object of class \code{beeSurvData}, which is a list with the following information:
+#' \item{nDatasets}{Number of files passed to the function}
 #' \item{survData}{A table containing the survival data as entered by the user in the input file}
 #' \item{survData_long}{A data frame containing the survival data in long format for model purposes}
 #' \item{concData}{A table containing the concentration data as entered by the user in the input file}
@@ -45,8 +47,12 @@
 #' \item{beeSpecies}{A character vector containing the type bee}
 #' \item{concModel}{A data frame containing the concentration data as recalculated by the model}
 #' \item{concModel_long}{A data frame containing the concentration data as recalculated by the model in a long format}
+#' Each element of the list is itself a list to account for multiple files that can be passed as input.
 #'
 #' @details
+#' The filename must begin with name of the chemical substance being tested and
+#' each word of the filename should be separated via an underscore '_'.
+#'
 #' #' Example of formatting of the input file for a chronic oral study
 #' \tabular{lllllll}{
 #' Survival time \[d\] \tab	Control	\tab T1	\tab T2	\tab T3	\tab T4	\tab T5 \cr
@@ -67,66 +73,127 @@
 #' @examples
 #' \dontrun{
 #' file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
-#' lsData <- dataGUTS(file_location = file_location, test_type = 'Chronic_Oral')
+#' lsData <- dataGUTS(file_location = c(file_location), test_type = c('Chronic_Oral'))
 #' }
 dataGUTS <- function(file_location = NULL,
                      test_type = NULL,
                      bee_species = "Honey_Bee",
                      ...) { # Possibility to add non default ksR, and kca
 
-  # Ensure a correct filename and a correct types is entered
-  if (is.null(file_location) || !file.exists(file_location) ||
-      (!grepl("\\.txt$", file_location) && !grepl("\\.csv$", file_location)) ) {
-    stop("You need to specify a path to the correct 'file_location' with a '.txt.' or '.csv' extension.")
+  ## check that file_location and test_types have the same length
+  if (length(file_location) != length(test_type)){
+    stop("Mismatch between number of files and number of tests.")
   }
-  if (is.null(test_type) ||  !(test_type %in% c("Acute_Oral", "Acute_Contact", "Chronic_Oral"))) {
-    stop("You need to specifiy a correct data 'test_type' amongst 'Acute_Oral', 'Acute_Contact', or 'Chronic_Oral'.")
+  name_chemical <- c() # array to store the name of the chemical extracted from the filename
+  for (i in 1:length(file_location)){
+    # Ensure a correct filename and a correct types is entered
+    if (is.null(file_location[i]) || !file.exists(file_location[i]) ||
+        (!grepl("\\.txt$", file_location[i]) && !grepl("\\.csv$", file_location[i])) ) {
+      stop("You need to specify a path to the correct 'file_location' with a '.txt.' or '.csv' extension.")
+    }
+    if (is.null(test_type[i]) ||  !(test_type[i] %in% c("Acute_Oral", "Acute_Contact", "Chronic_Oral"))) {
+      stop("You need to specifiy a correct data 'test_type' amongst 'Acute_Oral', 'Acute_Contact', or 'Chronic_Oral'.")
+    }
+    # sanity check on the inserted chemical species
+    splitpath <- strsplit(strsplit(file_location[i], "_")[[1]],"/")[[1]]
+    name_chemical <- append(name_chemical, splitpath[length(splitpath)])
   }
   if (is.null(bee_species) ||  !(bee_species %in% c("Honey_Bee"))) {
     stop("You need to specifiy a correct 'bee_species' amongst 'HoneyBee'.
          Other types of bees are not yet implemented.")
   }
+  # check that there are no multiple entries in the bee_species argument
+  if (length(bee_species) > 1){
+    warning("You entered multiple entries for the bee species. Only one is required.
+            Calibration on different species is not possible.
+            Using only the first entry.")
+    bee_species <- bee_species[[1]] # to make sure that the entry is always a string even if a list is passed
+  }
+
+  # Empty arrays for the objects to be returned. Values for each test are appended
+  tbSurv <- list()
+  tbConc <- list()
+  tbSurv_long <- list()
+  tbConc_long <- list()
+  chUnits <- list()
+  # use single value for now
+  bee_species <- bee_species #as.list(rep(bee_species, length(file_location)))
+  dfConcModel <- list()
+  dfConcModel_long <- list()
 
   # Load the survival data from the file
-  # Check where the survival data starts and ends
-  rawData <- readLines(file_location)
-  skipLine_surv <- grep("Survival", rawData)
-  nrowLine_surv <- grep("Concentration unit", rawData)
-  # Load the survival data
-  tbSurv <- data.table::fread(file_location, skip = skipLine_surv, header = T, nrow = nrowLine_surv - (skipLine_surv + 1L) )
-  colnames(tbSurv)[1] <- c("SurvivalTime") # Set unique name for time column
-
-  # Load the concentration data from the file
-  # Check where the concentration data starts and ends
-  skipLine_conc <- grep("Concentration time", rawData)
-  # Load the concentration data
-  tbConc <- data.table::fread(file_location, skip = skipLine_conc, header = T)
-  colnames(tbConc)[1] <- c("SurvivalTime")
-
-  if (ncol(tbSurv)  != ncol(tbConc)) {
-    stop("The number of columns in the survival dataset differs from the number of
+  # Check where the survival data starts and ends for each file
+  nDatasets <- length(file_location)
+  for (i in 1:nDatasets){
+    rawData <- readLines(file_location[i])
+    skipLine_surv <- grep("Survival", rawData)
+    nrowLine_surv <- grep("Concentration unit", rawData)
+    # Load the survival data
+    tbSurv_aux <- data.table::fread(file_location[i], skip = skipLine_surv, header = T, nrow = nrowLine_surv - (skipLine_surv + 1L) )
+    colnames(tbSurv_aux)[1] <- c("SurvivalTime") # Set unique name for time column
+    tbSurv_aux$Dataset <- i
+    tbSurv <- append(tbSurv, list(tbSurv_aux))
+    # Load the concentration data from the file
+    # Check where the concentration data starts and ends
+    skipLine_conc <- grep("Concentration time", rawData)
+    # Load the concentration data
+    tbConc_aux <- data.table::fread(file_location[i], skip = skipLine_conc, header = T)
+    tbConc_aux$Dataset <- i
+    colnames(tbConc_aux)[1] <- c("SurvivalTime")
+    tbConc <- append(tbConc, list(tbConc_aux))
+    if (ncol(tbSurv_aux)  != ncol(tbConc_aux)) {
+      stop("The number of columns in the survival dataset differs from the number of
          columns in the concentration dataset")
-  }
+    }
+    # Load the units
+    # TODO: insert code to extract exact value of units
+    # TODO: recalculate if units are different for different tests
+    # remove all possible whitespaces and substitute with simple whitespace
+    chUnits <- append(chUnits, gsub("[[:blank:]]", " ",rawData[nrowLine_surv]))
 
-  # Load the units
-  chUnits <- rawData[nrowLine_surv]
-
-  # Recalculate the concentrations based on the experiment type
-  if(test_type == "Acute_Oral") {
-    dfConcModel <- concAO(tbConc[1,-1], expTime = max(tbSurv[,1]), ...)
-    } else if(test_type == "Acute_Contact") {
-    dfConcModel <- concAC(tbConc[1,-1], expTime = max(tbSurv[,1]), ...)
+    # Recalculate the concentrations based on the experiment type
+    if(test_type[i] == "Acute_Oral") {
+      dfConcModel_aux <- concAO(tbConc_aux[1,-1], expTime = max(tbSurv_aux[,1]), ...)
+      dfConcModel_aux$Dataset <- i # reallocate the column because it gets overwritten
+    } else if(test_type[i] == "Acute_Contact") {
+      dfConcModel_aux <- concAC(tbConc_aux[1,-1], expTime = max(tbSurv_aux[,1]), ...)
+      dfConcModel_aux$Dataset <- i # reallocate the column because it gets overwritten
     } else {
-    dfConcModel <- data.frame(SurvivalTime = tbConc[,1], tbConc[,2:ncol(tbConc)])
+      dfConcModel_aux <- data.frame(SurvivalTime = tbConc_aux[,1], tbConc_aux[,2:ncol(tbConc_aux)])
+    }
+    dfConcModel <- append(dfConcModel, list(dfConcModel_aux))
+
+    # Transform into long data
+    tbSurv_long_aux <- tidyr::gather(tbSurv_aux, Treatment, NSurv, -SurvivalTime, -Dataset)
+    tbConc_long_aux <- tidyr::gather(tbConc_aux, Treatment, Conc, -SurvivalTime, -Dataset)
+    dfConcModel_long_aux <- tidyr::gather(dfConcModel_aux, Treatment, Conc, -SurvivalTime, -Dataset)
+
+    tbSurv_long <- append(tbSurv_long, list(tbSurv_long_aux))
+    tbConc_long <- append(tbConc_long, list(tbConc_long_aux))
+    dfConcModel_long <- append(dfConcModel_long, list(dfConcModel_long_aux))
   }
 
-  # Transform into long data
-  tbSurv_long <- tidyr::gather(tbSurv, Treatment, NSurv, -SurvivalTime)
-  tbConc_long <- tidyr::gather(tbConc, Treatment, Conc, -SurvivalTime)
-  dfConcModel_long <- tidyr::gather(dfConcModel, Treatment, Conc, -SurvivalTime)
+  ## TODO: This part has to be improved substantially. Needs to account for all
+  ##       possible ways to write the units in the experimental data file.
+  units_check <- length(unique(chUnits)) == 1
+  if (!units_check){
+    warning("!!! IMPORTANT NOTE !!!
+            Check the units in the data file. There seems to be a mismatch.
+            You can continue with the fit, but the results might be incorrect.")
+  }
+  ## TODO: Find a good strategy to ensure safety checks
+  ## to ensure using the same chemical species
+  chemical_check <- length(unique(tolower(name_chemical))) == 1
+  if (!chemical_check){
+    warning("!!! IMPORTANT NOTE !!!
+              Make sure you know what you are doing.
+              Chemical species extracted from filename of the two files does not match.
+              The data will continue to be read, but there might be inconsistencies.")
+  }
 
   # Return
-  lsOut <- list(survData = tbSurv,
+  lsOut <- list(nDatasets = nDatasets,
+                survData = tbSurv,
                 survData_long = tbSurv_long,
                 concData = tbConc,
                 concData_long = tbConc_long,
@@ -136,6 +203,13 @@ dataGUTS <- function(file_location = NULL,
                 concModel = dfConcModel,
                 concModel_long = dfConcModel_long)
   class(lsOut) <- "beeSurvData"
+
+  # This is to keep the compatibility with the current code if there is a single file passed
+  # TODO: Remove once all the changes have been implemented
+  #if (length(file_location)==1){
+  #    for (name in names(lsOut)) {lsOut[name]<-lsOut[name][[1]]}
+  #}
+
   return(lsOut)
 }
 

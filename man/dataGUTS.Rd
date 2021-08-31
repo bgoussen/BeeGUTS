@@ -12,7 +12,7 @@ dataGUTS(
 )
 }
 \arguments{
-\item{file_location}{Location of a text file containing two datasets, one for the survival data,
+\item{file_location}{List of Locations of text files containing each two datasets, one for the survival data,
 and one for the concentration data. Both datasets must be included in the same file and contain the same number of column in the same order.
 The following columns must be included in the survival dataset:
 \itemize{
@@ -36,7 +36,8 @@ exposure concentration at time 0 is required.
 
 See detail section for example}
 
-\item{test_type}{the test type amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"}
+\item{test_type}{list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
+this list must have the same length of the list of file locations}
 
 \item{bee_species}{the bee type. At the moment only "Honey_Bee" is supported}
 
@@ -47,6 +48,7 @@ See detail section for example}
 }
 \value{
 An object of class \code{beeSurvData}, which is a list with the following information:
+\item{nDatasets}{Number of files passed to the function}
 \item{survData}{A table containing the survival data as entered by the user in the input file}
 \item{survData_long}{A data frame containing the survival data in long format for model purposes}
 \item{concData}{A table containing the concentration data as entered by the user in the input file}
@@ -57,12 +59,16 @@ of the input file}
 \item{beeSpecies}{A character vector containing the type bee}
 \item{concModel}{A data frame containing the concentration data as recalculated by the model}
 \item{concModel_long}{A data frame containing the concentration data as recalculated by the model in a long format}
+Each element of the list is itself a list to account for multiple files that can be passed as input.
 }
 \description{
 Read data from a \code{text} or \code{csv} file and recalculate the
 exposure profile depending on the type of experiment (acute oral, acute contact, chronic oral).
 }
 \details{
+The filename must begin with name of the chemical substance being tested and
+each word of the filename should be separated via an underscore '_'.
+
 #' Example of formatting of the input file for a chronic oral study
 \tabular{lllllll}{
 Survival time [d] \tab	Control	\tab T1	\tab T2	\tab T3	\tab T4	\tab T5 \cr
@@ -81,6 +87,6 @@ Concentration time [d]	\tab Control	\tab T1	\tab T2	\tab T3	\tab T4	\tab T5 \cr
 \examples{
 \dontrun{
 file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
-lsData <- dataGUTS(file_location = file_location, test_type = 'Chronic_Oral')
+lsData <- dataGUTS(file_location = c(file_location), test_type = c('Chronic_Oral'))
 }
 }

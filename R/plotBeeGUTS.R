@@ -31,35 +31,59 @@ plot.beeSurvData <- function(x,
     if (!is(x,"beeSurvData")) {
     stop("plot.beeSurvData: an object of class 'beeSurvData' is expected")
   }
+  plotlist <- list()  # list of plots to be returned
+  for (i in 1:x$nDatasets){
+      main = paste("Data from a", x$typeData[i], "test on",
+                 x$beeSpecies)
+      # Extract data
+      dfDataSurv_long <- as.data.frame(x$survData_long[[i]])
+      dfDataConc_long <- as.data.frame(x$concData_long[[i]])
+      dfModelConc_long <- as.data.frame(x$concModel_long[[i]])
 
-  # Extract data
-  dfDataSurv_long <- as.data.frame(x$survData_long)
-  dfDataConc_long <- as.data.frame(x$concData_long)
-  dfModelConc_long <- as.data.frame(x$concModel_long)
+      ggSurv <- ggplot(data = dfDataSurv_long, aes(x=SurvivalTime, y = NSurv)) +
+        geom_point() +
+        xlab(xlab) +
+        ylab(ylab1) +
+        facet_grid(~Treatment) +
+        theme(
+          strip.background = element_blank(),
+          strip.text.x = element_blank()
+       )
 
-  ggSurv <- ggplot(data = dfDataSurv_long, aes(x=SurvivalTime, y = NSurv)) +
-    geom_point() +
-    xlab(xlab) +
-    ylab(ylab1) +
-    facet_grid(~Treatment) +
-    theme(
-      strip.background = element_blank(),
-      strip.text.x = element_blank()
-    )
+      ggConc <- ggplot(data = dfModelConc_long, aes(x=SurvivalTime, y = Conc)) +
+        geom_line() +
+        geom_point(data = dfDataConc_long) +
+        xlab(xlab) +
+        ylab(paste0(ylab2,"\n", x$unitData[[i]])) +
+        ggtitle(main) +
+        facet_grid(~Treatment) +
+        theme(axis.title.x=element_blank(),
+             axis.text.x=element_blank())
 
-  ggConc <- ggplot(data = dfModelConc_long, aes(x=SurvivalTime, y = Conc)) +
-    geom_line() +
-    geom_point(data = dfDataConc_long) +
-    xlab(xlab) +
-    ylab(paste0(ylab2,"\n", x$unitData)) +
-    ggtitle(main) +
-    facet_grid(~Treatment) +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank())
+      ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
+      plotlist <- append(plotlist, list(ggOut))
+  }
+  # return(ggOut)
 
-  ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
-  return(ggOut)
+  # Change the layout of the plots in order to use plotly so as to
+  # have interactivity (to in the end switch datasets)
+  # this is a test using plotly but does not work very well
+  # x <- list(title = "Time [d]")
+  # y1 <- list(title = "Nsurv")
+  # y2 <- list(title = paste0(ylab2,"\n", x$unitData))
+  # ggSurvy <- ggplotly(ggSurv + ylab(" ") + xlab(" "))
+  # ggConcy <- ggplotly(ggConc + ylab(" ") + xlab(" "))
+  # ggConcy %>% layout(xaxis = x, yaxis = y2)#, margin = list(l = 75, b =50))
+  # ggSurvy %>% layout(xaxis = x, yaxis = y1)#, margin = list(l = 75, b =50))
+  # #return(ggConcy)
+  # subplots <- subplot(ggConcy, ggSurvy, nrows = 2, margin=0.03,heights = c(0.4,0.4), titleX = TRUE, titleY = TRUE)
+  # #layout(subplots, xaxis=list(title=x))
+  # #, titleY = TRUE,nrows = 2, margin=0.03, )%>%
+  #    #layout(xaxis = list(title = x, anchor="y2"), yaxis = c(yy2,y1))
+  # return(subplots)
+  return(plotlist)
 }
+
 
 
 #' Plotting method for \code{beeSurvFit} objects
@@ -97,45 +121,59 @@ plot.beeSurvFit <- function(x,
     stop("plot.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
 
-  # Extract data
-  dfDataSurv_long <- as.data.frame(x$data$survData_long)
+  dfDataSurv_long_full <- dplyr::bind_rows(x$data$survData_long)
+  # extract the indices of the various datasets from the global table
+  dfDataSurv_index = dfDataSurv_long_full %>%
+    dplyr::mutate(idAll = dplyr::row_number() ) %>%
+    dplyr::group_by(Dataset) %>%
+    dplyr::summarise(idS_lw = min(idAll),
+                     idS_up = max(idAll))
   #dfModelSurv <- as.data.frame(x$survModel)
-  dfDataConc_long <- as.data.frame(x$data$concData_long)
-  dfModelConc_long <- as.data.frame(x$data$concModel_long)
   lsNsurv_sim <- rstan::extract(x$stanFit, pars = 'Nsurv_sim')
 
-  # Compute quantiles of simulations and compile all in a dataframe
-  dfDataSurv_long$simQ50 <- apply(lsNsurv_sim[[1]], 2, quantile, 0.5)
-  dfDataSurv_long$simQinf95 <- apply(lsNsurv_sim[[1]], 2, quantile, 0.025)
-  dfDataSurv_long$simQsup95 <- apply(lsNsurv_sim[[1]], 2, quantile, 0.975)
-  yLimits <- c(0, max(dfDataSurv_long$NSurv, dfDataSurv_long$simQsup95))
+  plotlist <- list()  # lists to add the plots for each dataset
 
-  ggSurv <- ggplot(data = dfDataSurv_long, aes(x=SurvivalTime, y = NSurv)) +
-    geom_point() +
-    # geom_pointrange( aes(x = SurvivalTime, y = q50, ymin = qinf95, ymax = qsup95, group = Treatment), color = "blue", size = 0.2) +
-    geom_line( aes(x = SurvivalTime, y = simQ50,  group = Treatment), color = "blue") +
-    geom_ribbon( aes(x= SurvivalTime, ymin = simQinf95, ymax = simQsup95, group = Treatment), fill = "blue", alpha = 0.2)+
-    scale_y_continuous(limits = yLimits) +
-    xlab(xlab) +
-    ylab(ylab1) +
-    facet_grid(~Treatment) +
-    theme(
-      strip.background = element_blank(),
-      strip.text.x = element_blank()
-    )
+  for (i in 1:x$data$nDatasets) {
+    # Extract data
+    dfDataSurv_long <- as.data.frame(x$data$survData_long[[i]])
+    dfDataConc_long <- as.data.frame(x$data$concData_long[[i]])
+    dfModelConc_long <- as.data.frame(x$data$concModel_long[[i]])
+    #Extract the right simulated values for each dataset
+    lsNsurv_sim_dataset <- lsNsurv_sim[[1]][,dfDataSurv_index$idS_lw[i]:dfDataSurv_index$idS_up[i]]
+    # Compute quantiles of simulations and compile all in a dataframe
+    dfDataSurv_long$simQ50 <- apply(lsNsurv_sim_dataset, 2, quantile, 0.5)
+    dfDataSurv_long$simQinf95 <- apply(lsNsurv_sim_dataset, 2, quantile, 0.025)
+    dfDataSurv_long$simQsup95 <- apply(lsNsurv_sim_dataset, 2, quantile, 0.975)
+    yLimits <- c(0, max(dfDataSurv_long$NSurv, dfDataSurv_long$simQsup95))
 
-  ggConc <- ggplot(data = dfModelConc_long, aes(x=SurvivalTime, y = Conc)) +
-    geom_line() +
-    geom_point(data = dfDataConc_long) +
-    xlab(xlab) +
-    ylab(paste0(ylab2,"\n", x$data$unitData)) +
-    ggtitle(main) +
-    facet_grid(~Treatment) +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank())
+    ggSurv <- ggplot(data = dfDataSurv_long, aes(x=SurvivalTime, y = NSurv)) +
+      geom_point() +
+      # geom_pointrange( aes(x = SurvivalTime, y = q50, ymin = qinf95, ymax = qsup95, group = Treatment), color = "blue", size = 0.2) +
+      geom_line( aes(x = SurvivalTime, y = simQ50,  group = Treatment), color = "blue") +
+      geom_ribbon( aes(x= SurvivalTime, ymin = simQinf95, ymax = simQsup95, group = Treatment), fill = "blue", alpha = 0.2)+
+      scale_y_continuous(limits = yLimits) +
+      xlab(xlab) +
+      ylab(ylab1) +
+      facet_grid(~Treatment) +
+      theme(
+        strip.background = element_blank(),
+        strip.text.x = element_blank()
+      )
 
-  ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
-  return(ggOut)
+    ggConc <- ggplot(data = dfModelConc_long, aes(x=SurvivalTime, y = Conc)) +
+      geom_line() +
+      geom_point(data = dfDataConc_long) +
+      xlab(xlab) +
+      ylab(paste0(ylab2,"\n", x$data$unitData[[i]])) +
+      ggtitle(main) +
+      facet_grid(~Treatment) +
+      theme(axis.title.x=element_blank(),
+            axis.text.x=element_blank())
+
+    ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
+    plotlist <- append(plotlist, list(ggOut))
+  }
+  return(plotlist)
 }
 
 
