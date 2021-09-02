@@ -6,7 +6,7 @@
 #'
 #' @param object An object of class \code{beeSurvFit}
 #' @param dataValidate Data to validate in the format of the experimental data used for fit (dataGUTS)
-#' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{morse} (e.g.
+#' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{odeGUTS} (e.g.
 #'  \code{mcmc_size = 1000} is to be used to reduce the number of mcmc samples in order to speed up
 #'  the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
 #'  is 1000. If all MCMC is wanted, set argument to \code{NULL}.,

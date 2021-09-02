@@ -2,7 +2,7 @@
 #'
 #' @description This is the generic \code{predict} S3 method for the \code{beeSurvFit}
 #' class. It predict the survival over time for the concentration profiles entered by the user.
-#' No concentration reconstructions are performed here. Functions [morse::predict_ode()]
+#' No concentration reconstructions are performed here. Functions [odeGUTS::predict_ode()]
 #' from the \code{morse} package is used. This might be changed in a future update
 #'
 #' @param object An object of class \code{beeSurvFit}
@@ -63,7 +63,7 @@ predict.beeSurvFit <- function(object,
     stop("Wrong model type. Model type should be 'SD' or 'IT'")
   }
 
-  # Perform predictions using the morse package
+  # Perform predictions using the odeGUTS package
   outMorse <- odeGUTS::predict_ode(morseObject, dataPredict, hb_value = FALSE, hb_valueFORCED  = 0, ...)
 
   # Calculate summary to embed mean posteriors values with outputs
