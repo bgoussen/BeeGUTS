@@ -8,6 +8,7 @@ dataGUTS(
   file_location = NULL,
   test_type = NULL,
   bee_species = "Honey_Bee",
+  NA_string = getOption("datatable.na.strings", "NA"),
   ...
 )
 }
@@ -40,6 +41,8 @@ See detail section for example}
 this list must have the same length of the list of file locations}
 
 \item{bee_species}{the bee type. At the moment only "Honey_Bee" is supported}
+
+\item{NA_string}{a character vector of strings which are to be interpreted as NA values}
 
 \item{...}{Optional arguments to be passed to the concentration reconstruction (e.g.
 \code{k_sr =} for the stomach release rate (d-1), default is 0.625,

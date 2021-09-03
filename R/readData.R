@@ -30,6 +30,7 @@
 #' @param test_type list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
 #' this list must have the same length of the list of file locations
 #' @param bee_species the bee type. At the moment only "Honey_Bee" is supported
+#' @param NA_string a character vector of strings which are to be interpreted as NA values
 #' @param ... Optional arguments to be passed to the concentration reconstruction (e.g.
 #'  \code{k_sr =} for the stomach release rate (d-1), default is 0.625,
 #'  \code{k_ca =} contact availability rate (d-1), default is 0.4), or
@@ -78,6 +79,7 @@
 dataGUTS <- function(file_location = NULL,
                      test_type = NULL,
                      bee_species = "Honey_Bee",
+                     NA_string = getOption("datatable.na.strings","NA"),
                      ...) { # Possibility to add non default ksR, and kca
 
   ## check that file_location and test_types have the same length
@@ -129,7 +131,8 @@ dataGUTS <- function(file_location = NULL,
     skipLine_surv <- grep("Survival", rawData)
     nrowLine_surv <- grep("Concentration unit", rawData)
     # Load the survival data
-    tbSurv_aux <- data.table::fread(file_location[i], skip = skipLine_surv, header = T, nrow = nrowLine_surv - (skipLine_surv + 1L) )
+    tbSurv_aux <- data.table::fread(file_location[i], skip = skipLine_surv, header = T, nrow = nrowLine_surv - (skipLine_surv + 1L),
+                                    na.strings = NA_string)
     colnames(tbSurv_aux)[1] <- c("SurvivalTime") # Set unique name for time column
     tbSurv_aux$Dataset <- i
     tbSurv <- append(tbSurv, list(tbSurv_aux))
@@ -137,7 +140,7 @@ dataGUTS <- function(file_location = NULL,
     # Check where the concentration data starts and ends
     skipLine_conc <- grep("Concentration time", rawData)
     # Load the concentration data
-    tbConc_aux <- data.table::fread(file_location[i], skip = skipLine_conc, header = T)
+    tbConc_aux <- data.table::fread(file_location[i], skip = skipLine_conc, header = T, na.strings = NA_string)
     tbConc_aux$Dataset <- i
     colnames(tbConc_aux)[1] <- c("SurvivalTime")
     tbConc <- append(tbConc, list(tbConc_aux))
