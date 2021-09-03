@@ -12,6 +12,10 @@ Authors@R:
            family = "Zakharova",
            role = c("ctb"),
            email = "liubov.zakharova@ibacon.com"),
+    person(given = "Romoli",
+           family = "Carlo",
+           role = c("ctb"),
+           email = "carlo.romoli@ibacon.com"),
     person("Bayer AG",
            role = "cph")
      )
