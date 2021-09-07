@@ -199,10 +199,12 @@ plot.beeSurvFit <- function(x,
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data(betacyfluthrinChronic) # Load dataset for validation
 #' data(fitBetacyfluthrin_Chronic)
 #' validation <- validate(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
 #' plot(validation)
+#' }
 plot.beeSurvValidation <- function(x,
                                    ...,
                                    xlab = "Time [d]",
@@ -283,6 +285,7 @@ plot.beeSurvValidation <- function(x,
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' dataPredict <- data.frame(time = c(1:10, 1:10, 1:10),
 #'                      conc = c(rep(5, 10), rep(10, 10), rep(15, 10)),
 #'                      replicate = c(rep("rep1", 10), rep("rep2", 10), rep("rep3", 10)),
@@ -290,6 +293,7 @@ plot.beeSurvValidation <- function(x,
 #' data(fitBetacyfluthrin_Chronic)
 #' prediction <- predict(fitBetacyfluthrin_Chronic, dataPredict)
 #' plot(prediction)
+#' }
 plot.beeSurvPred <- function(x,
                             ...,
                             xlab = "Time [d]",

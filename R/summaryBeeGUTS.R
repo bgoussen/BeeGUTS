@@ -10,8 +10,10 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data(fitBetacyfluthrin_Chronic)
 #' summary(fitBetacyfluthrin_Chronic)
+#' }
 summary.beeSurvFit <- function(object, ...) {
 
   # Prepare prior
