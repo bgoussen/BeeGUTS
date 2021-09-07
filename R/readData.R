@@ -168,8 +168,11 @@ dataGUTS <- function(file_location = NULL,
 
     # Transform into long data
     tbSurv_long_aux <- tidyr::gather(tbSurv_aux, Treatment, NSurv, -SurvivalTime, -Dataset)
+    tbSurv_long_aux <- na.omit(tbSurv_long_aux) # Remove NAs
     tbConc_long_aux <- tidyr::gather(tbConc_aux, Treatment, Conc, -SurvivalTime, -Dataset)
+    tbConc_long_aux <- na.omit(tbConc_long_aux) # Remove NAs
     dfConcModel_long_aux <- tidyr::gather(dfConcModel_aux, Treatment, Conc, -SurvivalTime, -Dataset)
+    dfConcModel_long_aux <- na.omit(dfConcModel_long_aux) # Remove NAs
 
     tbSurv_long <- append(tbSurv_long, list(tbSurv_long_aux))
     tbConc_long <- append(tbConc_long, list(tbConc_long_aux))
