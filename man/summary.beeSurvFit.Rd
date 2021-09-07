@@ -19,6 +19,8 @@ This is the generic \code{summary} S3 method for the \code{beeSurvFit} class.
 It shows the quantiles of priors and posteriors on parameters.
 }
 \examples{
+\dontrun{
 data(fitBetacyfluthrin_Chronic)
 summary(fitBetacyfluthrin_Chronic)
+}
 }

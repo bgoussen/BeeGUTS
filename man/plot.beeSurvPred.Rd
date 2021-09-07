@@ -35,6 +35,7 @@ This is the generic \code{plot} S3 method for the \code{beeSurvPred}
 class. It plots the predicted number of survivors for the exposure concentration entered by the user.
 }
 \examples{
+\dontrun{
 dataPredict <- data.frame(time = c(1:10, 1:10, 1:10),
                      conc = c(rep(5, 10), rep(10, 10), rep(15, 10)),
                      replicate = c(rep("rep1", 10), rep("rep2", 10), rep("rep3", 10)),
@@ -42,4 +43,5 @@ dataPredict <- data.frame(time = c(1:10, 1:10, 1:10),
 data(fitBetacyfluthrin_Chronic)
 prediction <- predict(fitBetacyfluthrin_Chronic, dataPredict)
 plot(prediction)
+}
 }

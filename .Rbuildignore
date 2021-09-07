@@ -5,3 +5,4 @@
 ^\.github$
 ^.travis.yml$
 ^testing_implementation\.R$
+^cran-comments\.md$
