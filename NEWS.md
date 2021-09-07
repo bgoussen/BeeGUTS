@@ -1,3 +1,8 @@
+# Version 1.0.0
+* Add possibility to use more than one dataset at a time. One file should be loaded
+per datasets. The concentrations should be expressed in the same unit.
+* Add possibility to have NAs in the datasets
+
 # Version 0.0.0.9000 (Development release)
 
 ## Known limitations
