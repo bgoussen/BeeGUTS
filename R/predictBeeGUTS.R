@@ -28,7 +28,7 @@
 #' \dontrun{
 #' dataPredict <- data.frame(time = c(1:5, 1:15),
 #'                           conc = c(rep(5, 5), rep(15, 15)),
-#'                           replicate = c(rep("rep1", 5), rep("rep3", 15)))
+#'                           replicate = c(rep("rep1", 5), rep("rep2", 15)))
 #' data(fitBetacyfluthrin_Chronic)
 #' prediction <- predict(fitBetacyfluthrin_Chronic, dataPredict)
 #' }
@@ -64,7 +64,7 @@ predict.beeSurvFit <- function(object,
   }
 
   # Perform predictions using the odeGUTS package
-  outMorse <- odeGUTS::predict_ode(morseObject, dataPredict, hb_value = FALSE, hb_valueFORCED  = 0, ...)
+  outMorse <- odeGUTS::predict_ode(morseObject, dataPredict, ...)
 
   # Calculate summary to embed mean posteriors values with outputs
   invisible(utils::capture.output(outSummary <- summary(object)))

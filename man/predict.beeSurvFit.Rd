@@ -38,7 +38,7 @@ from the \code{morse} package is used. This might be changed in a future update
 \dontrun{
 dataPredict <- data.frame(time = c(1:5, 1:15),
                           conc = c(rep(5, 5), rep(15, 15)),
-                          replicate = c(rep("rep1", 5), rep("rep3", 15)))
+                          replicate = c(rep("rep1", 5), rep("rep2", 15)))
 data(fitBetacyfluthrin_Chronic)
 prediction <- predict(fitBetacyfluthrin_Chronic, dataPredict)
 }

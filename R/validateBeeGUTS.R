@@ -92,7 +92,7 @@ validate.beeSurvFit <- function(object,
   }
 
   # Perform predictions using the odeGUTS package
-  outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, data, hb_value = FALSE, hb_valueFORCED  = 0, ...)
+  outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, data, ...)
 
 
   # Calculate EFSA criteria using the odeGUTS package
