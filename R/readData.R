@@ -32,12 +32,14 @@
 #' @param bee_species the bee type. At the moment only "Honey_Bee" is supported
 #' @param NA_string a character vector of strings which are to be interpreted as NA values
 #' @param ... Optional arguments to be passed to the concentration reconstruction (e.g.
-#'  \code{k_sr =} for the stomach release rate (d-1), default is 0.625,
-#'  \code{k_ca =} contact availability rate (d-1), default is 0.4), or
-#'  \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
-#'  \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
-#'  \code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day)
-#'  \code{targConc =} numerical scalar, tagert concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).
+#' \itemize{
+#'  \item \code{k_sr =} for the stomach release rate (d-1), default is 0.625,
+#'  \item \code{k_ca =} contact availability rate (d-1), default is 0.4), or
+#'  \item \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
+#'  \item \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
+#'  \item \code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day)
+#'  \item \code{targConc =} numerical scalar, tagert concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).
+#' }
 #'
 #' @return An object of class \code{beeSurvData}, which is a list with the following information:
 #' \item{nDatasets}{Number of files passed to the function}
@@ -285,9 +287,11 @@ concAC <- function(cExt, expTime, k_ca = 0.4, ...) {
 #' mg a.s./kg feed to Xg/bee
 #' @param cExt The concentration dataframe in mg a.s./kg feed
 #' @param targConc A numerical scalar representing the unit of the target concentration amongst (default = 1)
-#' \code{1 for µg a.s./bee}
-#' \code{2 for ng a.s./bee}
-#' \code{3 for mg a.s./bee}
+#' \itemise{
+#' \item \code{1} for µg a.s./bee
+#' \item \code{2} for ng a.s./bee
+#' \item \code{3} for mg a.s./bee
+#' }
 #' @param ... Not used
 #'
 #' @return A data frame containing a column with the time points and a column with the

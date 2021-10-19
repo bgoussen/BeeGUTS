@@ -4,7 +4,7 @@
 \alias{concAC}
 \title{Recalculate the concentrations for the acute contact tests for bees}
 \usage{
-concAC(cExt, expTime, k_ca = 0.4)
+concAC(cExt, expTime, k_ca = 0.4, ...)
 }
 \arguments{
 \item{cExt}{The concentration applied}
@@ -12,6 +12,8 @@ concAC(cExt, expTime, k_ca = 0.4)
 \item{expTime}{The duration of the experiment in days}
 
 \item{k_ca}{Contact availability rate (d-1), default is 0.4}
+
+\item{...}{Not used}
 }
 \value{
 A data frame containing a column with the time points and a column with the

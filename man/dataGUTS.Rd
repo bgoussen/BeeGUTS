@@ -45,12 +45,14 @@ this list must have the same length of the list of file locations}
 \item{NA_string}{a character vector of strings which are to be interpreted as NA values}
 
 \item{...}{Optional arguments to be passed to the concentration reconstruction (e.g.
-\code{k_sr =} for the stomach release rate (d-1), default is 0.625,
-\code{k_ca =} contact availability rate (d-1), default is 0.4), or
-\code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
-\code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
-\code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day)
-\code{targConc =} numerical scalar, tagert concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).}
+\itemize{
+\item \code{k_sr =} for the stomach release rate (d-1), default is 0.625,
+\item \code{k_ca =} contact availability rate (d-1), default is 0.4), or
+\item \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
+\item \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
+\item \code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day)
+\item \code{targConc =} numerical scalar, tagert concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).
+}}
 }
 \value{
 An object of class \code{beeSurvData}, which is a list with the following information:
