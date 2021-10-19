@@ -237,13 +237,14 @@ dataGUTS <- function(file_location = NULL,
 #' @param cTime The duration of exposure in days, default is 0.25 d
 #' @param k_sr Stomach release rate (d-1), default is 0.625
 #' @param expTime The duration of the experiment in days
+#' @param ... Not used
 #'
 #' @return A data frame containing a column with the time points and a column with the
 #' recalculated concentrations
 #' @export
 #'
 #' @examples conc <- concAO(cExt = cbind(3.5, 6, 8, 10), cTime = 0.25, expTime = 4)
-concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625) {
+concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625, ...) {
   timePoint <- seq(0, expTime, 0.1)
   cExt <- cExt[rep(seq_len(nrow(cExt)), each = length(timePoint)),] # Expend cExt to allow concentration calculation for all time points
   out <- (cExt * (timePoint / cTime) * (timePoint <= cTime))  + (cExt * exp(-k_sr * (timePoint - cTime)) * (timePoint > cTime))
@@ -256,13 +257,14 @@ concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625) {
 #' @param cExt The concentration applied
 #' @param expTime The duration of the experiment in days
 #' @param k_ca Contact availability rate (d-1), default is 0.4
+#' @param ... Not used
 #'
 #' @return A data frame containing a column with the time points and a column with the
 #' recalculated concentrations
 #' @export
 #'
 #' @examples conc <- concAC(cbind(3.1, 4, 6, 8), 4)
-concAC <- function(cExt, expTime, k_ca = 0.4) {
+concAC <- function(cExt, expTime, k_ca = 0.4, ...) {
   timePoint <- seq(0, expTime, 0.1)
   cExt <- cExt[rep(seq_len(nrow(cExt)), each = length(timePoint)),] # Expend cExt to allow concentration calculation for all time points
   out <-cExt * exp(-k_ca * timePoint)
@@ -286,6 +288,7 @@ concAC <- function(cExt, expTime, k_ca = 0.4) {
 #' \code{1 for µg a.s./bee}
 #' \code{2 for ng a.s./bee}
 #' \code{3 for mg a.s./bee}
+#' @param ... Not used
 #'
 #' @return A data frame containing a column with the time points and a column with the
 #' recalculated concentrations
@@ -294,7 +297,7 @@ concAC <- function(cExt, expTime, k_ca = 0.4) {
 #' @examples
 #' cExt <- data.frame(SurvivalTime = c(0,10), Control = c(0,0), T1 = c(1, 1), T2 = c(5, 5), Dataset = c(1, 1))
 #' conc <- concCst(cExt)
-concCst <- function(cExt, f_rate = c(25), targConc = 1, cstConcCal = TRUE) {
+concCst <- function(cExt, f_rate = c(25), targConc = 1, cstConcCal = TRUE, ...) {
   if (cstConcCal == FALSE) { # If recalculating chronic concentrations is not necessary, return early
     return(list(Units = NULL, Concentrations = data.frame(SurvivalTime = cExt[,1], cExt[,2:ncol(cExt)])))
   }
