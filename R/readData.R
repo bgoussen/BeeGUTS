@@ -35,6 +35,9 @@
 #'  \code{k_sr =} for the stomach release rate (d-1), default is 0.625,
 #'  \code{k_ca =} contact availability rate (d-1), default is 0.4), or
 #'  \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
+#'  \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
+#'  \code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day)
+#'  \code{targConc =} numerical scalar, tagert concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).
 #'
 #' @return An object of class \code{beeSurvData}, which is a list with the following information:
 #' \item{nDatasets}{Number of files passed to the function}
@@ -74,7 +77,7 @@
 #' @examples
 #' \dontrun{
 #' file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
-#' lsData <- dataGUTS(file_location = c(file_location), test_type = c('Chronic_Oral'))
+#' lsData <- dataGUTS(file_location = c(file_location), test_type = c('Chronic_Oral'), cstConcCal = FALSE)
 #' }
 dataGUTS <- function(file_location = NULL,
                      test_type = NULL,
@@ -131,7 +134,7 @@ dataGUTS <- function(file_location = NULL,
     skipLine_surv <- grep("Survival", rawData)
     nrowLine_surv <- grep("Concentration unit", rawData)
     # Load the survival data
-    tbSurv_aux <- data.table::fread(file_location[i], skip = skipLine_surv, header = T, nrow = nrowLine_surv - (skipLine_surv + 1L),
+    tbSurv_aux <- data.table::fread(file_location[i], skip = skipLine_surv - 1L, header = T, nrow = nrowLine_surv - (skipLine_surv + 1L),
                                     na.strings = NA_string)
     colnames(tbSurv_aux)[1] <- c("SurvivalTime") # Set unique name for time column
     tbSurv_aux$Dataset <- i
@@ -140,7 +143,7 @@ dataGUTS <- function(file_location = NULL,
     # Check where the concentration data starts and ends
     skipLine_conc <- grep("Concentration time", rawData)
     # Load the concentration data
-    tbConc_aux <- data.table::fread(file_location[i], skip = skipLine_conc, header = T, na.strings = NA_string)
+    tbConc_aux <- data.table::fread(file_location[i], skip = skipLine_conc - 1L, header = T, na.strings = NA_string)
     tbConc_aux$Dataset <- i
     colnames(tbConc_aux)[1] <- c("SurvivalTime")
     tbConc <- append(tbConc, list(tbConc_aux))
@@ -162,7 +165,11 @@ dataGUTS <- function(file_location = NULL,
       dfConcModel_aux <- concAC(tbConc_aux[1,-1], expTime = max(tbSurv_aux[,1]), ...)
       dfConcModel_aux$Dataset <- i # reallocate the column because it gets overwritten
     } else {
-      dfConcModel_aux <- data.frame(SurvivalTime = tbConc_aux[,1], tbConc_aux[,2:ncol(tbConc_aux)])
+      lsConcModel_aux <- concCst(tbConc_aux, ...)
+      dfConcModel_aux <- lsConcModel_aux$Concentrations
+      if (!is.null(lsConcModel_aux$Units)) {
+        chUnits[[i]] <- lsConcModel_aux$Units
+      }
     }
     dfConcModel <- append(dfConcModel, list(dfConcModel_aux))
 
@@ -262,3 +269,52 @@ concAC <- function(cExt, expTime, k_ca = 0.4) {
   return(data.frame(SurvivalTime = timePoint, out))
 }
 
+
+
+# Chronic oral test
+#' Recalculate the concentrations for the chronic oral tests for bees from
+#' mg a.s./kg feed to µg/bee
+#'
+#' @param f_rate A vector containing the feeding rates of the bees in mg/bee/day. If the vector
+#' is of size 1, the same feeding rate is used for all test conditions. If the vector
+#' is of size >1, it should be of the same size as the number of condition and one
+#' feeding rate must be provided per condition. Default is 25 mg/bee/day
+#' @param cstConcCal Logical. Indicate if concentrations should be recalculated from
+#' mg a.s./kg feed to Xg/bee
+#' @param cExt The concentration dataframe in mg a.s./kg feed
+#' @param targConc A numerical scalar representing the unit of the target concentration amongst (default = 1)
+#' \code{1 for µg a.s./bee}
+#' \code{2 for ng a.s./bee}
+#' \code{3 for mg a.s./bee}
+#'
+#' @return A data frame containing a column with the time points and a column with the
+#' recalculated concentrations
+#' @export
+#'
+#' @examples
+#' cExt <- data.frame(SurvivalTime = c(0,10), Control = c(0,0), T1 = c(1, 1), T2 = c(5, 5), Dataset = c(1, 1))
+#' conc <- concCst(cExt)
+concCst <- function(cExt, f_rate = c(25), targConc = 1, cstConcCal = TRUE) {
+  if (cstConcCal == FALSE) { # If recalculating chronic concentrations is not necessary, return early
+    return(list(Units = NULL, Concentrations = data.frame(SurvivalTime = cExt[,1], cExt[,2:ncol(cExt)])))
+  }
+
+  if (cstConcCal == TRUE) {
+    tmpConc <- cExt[,2:(ncol(cExt) - 1L)] # Remove dataset number for concentration calculations
+    if (!(targConc %in% c(1, 2, 3))) {
+      stop("targConc should be 1, 2, or 3")
+    }
+    concConvert <- switch(targConc, 1000, 1000*1000, 1) # Choose the correct target concentration
+    concUnit <- switch(targConc, "µg/bee/day", "ng/bee/day", "mg/bee/day")
+    if (length(f_rate) == 1){ # If only one feeding rate is provided, use it for all conditions
+      f_rate <- rep(f_rate, times = length(tmpConc))
+      out <- mapply('*', tmpConc, f_rate) / concConvert # Correspond to (f_rate/concConvert) * tmpConc
+    } else if (length(f_rate) == length(tmpConc)) { # If more than one feeding rate is provided, it should be of the same length than the number of conditions
+      out <- mapply('*', tmpConc, f_rate) / concConvert # Correspond to (f_rate/concConvert) * tmpConc
+    } else {
+      stop("Feeding rates should either be provided as a mean for the whole study
+           or per treatment")
+    }
+    return(list(Units = concUnit, Concentrations = data.frame(SurvivalTime = cExt[,1], out, Dataset = cExt [,ncol(cExt)])))
+  }
+}

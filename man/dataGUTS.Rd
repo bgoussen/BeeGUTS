@@ -47,7 +47,10 @@ this list must have the same length of the list of file locations}
 \item{...}{Optional arguments to be passed to the concentration reconstruction (e.g.
 \code{k_sr =} for the stomach release rate (d-1), default is 0.625,
 \code{k_ca =} contact availability rate (d-1), default is 0.4), or
-\code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d}
+\code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
+\code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
+\code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day)
+\code{targConc =} numerical scalar, tagert concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).}
 }
 \value{
 An object of class \code{beeSurvData}, which is a list with the following information:
@@ -90,6 +93,6 @@ Concentration time [d]	\tab Control	\tab T1	\tab T2	\tab T3	\tab T4	\tab T5 \cr
 \examples{
 \dontrun{
 file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
-lsData <- dataGUTS(file_location = c(file_location), test_type = c('Chronic_Oral'))
+lsData <- dataGUTS(file_location = c(file_location), test_type = c('Chronic_Oral'), cstConcCal = FALSE)
 }
 }
