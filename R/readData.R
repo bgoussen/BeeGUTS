@@ -194,7 +194,8 @@ dataGUTS <- function(file_location = NULL,
   if (!units_check){
     warning("!!! IMPORTANT NOTE !!!
             Check the units in the data file. There seems to be a mismatch.
-            You can continue with the fit, but the results might be incorrect.")
+            You can continue with the fit, but the results might be incorrect.
+            See 'object$chUnits' for more information.")
   }
   ## TODO: Find a good strategy to ensure safety checks
   ## to ensure using the same chemical species
@@ -300,7 +301,7 @@ concAC <- function(cExt, expTime, k_ca = 0.4, ...) {
 #'
 #' @examples
 #' cExt <- data.frame(SurvivalTime = c(0,10), Control = c(0,0), T1 = c(1, 1), T2 = c(5, 5), Dataset = c(1, 1))
-#' conc <- concCst(cExt)
+#' conc <- concCst(cExt, targConc = 2)
 concCst <- function(cExt, f_rate = c(25), targConc = 1, cstConcCal = TRUE, ...) {
   if (cstConcCal == FALSE) { # If recalculating chronic concentrations is not necessary, return early
     return(list(Units = NULL, Concentrations = data.frame(SurvivalTime = cExt[,1], cExt[,2:ncol(cExt)])))
@@ -311,13 +312,13 @@ concCst <- function(cExt, f_rate = c(25), targConc = 1, cstConcCal = TRUE, ...) 
     if (!(targConc %in% c(1, 2, 3))) {
       stop("targConc should be 1, 2, or 3")
     }
-    concConvert <- switch(targConc, 1000, 1000*1000, 1) # Choose the correct target concentration
+    concConvert <- switch(targConc, 1, 1000, 0.001) # Choose the correct target concentration
     concUnit <- switch(targConc, "µg/bee/day", "ng/bee/day", "mg/bee/day")
     if (length(f_rate) == 1){ # If only one feeding rate is provided, use it for all conditions
       f_rate <- rep(f_rate, times = length(tmpConc))
-      out <- mapply('*', tmpConc, f_rate) / concConvert # Correspond to (f_rate/concConvert) * tmpConc
+      out <- mapply('*', tmpConc, f_rate) / 1000 * concConvert # Correspond to (f_rate/1000) * tmpConc
     } else if (length(f_rate) == length(tmpConc)) { # If more than one feeding rate is provided, it should be of the same length than the number of conditions
-      out <- mapply('*', tmpConc, f_rate) / concConvert # Correspond to (f_rate/concConvert) * tmpConc
+      out <- mapply('*', tmpConc, f_rate) / 1000 * concConvert # Correspond to (f_rate/1000) * tmpConc
     } else {
       stop("Feeding rates should either be provided as a mean for the whole study
            or per treatment")
