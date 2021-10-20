@@ -195,7 +195,7 @@ dataGUTS <- function(file_location = NULL,
     warning("!!! IMPORTANT NOTE !!!
             Check the units in the data file. There seems to be a mismatch.
             You can continue with the fit, but the results might be incorrect.
-            See 'object$chUnits' for more information.")
+            See 'object$unitData' for more information.")
   }
   ## TODO: Find a good strategy to ensure safety checks
   ## to ensure using the same chemical species
