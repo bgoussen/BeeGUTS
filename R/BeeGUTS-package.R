@@ -20,7 +20,7 @@
 #' Baas, J., Goussen, B., Miles, M., Preuss, T.G., Roessing, I. (submitted).
 #' BeeGUTS – new integrative TKTD model for honey bees approach moving from single point estimates of toxicity and exposure to a holistic link between exposure and effect.
 #'
-#' Jager, T., Albert, C., Preuss, T.G. and Ashauer, R. (2011). General Unified Thresold model of Survivial - a toxicokinetic-toxicodynamic fremework for ecotoxicology.
+#' Jager, T., Albert, C., Preuss, T.G. and Ashauer, R. (2011). General Unified Threshold model of Survival - a toxicokinetic-toxicodynamic framework for ecotoxicology.
 #' \doi{10.1021/es103092a}
 #'
 #' Jager, T. and Ashauer, R. (2018). Modelling survival under chemical stress. A comprehensive guide to the GUTS framework. Version 1.0
@@ -74,9 +74,9 @@ NULL
 #' @usage data(fitBetacyfluthrin_Chronic)
 #' @format A list of class \code{beeSurvFit} constructed by \code{fitBeeGUTS} containing:
 #' \describe{
-#' \item{\code{stanFit}}{A 'stanfit'  object contianing the results of the calibration.}
-#' \item{\code{data}}{A 'data frame'beeSurvData' objects with the user data used for the calibration.}
-#' \item{\code{dataFit}}{A list containing the priors and adata formatted for the calibration algorithm.}
+#' \item{\code{stanFit}}{A 'stanfit'  object containing the results of the calibration.}
+#' \item{\code{data}}{A 'beeSurvData' objects with the user data used for the calibration.}
+#' \item{\code{dataFit}}{A list containing the priors and data formatted for the calibration algorithm.}
 #' \item{\code{setupMCMC}}{A list containing the setup used for the MCMC.}
 #' \item{\code{modelType}}{A character string containing the type of GUTS model used (here 'SD').}
 #' \item{\code{distribution}}{A character string containing the distribution used (IT only, here 'NA').}

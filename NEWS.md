@@ -8,5 +8,5 @@ per datasets. The concentrations should be expressed in the same unit.
 ## Known limitations
 * Only one dataset at a time can be used for the calibration
 * LPx calculations are not currently implemented
-* PPC plots and EFSA criteria are not available for the calibration. They are available for the validaiton
+* PPC plots and EFSA criteria are not available for the calibration. They are available for the validation
 * Only the _honey bee_ species is implemented

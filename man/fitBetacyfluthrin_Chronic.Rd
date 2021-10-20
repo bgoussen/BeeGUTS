@@ -8,9 +8,9 @@ constant concentration of Betacyfluthrin for 10 days.}
 \format{
 A list of class \code{beeSurvFit} constructed by \code{fitBeeGUTS} containing:
 \describe{
-\item{\code{stanFit}}{A 'stanfit'  object contianing the results of the calibration.}
-\item{\code{data}}{A 'data frame'beeSurvData' objects with the user data used for the calibration.}
-\item{\code{dataFit}}{A list containing the priors and adata formatted for the calibration algorithm.}
+\item{\code{stanFit}}{A 'stanfit'  object containing the results of the calibration.}
+\item{\code{data}}{A 'beeSurvData' objects with the user data used for the calibration.}
+\item{\code{dataFit}}{A list containing the priors and data formatted for the calibration algorithm.}
 \item{\code{setupMCMC}}{A list containing the setup used for the MCMC.}
 \item{\code{modelType}}{A character string containing the type of GUTS model used (here 'SD').}
 \item{\code{distribution}}{A character string containing the distribution used (IT only, here 'NA').}

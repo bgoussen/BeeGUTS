@@ -11,7 +11,7 @@
 #' @param main A character string for the title label plot
 #' @param ... Additional parameters to generic plot function (not used)
 #'
-#' @return A graphic with the inputed data
+#' @return A graphic with the input data
 #'
 #' @import ggplot2
 #'

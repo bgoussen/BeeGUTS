@@ -51,7 +51,7 @@ this list must have the same length of the list of file locations}
 \item \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
 \item \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
 \item \code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day)
-\item \code{targConc =} numerical scalar, tagert concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).
+\item \code{targConc =} numerical scalar, target concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).
 }}
 }
 \value{
