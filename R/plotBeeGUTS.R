@@ -165,7 +165,7 @@ plot.beeSurvFit <- function(x,
       geom_point(data = dfDataConc_long) +
       xlab(xlab) +
       ylab(paste0(ylab2,"\n", x$data$unitData[[i]])) +
-      ggtitle(main) +
+      ggtitle(main[i]) +
       facet_grid(~Treatment) +
       theme(axis.title.x=element_blank(),
             axis.text.x=element_blank())
