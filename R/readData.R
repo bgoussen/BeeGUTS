@@ -79,7 +79,8 @@
 #' @examples
 #' \dontrun{
 #' file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
-#' lsData <- dataGUTS(file_location = c(file_location), test_type = c('Chronic_Oral'), cstConcCal = FALSE)
+#' lsData <- dataGUTS(file_location = c(file_location),
+#'                   test_type = c('Chronic_Oral'), cstConcCal = FALSE)
 #' }
 dataGUTS <- function(file_location = NULL,
                      test_type = NULL,
@@ -278,7 +279,7 @@ concAC <- function(cExt, expTime, k_ca = 0.4, ...) {
 
 # Chronic oral test
 #' Recalculate the concentrations for the chronic oral tests for bees from
-#' mg a.s./kg feed to µg/bee
+#' mg a.s./kg feed to \eqn{\mu}g/bee
 #'
 #' @param f_rate A vector containing the feeding rates of the bees in mg/bee/day. If the vector
 #' is of size 1, the same feeding rate is used for all test conditions. If the vector
@@ -288,8 +289,8 @@ concAC <- function(cExt, expTime, k_ca = 0.4, ...) {
 #' mg a.s./kg feed to Xg/bee
 #' @param cExt The concentration dataframe in mg a.s./kg feed
 #' @param targConc A numerical scalar representing the unit of the target concentration amongst (default = 1)
-#' \itemise{
-#' \item \code{1} for µg a.s./bee
+#' \itemize{
+#' \item \code{1} for \eqn{\mu}g a.s./bee
 #' \item \code{2} for ng a.s./bee
 #' \item \code{3} for mg a.s./bee
 #' }
@@ -300,7 +301,8 @@ concAC <- function(cExt, expTime, k_ca = 0.4, ...) {
 #' @export
 #'
 #' @examples
-#' cExt <- data.frame(SurvivalTime = c(0,10), Control = c(0,0), T1 = c(1, 1), T2 = c(5, 5), Dataset = c(1, 1))
+#' cExt <- data.frame(SurvivalTime = c(0,10), Control = c(0,0),
+#'         T1 = c(1, 1), T2 = c(5, 5), Dataset = c(1, 1))
 #' conc <- concCst(cExt, targConc = 2)
 concCst <- function(cExt, f_rate = c(25), targConc = 1, cstConcCal = TRUE, ...) {
   if (cstConcCal == FALSE) { # If recalculating chronic concentrations is not necessary, return early
@@ -313,7 +315,7 @@ concCst <- function(cExt, f_rate = c(25), targConc = 1, cstConcCal = TRUE, ...) 
       stop("targConc should be 1, 2, or 3")
     }
     concConvert <- switch(targConc, 1, 1000, 0.001) # Choose the correct target concentration
-    concUnit <- switch(targConc, "µg/bee/day", "ng/bee/day", "mg/bee/day")
+    concUnit <- switch(targConc, "\u00b5g/bee/day", "ng/bee/day", "mg/bee/day")
     if (length(f_rate) == 1){ # If only one feeding rate is provided, use it for all conditions
       f_rate <- rep(f_rate, times = length(tmpConc))
       out <- mapply('*', tmpConc, f_rate) / 1000 * concConvert # Correspond to (f_rate/1000) * tmpConc

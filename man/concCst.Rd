@@ -3,7 +3,7 @@
 \name{concCst}
 \alias{concCst}
 \title{Recalculate the concentrations for the chronic oral tests for bees from
-mg a.s./kg feed to µg/bee}
+mg a.s./kg feed to \eqn{\mu}g/bee}
 \usage{
 concCst(cExt, f_rate = c(25), targConc = 1, cstConcCal = TRUE, ...)
 }
@@ -16,8 +16,8 @@ is of size >1, it should be of the same size as the number of condition and one
 feeding rate must be provided per condition. Default is 25 mg/bee/day}
 
 \item{targConc}{A numerical scalar representing the unit of the target concentration amongst (default = 1)
-\itemise{
-\item \code{1} for µg a.s./bee
+\itemize{
+\item \code{1} for \eqn{\mu}g a.s./bee
 \item \code{2} for ng a.s./bee
 \item \code{3} for mg a.s./bee
 }}
@@ -33,9 +33,10 @@ recalculated concentrations
 }
 \description{
 Recalculate the concentrations for the chronic oral tests for bees from
-mg a.s./kg feed to µg/bee
+mg a.s./kg feed to \eqn{\mu}g/bee
 }
 \examples{
-cExt <- data.frame(SurvivalTime = c(0,10), Control = c(0,0), T1 = c(1, 1), T2 = c(5, 5), Dataset = c(1, 1))
+cExt <- data.frame(SurvivalTime = c(0,10), Control = c(0,0),
+        T1 = c(1, 1), T2 = c(5, 5), Dataset = c(1, 1))
 conc <- concCst(cExt, targConc = 2)
 }
