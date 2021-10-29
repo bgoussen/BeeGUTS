@@ -65,10 +65,12 @@ validate.beeSurvFit <- function(object,
   }
 
   ### prepare experimental dataset for
-  data <- dplyr::full_join(dplyr::select(dataValidate$survData_long,!Dataset),
+  dfData <- dplyr::full_join(dplyr::select(dataValidate$survData_long,!Dataset),
                            dplyr::select(dataValidate$concModel_long, !Dataset),
                            by =c("SurvivalTime", "Treatment"))
-  colnames(data) <- c("time", "replicate", "Nsurv", "conc")
+  colnames(dfData) <- c("time", "replicate", "Nsurv", "conc")
+
+  dfData <- dfData[with(dfData, order(replicate, time)),]
 
   ## run prediction with odeGUTS::predict_Nsurv_ode function
   if(object$modelType == "SD"){
@@ -92,7 +94,7 @@ validate.beeSurvFit <- function(object,
   }
 
   # Perform predictions using the odeGUTS package
-  outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, data, ...)
+  outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, dfData, ...)
 
 
   # Calculate EFSA criteria using the odeGUTS package
@@ -106,11 +108,12 @@ validate.beeSurvFit <- function(object,
                 modelType = object$modelType,
                 unitData = object$data$unitData,
                 beeSpecies = object$data$beeSpecies,
-                typeData = object$data$typeData,
+                typeData = dataValidate$typeData,
                 setupMCMC = object$setupMCMC,
                 sim = outMorse$df_quantile,
                 EFSA = EFSA_Criteria,
-                data = dataValidate$concData_long
+                data = dataValidate$concData_long,
+                dataModel = dataValidate$concModel_long
   )
 
 

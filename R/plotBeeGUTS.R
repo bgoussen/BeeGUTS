@@ -229,22 +229,24 @@ plot.beeSurvValidation <- function(x,
   EFSA_criteria$SPPE <-  x$EFSA$Percent_SPPE$SPPE
   ###############################################
 
-  ggSurv <- ggplot(data = x$sim, aes(x = time, y = Nsurv_q50_valid,  group = replicate)) +
+  colnames(x$sim)[3] <- "Treatment" # Rename column name for plotting purposes
+
+  ggSurv <- ggplot(data = x$sim, aes(x = time, y = Nsurv_q50_valid,  group = Treatment)) +
     geom_line(color = "blue") +
-    geom_point(data = x$sim, aes(x=time, y=Nsurv,  group = replicate)) +
-    geom_ribbon( aes(x= time, ymin = Nsurv_qinf95_valid, ymax = Nsurv_qsup95_valid, group = replicate), fill = "blue", alpha = 0.2)+
+    geom_point(data = x$sim, aes(x=time, y=Nsurv,  group = Treatment)) +
+    geom_ribbon( aes(x= time, ymin = Nsurv_qinf95_valid, ymax = Nsurv_qsup95_valid, group = Treatment), fill = "blue", alpha = 0.2)+
     scale_y_continuous(limits = yLimits) +
     xlab(xlab) +
     ylab(ylab1) +
-    facet_grid(~replicate) +
+    facet_grid(~Treatment) +
     theme(
       strip.background = element_blank(),
       strip.text.x = element_blank()
     )
 
-  ggConc <- ggplot(data = x$data, aes(x=SurvivalTime, y = Conc)) +
+  ggConc <- ggplot(data = x$dataModel, aes(x=SurvivalTime, y = Conc)) +
     geom_line() +
-    geom_point() +
+    geom_point(data = x$data) +
     xlab(xlab) +
     ylab(paste0(ylab2,"\n", x$data$unitData)) +
     ggtitle(main) +
