@@ -56,3 +56,7 @@ LinkingTo:
 SystemRequirements: GNU make
 URL: https://github.com/bgoussen/BeeGUTS
 BugReports: https://github.com/bgoussen/BeeGUTS/issues
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
