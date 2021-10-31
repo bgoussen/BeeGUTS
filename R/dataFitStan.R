@@ -29,9 +29,11 @@ dataFitStan <- function(data,
   ## Number of groups.
   ## Different datasets are treated as additional groups
   nDatasets <- data$nDatasets
+  lsOUT$nDatasets <- nDatasets
   nGroups <- c()
   for (i in 1:nDatasets) {nGroups<-append(nGroups,length(unique(data$survData_long[[i]]$Treatment)))}
-  lsOUT$nGroup <- sum(nGroups)
+  lsOUT$nGroup <- sum(nGroups) # Number of groups
+  lsOUT$groupDataset <- rep(1:length(nGroups), nGroups) # corresponding dataset for each group
 
   # join the datasets to treat everything as a single group
   # Concentrations

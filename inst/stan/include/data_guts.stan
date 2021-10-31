@@ -1,8 +1,12 @@
 /* Code adapted from Virgile Baudrot
 https://github.com/virgile-baudrot/gutsRstan */
 
+// Number of datasets
+int <lower=1> nDatasets;
+
 // Number of groups
-int<lower=1> nGroup;
+int<lower=1> nGroup; // Number of groups (one group is combination of one dataset and one treatment)
+int groupDataset[nGroup]; // Corresponding dataset for each group
 
 // Concentration
 int<lower=1> nData_conc; // length of data for concentration

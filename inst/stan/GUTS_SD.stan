@@ -14,10 +14,10 @@ functions {
                      int[]  x_i) {
 
     // - parameters
-    real hb = theta[1];
-    real kd = theta[2];
-    real zw = theta[3];
-    real bw = theta[4];
+    real kd = theta[1];
+    real zw = theta[2];
+    real bw = theta[3];
+    real hb = theta[4];
 
     // - new variables
     real max_zw[2]; //
@@ -98,15 +98,15 @@ transformed data{
 }
 parameters {
 
-  real sigma[4];
+  real sigma[3 + nDatasets];
 
 }
 transformed parameters{
 
-  real hb_log10 = hbMean_log10 + hbSD_log10 * sigma[1];
-  real kd_log10 = kdMean_log10 + kdSD_log10 * sigma[2];
-  real zw_log10 = zwMean_log10 + zwSD_log10 * sigma[3];
-  real bw_log10 = bwMean_log10 + bwSD_log10 * sigma[4];
+  real kd_log10 = kdMean_log10 + kdSD_log10 * sigma[1];
+  real zw_log10 = zwMean_log10 + zwSD_log10 * sigma[2];
+  real bw_log10 = bwMean_log10 + bwSD_log10 * sigma[3];
+  real hb_log10[nDatasets];
 
   real<lower=0> param[4]; //
 
@@ -114,12 +114,19 @@ transformed parameters{
   vector<lower=0, upper=1>[nData_Nsurv] Psurv_hat;
   vector<lower=0, upper=1>[nData_Nsurv] Conditional_Psurv_hat;
 
-  param[1] = 10^hb_log10; // hb
-  param[2] = 10^kd_log10; // kd
-  param[3] = 10^zw_log10; // zw
-  param[4] = 10^bw_log10; // bw
+
+  param[1] = 10^kd_log10; // kd
+  param[2] = 10^zw_log10; // zw
+  param[3] = 10^bw_log10; // bw
+
+
+  for(i in  1:nDatasets){
+    hb_log10[i]  = hbMean_log10 + hbSD_log10 * sigma[3+i];
+  }
 
   for(gr in 1:nGroup){
+    param[4] = 10^hb_log10[groupDataset[gr]]; // hb
+
   /* initial time must be less than t0 = 0, so we use a very small close small number 1e-9 to at at time tNsurv and tconc */
     y_hat[idS_lw[gr]:idS_up[gr],1:2] = solve_TKTD_varSD(y0, 0, tNsurv_ode[idS_lw[gr]:idS_up[gr]], param, tconc_ode[idC_lw[gr]:idC_up[gr]], conc[idC_lw[gr]:idC_up[gr]], odeParam);
 
