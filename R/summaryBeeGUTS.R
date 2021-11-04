@@ -109,15 +109,16 @@ summary.beeSurvFit <- function(object, ...) {
                           Q2.5 = c(kd_inf95, mw_inf95, beta_inf95),
                           Q97.5 = c(kd_sup95, mw_sup95, beta_sup95))
 
-    hbNames <- c()
-    for(i in 1:lsData_fit$nDatasets){
-      hbNames[i] <- paste0("hb[",i,"]")
-    }
-    outPost_hb <- data.frame(parameters = hbNames,
-                          median = hb_med,
-                          Q2.5 = hb_inf95,
-                          Q97.5 = hb_sup95)
   }
+
+  hbNames <- c()
+  for(i in 1:lsData_fit$nDatasets){
+    hbNames[i] <- paste0("hb[",i,"]")
+  }
+  outPost_hb <- data.frame(parameters = hbNames,
+                           median = hb_med,
+                           Q2.5 = hb_inf95,
+                           Q97.5 = hb_sup95)
 
   # Format and output
   outPrior <- format(data.frame(outPrior), scientific = TRUE, digit = 6)
