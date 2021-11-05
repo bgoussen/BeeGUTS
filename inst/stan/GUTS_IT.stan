@@ -90,15 +90,15 @@ parameters {
 
   real beta_log10  ;
 
-  real sigma[3] ;
+  real sigma[2 + nDatasets] ;
 
 
 }
 transformed parameters{
 
-  real hb_log10 = hbMean_log10 + hbSD_log10 * sigma[1] ;
-  real kd_log10 = kdMean_log10 + kdSD_log10 * sigma[2] ;
-  real mw_log10 = mwMean_log10 + mwSD_log10 * sigma[3] ;
+  real kd_log10 = kdMean_log10 + kdSD_log10 * sigma[1] ;
+  real mw_log10 = mwMean_log10 + mwSD_log10 * sigma[2] ;
+  real hb_log10[nDatasets];
 
   real<lower=0> param[1]; //
 
@@ -106,13 +106,17 @@ transformed parameters{
   vector<lower=0, upper=1>[nData_Nsurv] Psurv_hat;
   vector<lower=0, upper=1>[nData_Nsurv] Conditional_Psurv_hat;
 
-  real hb = 10^hb_log10; // hb
   real mw = 10^mw_log10; // mw
   real beta = 10^beta_log10; // beta
+
+  for(i in  1:nDatasets){
+    hb_log10[i]  = hbMean_log10 + hbSD_log10 * sigma[2+i];
+  }
 
   param[1] = 10^kd_log10; // kd
 
   for(gr in 1:nGroup){
+     real hb  = 10^hb_log10[groupDataset[gr]]; // hb
     /* initial time must be less than t0 = 0, so we use a very small close small number -1e-9 */
       y_hat[idS_lw[gr]:idS_up[gr], 1] = solve_TKTD_varIT(y0, 0, tNsurv_ode[idS_lw[gr]:idS_up[gr]], param, tconc_ode[idC_lw[gr]:idC_up[gr]], conc[idC_lw[gr]:idC_up[gr]], odeParam)[,1];
 

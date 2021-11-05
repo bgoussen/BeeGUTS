@@ -6,3 +6,4 @@ check/
 ./src/*.so
 ./src/*.dll
 data-raw/
+inst/doc

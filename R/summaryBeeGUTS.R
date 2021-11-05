@@ -65,10 +65,14 @@ summary.beeSurvFit <- function(object, ...) {
   tmpRes <- rstan::monitor(object$stanFit, print = FALSE)
 
   ## Common parameters
-  hb_med <- 10^tmpRes[["hb_log10", "50%"]]
-  hb_inf95 <- 10^tmpRes[["hb_log10", "2.5%"]]
-  hb_sup95 <- 10^tmpRes[["hb_log10", "97.5%"]]
-
+  hb_med <- c()
+  hb_inf95 <- c()
+  hb_sup95 <- c()
+  for(i in 1:lsData_fit$nDatasets){
+    hb_med[i] <- 10^tmpRes[[paste0("hb_log10[",i,"]"), "50%"]]
+    hb_inf95[i] <- 10^tmpRes[[paste0("hb_log10[",i,"]"), "2.5%"]]
+    hb_sup95[i] <- 10^tmpRes[[paste0("hb_log10[",i,"]"), "97.5%"]]
+  }
   kd_med <- 10^tmpRes[["kd_log10", "50%"]]
   kd_inf95 <- 10^tmpRes[["kd_log10", "2.5%"]]
   kd_sup95 <- 10^tmpRes[["kd_log10", "97.5%"]]
@@ -84,10 +88,10 @@ summary.beeSurvFit <- function(object, ...) {
     bw_inf95 <- 10^tmpRes[["bw_log10", "2.5%"]]
     bw_sup95 <- 10^tmpRes[["bw_log10", "97.5%"]]
 
-    outPost <- data.frame(parameters = c("hb", "kd", "zw", "bw"),
-                      median = c(hb_med, kd_med, zw_med, bw_med),
-                      Q2.5 = c(hb_inf95, kd_inf95, zw_inf95, bw_inf95),
-                      Q97.5 = c(hb_sup95, kd_sup95, zw_sup95, bw_sup95))
+    outPost <- data.frame(parameters = c("kd", "zw", "bw"),
+                      median = c(kd_med, zw_med, bw_med),
+                      Q2.5 = c(kd_inf95, zw_inf95, bw_inf95),
+                      Q97.5 = c(kd_sup95, zw_sup95, bw_sup95))
 
 
   } else if (object$modelType == "IT") {
@@ -100,15 +104,26 @@ summary.beeSurvFit <- function(object, ...) {
     beta_inf95 <- 10^tmpRes[["beta_log10", "2.5%"]]
     beta_sup95 <- 10^tmpRes[["beta_log10", "97.5%"]]
 
-    outPost <- data.frame(parameters = c("hb", "kd", "mw", "beta"),
-                          median = c(hb_med, kd_med, mw_med, beta_med),
-                          Q2.5 = c(hb_inf95, kd_inf95, mw_inf95, beta_inf95),
-                          Q97.5 = c(hb_sup95, kd_sup95, mw_sup95, beta_sup95))
+    outPost <- data.frame(parameters = c("kd", "mw", "beta"),
+                          median = c(kd_med, mw_med, beta_med),
+                          Q2.5 = c(kd_inf95, mw_inf95, beta_inf95),
+                          Q97.5 = c(kd_sup95, mw_sup95, beta_sup95))
+
   }
+
+  hbNames <- c()
+  for(i in 1:lsData_fit$nDatasets){
+    hbNames[i] <- paste0("hb[",i,"]")
+  }
+  outPost_hb <- data.frame(parameters = hbNames,
+                           median = hb_med,
+                           Q2.5 = hb_inf95,
+                           Q97.5 = hb_sup95)
 
   # Format and output
   outPrior <- format(data.frame(outPrior), scientific = TRUE, digit = 6)
   outPost <- format(data.frame(outPost), scientific = TRUE, digit = 6)
+  outPost_hb <- format(data.frame(outPost_hb), scientific = TRUE, digit = 6)
   maxRhat <- max(rstan::summary(object$stanFit)$summary[,"Rhat"], na.rm= TRUE)
   minBulk_ESS <- min(tmpRes$Bulk_ESS)
   minTail_ESS <- min(tmpRes$Tail_ESS)
@@ -125,6 +140,7 @@ summary.beeSurvFit <- function(object, ...) {
   cat("\n\nPriors of the parameters (quantiles) (select with '$Qpriors'):\n\n")
   print(outPrior, row.names = FALSE)
   cat("\nPosteriors of the parameters (quantiles) (select with '$Qposteriors'):\n\n")
+  print(outPost_hb, row.names = FALSE)
   print(outPost, row.names = FALSE)
   cat("\n\n Maximum Rhat computed (na.rm = TRUE):", maxRhat, "\n",
       "Minimum Bulk_ESS:", minBulk_ESS, "\n",

@@ -43,13 +43,13 @@ stan::io::program_reader prog_reader__() {
     reader.add_event(87, 8, "restart", "model_GUTS_IT");
     reader.add_event(134, 55, "include", "/include/data_guts.stan");
     reader.add_event(134, 0, "start", "/include/data_guts.stan");
-    reader.add_event(167, 33, "end", "/include/data_guts.stan");
-    reader.add_event(167, 56, "restart", "model_GUTS_IT");
-    reader.add_event(258, 147, "include", "/include/gen_quantities_guts.stan");
-    reader.add_event(258, 0, "start", "/include/gen_quantities_guts.stan");
-    reader.add_event(279, 21, "end", "/include/gen_quantities_guts.stan");
-    reader.add_event(279, 148, "restart", "model_GUTS_IT");
-    reader.add_event(283, 150, "end", "model_GUTS_IT");
+    reader.add_event(171, 37, "end", "/include/data_guts.stan");
+    reader.add_event(171, 56, "restart", "model_GUTS_IT");
+    reader.add_event(266, 151, "include", "/include/gen_quantities_guts.stan");
+    reader.add_event(266, 0, "start", "/include/gen_quantities_guts.stan");
+    reader.add_event(287, 21, "end", "/include/gen_quantities_guts.stan");
+    reader.add_event(287, 152, "restart", "model_GUTS_IT");
+    reader.add_event(291, 154, "end", "model_GUTS_IT");
     return reader;
 }
 template <typename T0__, typename T1__>
@@ -472,7 +472,9 @@ struct solve_TKTD_varIT_functor__ {
 class model_GUTS_IT
   : public stan::model::model_base_crtp<model_GUTS_IT> {
 private:
+        int nDatasets;
         int nGroup;
+        std::vector<int> groupDataset;
         int nData_conc;
         std::vector<double> conc;
         std::vector<double> tconc;
@@ -531,20 +533,37 @@ public:
         try {
             // initialize data block variables from context__
             current_statement_begin__ = 139;
+            context__.validate_dims("data initialization", "nDatasets", "int", context__.to_vec());
+            nDatasets = int(0);
+            vals_i__ = context__.vals_i("nDatasets");
+            pos__ = 0;
+            nDatasets = vals_i__[pos__++];
+            check_greater_or_equal(function__, "nDatasets", nDatasets, 1);
+            current_statement_begin__ = 142;
             context__.validate_dims("data initialization", "nGroup", "int", context__.to_vec());
             nGroup = int(0);
             vals_i__ = context__.vals_i("nGroup");
             pos__ = 0;
             nGroup = vals_i__[pos__++];
             check_greater_or_equal(function__, "nGroup", nGroup, 1);
-            current_statement_begin__ = 142;
+            current_statement_begin__ = 143;
+            validate_non_negative_index("groupDataset", "nGroup", nGroup);
+            context__.validate_dims("data initialization", "groupDataset", "int", context__.to_vec(nGroup));
+            groupDataset = std::vector<int>(nGroup, int(0));
+            vals_i__ = context__.vals_i("groupDataset");
+            pos__ = 0;
+            size_t groupDataset_k_0_max__ = nGroup;
+            for (size_t k_0__ = 0; k_0__ < groupDataset_k_0_max__; ++k_0__) {
+                groupDataset[k_0__] = vals_i__[pos__++];
+            }
+            current_statement_begin__ = 146;
             context__.validate_dims("data initialization", "nData_conc", "int", context__.to_vec());
             nData_conc = int(0);
             vals_i__ = context__.vals_i("nData_conc");
             pos__ = 0;
             nData_conc = vals_i__[pos__++];
             check_greater_or_equal(function__, "nData_conc", nData_conc, 1);
-            current_statement_begin__ = 143;
+            current_statement_begin__ = 147;
             validate_non_negative_index("conc", "nData_conc", nData_conc);
             context__.validate_dims("data initialization", "conc", "double", context__.to_vec(nData_conc));
             conc = std::vector<double>(nData_conc, double(0));
@@ -554,7 +573,7 @@ public:
             for (size_t k_0__ = 0; k_0__ < conc_k_0_max__; ++k_0__) {
                 conc[k_0__] = vals_r__[pos__++];
             }
-            current_statement_begin__ = 144;
+            current_statement_begin__ = 148;
             validate_non_negative_index("tconc", "nData_conc", nData_conc);
             context__.validate_dims("data initialization", "tconc", "double", context__.to_vec(nData_conc));
             tconc = std::vector<double>(nData_conc, double(0));
@@ -564,7 +583,7 @@ public:
             for (size_t k_0__ = 0; k_0__ < tconc_k_0_max__; ++k_0__) {
                 tconc[k_0__] = vals_r__[pos__++];
             }
-            current_statement_begin__ = 146;
+            current_statement_begin__ = 150;
             validate_non_negative_index("idC_lw", "nGroup", nGroup);
             context__.validate_dims("data initialization", "idC_lw", "int", context__.to_vec(nGroup));
             idC_lw = std::vector<int>(nGroup, int(0));
@@ -578,7 +597,7 @@ public:
             for (size_t i_0__ = 0; i_0__ < idC_lw_i_0_max__; ++i_0__) {
                 check_greater_or_equal(function__, "idC_lw[i_0__]", idC_lw[i_0__], 1);
             }
-            current_statement_begin__ = 147;
+            current_statement_begin__ = 151;
             validate_non_negative_index("idC_up", "nGroup", nGroup);
             context__.validate_dims("data initialization", "idC_up", "int", context__.to_vec(nGroup));
             idC_up = std::vector<int>(nGroup, int(0));
@@ -592,14 +611,14 @@ public:
             for (size_t i_0__ = 0; i_0__ < idC_up_i_0_max__; ++i_0__) {
                 check_greater_or_equal(function__, "idC_up[i_0__]", idC_up[i_0__], 1);
             }
-            current_statement_begin__ = 150;
+            current_statement_begin__ = 154;
             context__.validate_dims("data initialization", "nData_Nsurv", "int", context__.to_vec());
             nData_Nsurv = int(0);
             vals_i__ = context__.vals_i("nData_Nsurv");
             pos__ = 0;
             nData_Nsurv = vals_i__[pos__++];
             check_greater_or_equal(function__, "nData_Nsurv", nData_Nsurv, 1);
-            current_statement_begin__ = 151;
+            current_statement_begin__ = 155;
             validate_non_negative_index("Nsurv", "nData_Nsurv", nData_Nsurv);
             context__.validate_dims("data initialization", "Nsurv", "int", context__.to_vec(nData_Nsurv));
             Nsurv = std::vector<int>(nData_Nsurv, int(0));
@@ -609,7 +628,7 @@ public:
             for (size_t k_0__ = 0; k_0__ < Nsurv_k_0_max__; ++k_0__) {
                 Nsurv[k_0__] = vals_i__[pos__++];
             }
-            current_statement_begin__ = 152;
+            current_statement_begin__ = 156;
             validate_non_negative_index("Nprec", "nData_Nsurv", nData_Nsurv);
             context__.validate_dims("data initialization", "Nprec", "int", context__.to_vec(nData_Nsurv));
             Nprec = std::vector<int>(nData_Nsurv, int(0));
@@ -619,7 +638,7 @@ public:
             for (size_t k_0__ = 0; k_0__ < Nprec_k_0_max__; ++k_0__) {
                 Nprec[k_0__] = vals_i__[pos__++];
             }
-            current_statement_begin__ = 153;
+            current_statement_begin__ = 157;
             validate_non_negative_index("tNsurv", "nData_Nsurv", nData_Nsurv);
             context__.validate_dims("data initialization", "tNsurv", "double", context__.to_vec(nData_Nsurv));
             tNsurv = std::vector<double>(nData_Nsurv, double(0));
@@ -629,7 +648,7 @@ public:
             for (size_t k_0__ = 0; k_0__ < tNsurv_k_0_max__; ++k_0__) {
                 tNsurv[k_0__] = vals_r__[pos__++];
             }
-            current_statement_begin__ = 155;
+            current_statement_begin__ = 159;
             validate_non_negative_index("idS_lw", "nGroup", nGroup);
             context__.validate_dims("data initialization", "idS_lw", "int", context__.to_vec(nGroup));
             idS_lw = std::vector<int>(nGroup, int(0));
@@ -643,7 +662,7 @@ public:
             for (size_t i_0__ = 0; i_0__ < idS_lw_i_0_max__; ++i_0__) {
                 check_greater_or_equal(function__, "idS_lw[i_0__]", idS_lw[i_0__], 1);
             }
-            current_statement_begin__ = 156;
+            current_statement_begin__ = 160;
             validate_non_negative_index("idS_up", "nGroup", nGroup);
             context__.validate_dims("data initialization", "idS_up", "int", context__.to_vec(nGroup));
             idS_up = std::vector<int>(nGroup, int(0));
@@ -657,141 +676,141 @@ public:
             for (size_t i_0__ = 0; i_0__ < idS_up_i_0_max__; ++i_0__) {
                 check_greater_or_equal(function__, "idS_up[i_0__]", idS_up[i_0__], 1);
             }
-            current_statement_begin__ = 159;
+            current_statement_begin__ = 163;
             context__.validate_dims("data initialization", "hbMean_log10", "double", context__.to_vec());
             hbMean_log10 = double(0);
             vals_r__ = context__.vals_r("hbMean_log10");
             pos__ = 0;
             hbMean_log10 = vals_r__[pos__++];
-            current_statement_begin__ = 160;
+            current_statement_begin__ = 164;
             context__.validate_dims("data initialization", "hbSD_log10", "double", context__.to_vec());
             hbSD_log10 = double(0);
             vals_r__ = context__.vals_r("hbSD_log10");
             pos__ = 0;
             hbSD_log10 = vals_r__[pos__++];
-            current_statement_begin__ = 161;
+            current_statement_begin__ = 165;
             context__.validate_dims("data initialization", "kdMean_log10", "double", context__.to_vec());
             kdMean_log10 = double(0);
             vals_r__ = context__.vals_r("kdMean_log10");
             pos__ = 0;
             kdMean_log10 = vals_r__[pos__++];
-            current_statement_begin__ = 162;
+            current_statement_begin__ = 166;
             context__.validate_dims("data initialization", "kdSD_log10", "double", context__.to_vec());
             kdSD_log10 = double(0);
             vals_r__ = context__.vals_r("kdSD_log10");
             pos__ = 0;
             kdSD_log10 = vals_r__[pos__++];
-            current_statement_begin__ = 165;
+            current_statement_begin__ = 169;
             context__.validate_dims("data initialization", "relTol", "double", context__.to_vec());
             relTol = double(0);
             vals_r__ = context__.vals_r("relTol");
             pos__ = 0;
             relTol = vals_r__[pos__++];
-            current_statement_begin__ = 166;
+            current_statement_begin__ = 170;
             context__.validate_dims("data initialization", "absTol", "double", context__.to_vec());
             absTol = double(0);
             vals_r__ = context__.vals_r("absTol");
             pos__ = 0;
             absTol = vals_r__[pos__++];
-            current_statement_begin__ = 167;
+            current_statement_begin__ = 171;
             context__.validate_dims("data initialization", "maxSteps", "int", context__.to_vec());
             maxSteps = int(0);
             vals_i__ = context__.vals_i("maxSteps");
             pos__ = 0;
             maxSteps = vals_i__[pos__++];
-            current_statement_begin__ = 169;
+            current_statement_begin__ = 173;
             context__.validate_dims("data initialization", "distribution", "int", context__.to_vec());
             distribution = int(0);
             vals_i__ = context__.vals_i("distribution");
             pos__ = 0;
             distribution = vals_i__[pos__++];
-            current_statement_begin__ = 172;
+            current_statement_begin__ = 176;
             context__.validate_dims("data initialization", "mwMean_log10", "double", context__.to_vec());
             mwMean_log10 = double(0);
             vals_r__ = context__.vals_r("mwMean_log10");
             pos__ = 0;
             mwMean_log10 = vals_r__[pos__++];
-            current_statement_begin__ = 173;
+            current_statement_begin__ = 177;
             context__.validate_dims("data initialization", "mwSD_log10", "double", context__.to_vec());
             mwSD_log10 = double(0);
             vals_r__ = context__.vals_r("mwSD_log10");
             pos__ = 0;
             mwSD_log10 = vals_r__[pos__++];
-            current_statement_begin__ = 174;
+            current_statement_begin__ = 178;
             context__.validate_dims("data initialization", "betaMin_log10", "double", context__.to_vec());
             betaMin_log10 = double(0);
             vals_r__ = context__.vals_r("betaMin_log10");
             pos__ = 0;
             betaMin_log10 = vals_r__[pos__++];
-            current_statement_begin__ = 175;
+            current_statement_begin__ = 179;
             context__.validate_dims("data initialization", "betaMax_log10", "double", context__.to_vec());
             betaMax_log10 = double(0);
             vals_r__ = context__.vals_r("betaMax_log10");
             pos__ = 0;
             betaMax_log10 = vals_r__[pos__++];
             // initialize transformed data variables
-            current_statement_begin__ = 179;
+            current_statement_begin__ = 183;
             validate_non_negative_index("y0", "1", 1);
             y0 = std::vector<double>(1, double(0));
             stan::math::fill(y0, DUMMY_VAR__);
-            current_statement_begin__ = 180;
+            current_statement_begin__ = 184;
             validate_non_negative_index("odeParam", "3", 3);
             odeParam = std::vector<double>(3, double(0));
             stan::math::fill(odeParam, DUMMY_VAR__);
-            current_statement_begin__ = 182;
+            current_statement_begin__ = 186;
             validate_non_negative_index("tNsurv_ode", "nData_Nsurv", nData_Nsurv);
             tNsurv_ode = std::vector<double>(nData_Nsurv, double(0));
             stan::math::fill(tNsurv_ode, DUMMY_VAR__);
-            current_statement_begin__ = 183;
+            current_statement_begin__ = 187;
             validate_non_negative_index("tconc_ode", "nData_conc", nData_conc);
             tconc_ode = std::vector<double>(nData_conc, double(0));
             stan::math::fill(tconc_ode, DUMMY_VAR__);
             // execute transformed data statements
-            current_statement_begin__ = 185;
+            current_statement_begin__ = 189;
             stan::model::assign(y0, 
                         stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list()), 
                         1e-20, 
                         "assigning variable y0");
-            current_statement_begin__ = 188;
+            current_statement_begin__ = 192;
             stan::model::assign(odeParam, 
                         stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list()), 
                         relTol, 
                         "assigning variable odeParam");
-            current_statement_begin__ = 189;
+            current_statement_begin__ = 193;
             stan::model::assign(odeParam, 
                         stan::model::cons_list(stan::model::index_uni(2), stan::model::nil_index_list()), 
                         absTol, 
                         "assigning variable odeParam");
-            current_statement_begin__ = 190;
+            current_statement_begin__ = 194;
             stan::model::assign(odeParam, 
                         stan::model::cons_list(stan::model::index_uni(3), stan::model::nil_index_list()), 
                         maxSteps, 
                         "assigning variable odeParam");
-            current_statement_begin__ = 192;
+            current_statement_begin__ = 196;
             for (int gr = 1; gr <= nGroup; ++gr) {
-                current_statement_begin__ = 193;
+                current_statement_begin__ = 197;
                 stan::model::assign(tNsurv_ode, 
                             stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), 
                             stan::model::rvalue(tNsurv, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), "tNsurv"), 
                             "assigning variable tNsurv_ode");
-                current_statement_begin__ = 194;
+                current_statement_begin__ = 198;
                 stan::model::assign(tNsurv_ode, 
                             stan::model::cons_list(stan::model::index_uni(get_base1(idS_lw, gr, "idS_lw", 1)), stan::model::nil_index_list()), 
                             (get_base1(tNsurv, get_base1(idS_lw, gr, "idS_lw", 1), "tNsurv", 1) + 1e-9), 
                             "assigning variable tNsurv_ode");
-                current_statement_begin__ = 195;
+                current_statement_begin__ = 199;
                 stan::model::assign(tconc_ode, 
                             stan::model::cons_list(stan::model::index_min_max(get_base1(idC_lw, gr, "idC_lw", 1), get_base1(idC_up, gr, "idC_up", 1)), stan::model::nil_index_list()), 
                             stan::model::rvalue(tconc, stan::model::cons_list(stan::model::index_min_max(get_base1(idC_lw, gr, "idC_lw", 1), get_base1(idC_up, gr, "idC_up", 1)), stan::model::nil_index_list()), "tconc"), 
                             "assigning variable tconc_ode");
-                current_statement_begin__ = 196;
+                current_statement_begin__ = 200;
                 stan::model::assign(tconc_ode, 
                             stan::model::cons_list(stan::model::index_uni(get_base1(idC_lw, gr, "idC_lw", 1)), stan::model::nil_index_list()), 
                             (get_base1(tconc, get_base1(idC_lw, gr, "idC_lw", 1), "tconc", 1) + 1e-9), 
                             "assigning variable tconc_ode");
             }
             // validate transformed data
-            current_statement_begin__ = 179;
+            current_statement_begin__ = 183;
             size_t y0_i_0_max__ = 1;
             for (size_t i_0__ = 0; i_0__ < y0_i_0_max__; ++i_0__) {
                 check_greater_or_equal(function__, "y0[i_0__]", y0[i_0__], 0);
@@ -799,11 +818,11 @@ public:
             // validate, set parameter ranges
             num_params_r__ = 0U;
             param_ranges_i__.clear();
-            current_statement_begin__ = 202;
+            current_statement_begin__ = 206;
             num_params_r__ += 1;
-            current_statement_begin__ = 204;
-            validate_non_negative_index("sigma", "3", 3);
-            num_params_r__ += (1 * 3);
+            current_statement_begin__ = 208;
+            validate_non_negative_index("sigma", "(2 + nDatasets)", (2 + nDatasets));
+            num_params_r__ += (1 * (2 + nDatasets));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
             // Next line prevents compiler griping about no return
@@ -821,7 +840,7 @@ public:
         (void) pos__; // dummy call to supress warning
         std::vector<double> vals_r__;
         std::vector<int> vals_i__;
-        current_statement_begin__ = 202;
+        current_statement_begin__ = 206;
         if (!(context__.contains_r("beta_log10")))
             stan::lang::rethrow_located(std::runtime_error(std::string("Variable beta_log10 missing")), current_statement_begin__, prog_reader__());
         vals_r__ = context__.vals_r("beta_log10");
@@ -834,19 +853,19 @@ public:
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(std::runtime_error(std::string("Error transforming variable beta_log10: ") + e.what()), current_statement_begin__, prog_reader__());
         }
-        current_statement_begin__ = 204;
+        current_statement_begin__ = 208;
         if (!(context__.contains_r("sigma")))
             stan::lang::rethrow_located(std::runtime_error(std::string("Variable sigma missing")), current_statement_begin__, prog_reader__());
         vals_r__ = context__.vals_r("sigma");
         pos__ = 0U;
-        validate_non_negative_index("sigma", "3", 3);
-        context__.validate_dims("parameter initialization", "sigma", "double", context__.to_vec(3));
-        std::vector<double> sigma(3, double(0));
-        size_t sigma_k_0_max__ = 3;
+        validate_non_negative_index("sigma", "(2 + nDatasets)", (2 + nDatasets));
+        context__.validate_dims("parameter initialization", "sigma", "double", context__.to_vec((2 + nDatasets)));
+        std::vector<double> sigma((2 + nDatasets), double(0));
+        size_t sigma_k_0_max__ = (2 + nDatasets);
         for (size_t k_0__ = 0; k_0__ < sigma_k_0_max__; ++k_0__) {
             sigma[k_0__] = vals_r__[pos__++];
         }
-        size_t sigma_i_0_max__ = 3;
+        size_t sigma_i_0_max__ = (2 + nDatasets);
         for (size_t i_0__ = 0; i_0__ < sigma_i_0_max__; ++i_0__) {
             try {
                 writer__.scalar_unconstrain(sigma[i_0__]);
@@ -879,16 +898,16 @@ public:
         try {
             stan::io::reader<local_scalar_t__> in__(params_r__, params_i__);
             // model parameters
-            current_statement_begin__ = 202;
+            current_statement_begin__ = 206;
             local_scalar_t__ beta_log10;
             (void) beta_log10;  // dummy to suppress unused var warning
             if (jacobian__)
                 beta_log10 = in__.scalar_constrain(lp__);
             else
                 beta_log10 = in__.scalar_constrain();
-            current_statement_begin__ = 204;
+            current_statement_begin__ = 208;
             std::vector<local_scalar_t__> sigma;
-            size_t sigma_d_0_max__ = 3;
+            size_t sigma_d_0_max__ = (2 + nDatasets);
             sigma.reserve(sigma_d_0_max__);
             for (size_t d_0__ = 0; d_0__ < sigma_d_0_max__; ++d_0__) {
                 if (jacobian__)
@@ -897,123 +916,135 @@ public:
                     sigma.push_back(in__.scalar_constrain());
             }
             // transformed parameters
-            current_statement_begin__ = 210;
-            local_scalar_t__ hb_log10;
-            (void) hb_log10;  // dummy to suppress unused var warning
-            stan::math::initialize(hb_log10, DUMMY_VAR__);
-            stan::math::fill(hb_log10, DUMMY_VAR__);
-            stan::math::assign(hb_log10,(hbMean_log10 + (hbSD_log10 * get_base1(sigma, 1, "sigma", 1))));
-            current_statement_begin__ = 211;
+            current_statement_begin__ = 214;
             local_scalar_t__ kd_log10;
             (void) kd_log10;  // dummy to suppress unused var warning
             stan::math::initialize(kd_log10, DUMMY_VAR__);
             stan::math::fill(kd_log10, DUMMY_VAR__);
-            stan::math::assign(kd_log10,(kdMean_log10 + (kdSD_log10 * get_base1(sigma, 2, "sigma", 1))));
-            current_statement_begin__ = 212;
+            stan::math::assign(kd_log10,(kdMean_log10 + (kdSD_log10 * get_base1(sigma, 1, "sigma", 1))));
+            current_statement_begin__ = 215;
             local_scalar_t__ mw_log10;
             (void) mw_log10;  // dummy to suppress unused var warning
             stan::math::initialize(mw_log10, DUMMY_VAR__);
             stan::math::fill(mw_log10, DUMMY_VAR__);
-            stan::math::assign(mw_log10,(mwMean_log10 + (mwSD_log10 * get_base1(sigma, 3, "sigma", 1))));
-            current_statement_begin__ = 214;
+            stan::math::assign(mw_log10,(mwMean_log10 + (mwSD_log10 * get_base1(sigma, 2, "sigma", 1))));
+            current_statement_begin__ = 216;
+            validate_non_negative_index("hb_log10", "nDatasets", nDatasets);
+            std::vector<local_scalar_t__> hb_log10(nDatasets, local_scalar_t__(0));
+            stan::math::initialize(hb_log10, DUMMY_VAR__);
+            stan::math::fill(hb_log10, DUMMY_VAR__);
+            current_statement_begin__ = 218;
             validate_non_negative_index("param", "1", 1);
             std::vector<local_scalar_t__> param(1, local_scalar_t__(0));
             stan::math::initialize(param, DUMMY_VAR__);
             stan::math::fill(param, DUMMY_VAR__);
-            current_statement_begin__ = 216;
+            current_statement_begin__ = 220;
             validate_non_negative_index("y_hat", "nData_Nsurv", nData_Nsurv);
             validate_non_negative_index("y_hat", "1", 1);
             Eigen::Matrix<local_scalar_t__, Eigen::Dynamic, Eigen::Dynamic> y_hat(nData_Nsurv, 1);
             stan::math::initialize(y_hat, DUMMY_VAR__);
             stan::math::fill(y_hat, DUMMY_VAR__);
-            current_statement_begin__ = 217;
+            current_statement_begin__ = 221;
             validate_non_negative_index("Psurv_hat", "nData_Nsurv", nData_Nsurv);
             Eigen::Matrix<local_scalar_t__, Eigen::Dynamic, 1> Psurv_hat(nData_Nsurv);
             stan::math::initialize(Psurv_hat, DUMMY_VAR__);
             stan::math::fill(Psurv_hat, DUMMY_VAR__);
-            current_statement_begin__ = 218;
+            current_statement_begin__ = 222;
             validate_non_negative_index("Conditional_Psurv_hat", "nData_Nsurv", nData_Nsurv);
             Eigen::Matrix<local_scalar_t__, Eigen::Dynamic, 1> Conditional_Psurv_hat(nData_Nsurv);
             stan::math::initialize(Conditional_Psurv_hat, DUMMY_VAR__);
             stan::math::fill(Conditional_Psurv_hat, DUMMY_VAR__);
-            current_statement_begin__ = 220;
-            local_scalar_t__ hb;
-            (void) hb;  // dummy to suppress unused var warning
-            stan::math::initialize(hb, DUMMY_VAR__);
-            stan::math::fill(hb, DUMMY_VAR__);
-            stan::math::assign(hb,pow(10, hb_log10));
-            current_statement_begin__ = 221;
+            current_statement_begin__ = 224;
             local_scalar_t__ mw;
             (void) mw;  // dummy to suppress unused var warning
             stan::math::initialize(mw, DUMMY_VAR__);
             stan::math::fill(mw, DUMMY_VAR__);
             stan::math::assign(mw,pow(10, mw_log10));
-            current_statement_begin__ = 222;
+            current_statement_begin__ = 225;
             local_scalar_t__ beta;
             (void) beta;  // dummy to suppress unused var warning
             stan::math::initialize(beta, DUMMY_VAR__);
             stan::math::fill(beta, DUMMY_VAR__);
             stan::math::assign(beta,pow(10, beta_log10));
             // transformed parameters block statements
-            current_statement_begin__ = 224;
+            current_statement_begin__ = 227;
+            for (int i = 1; i <= nDatasets; ++i) {
+                current_statement_begin__ = 228;
+                stan::model::assign(hb_log10, 
+                            stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
+                            (hbMean_log10 + (hbSD_log10 * get_base1(sigma, (2 + i), "sigma", 1))), 
+                            "assigning variable hb_log10");
+            }
+            current_statement_begin__ = 231;
             stan::model::assign(param, 
                         stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list()), 
                         pow(10, kd_log10), 
                         "assigning variable param");
-            current_statement_begin__ = 226;
+            current_statement_begin__ = 233;
             for (int gr = 1; gr <= nGroup; ++gr) {
-                current_statement_begin__ = 228;
+                {
+                current_statement_begin__ = 234;
+                local_scalar_t__ hb(DUMMY_VAR__);
+                (void) hb;  // dummy to suppress unused var warning
+                stan::math::initialize(hb, DUMMY_VAR__);
+                stan::math::fill(hb, DUMMY_VAR__);
+                stan::math::assign(hb,pow(10, get_base1(hb_log10, get_base1(groupDataset, gr, "groupDataset", 1), "hb_log10", 1)));
+                current_statement_begin__ = 236;
                 stan::model::assign(y_hat, 
                             stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list())), 
                             stan::model::rvalue(solve_TKTD_varIT(y0, 0, stan::model::rvalue(tNsurv_ode, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), "tNsurv_ode"), param, stan::model::rvalue(tconc_ode, stan::model::cons_list(stan::model::index_min_max(get_base1(idC_lw, gr, "idC_lw", 1), get_base1(idC_up, gr, "idC_up", 1)), stan::model::nil_index_list()), "tconc_ode"), stan::model::rvalue(conc, stan::model::cons_list(stan::model::index_min_max(get_base1(idC_lw, gr, "idC_lw", 1), get_base1(idC_up, gr, "idC_up", 1)), stan::model::nil_index_list()), "conc"), odeParam, pstream__), stan::model::cons_list(stan::model::index_omni(), stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list())), "solve_TKTD_varIT(y0, 0, tNsurv_ode[idS_lw[gr]:idS_up[gr]], param, tconc_ode[idC_lw[gr]:idC_up[gr]], conc[idC_lw[gr]:idC_up[gr]], odeParam, pstream__)"), 
                             "assigning variable y_hat");
-                current_statement_begin__ = 230;
+                current_statement_begin__ = 238;
                 for (int i = get_base1(idS_lw, gr, "idS_lw", 1); i <= get_base1(idS_up, gr, "idS_up", 1); ++i) {
-                    current_statement_begin__ = 232;
+                    current_statement_begin__ = 240;
                     if (as_bool(logical_eq(distribution, 1))) {
-                        current_statement_begin__ = 233;
+                        current_statement_begin__ = 241;
                         stan::model::assign(Psurv_hat, 
                                     stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                     (stan::math::exp((-(hb) * get_base1(tNsurv_ode, i, "tNsurv_ode", 1))) * (1 - stan::math::exp(loglogistic_lcdf(max(stan::model::rvalue(y_hat, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), i), stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list())), "y_hat")), mw, beta, pstream__)))), 
                                     "assigning variable Psurv_hat");
                     }
-                    current_statement_begin__ = 235;
+                    current_statement_begin__ = 243;
                     if (as_bool(logical_eq(distribution, 2))) {
-                        current_statement_begin__ = 236;
+                        current_statement_begin__ = 244;
                         stan::model::assign(Psurv_hat, 
                                     stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                     (stan::math::exp((-(hb) * get_base1(tNsurv_ode, i, "tNsurv_ode", 1))) * (1 - stan::math::exp(lognormal_cdf_log(max(stan::model::rvalue(y_hat, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), i), stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list())), "y_hat")), mw, beta)))), 
                                     "assigning variable Psurv_hat");
                     }
-                    current_statement_begin__ = 239;
+                    current_statement_begin__ = 247;
                     stan::model::assign(Conditional_Psurv_hat, 
                                 stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                 (logical_eq(i, get_base1(idS_lw, gr, "idS_lw", 1)) ? stan::math::promote_scalar<local_scalar_t__>(get_base1(Psurv_hat, i, "Psurv_hat", 1)) : stan::math::promote_scalar<local_scalar_t__>((get_base1(Psurv_hat, i, "Psurv_hat", 1) / get_base1(Psurv_hat, (i - 1), "Psurv_hat", 1))) ), 
                                 "assigning variable Conditional_Psurv_hat");
                 }
+                }
             }
             // validate transformed parameters
             const char* function__ = "validate transformed params";
             (void) function__;  // dummy to suppress unused var warning
-            current_statement_begin__ = 210;
-            if (stan::math::is_uninitialized(hb_log10)) {
-                std::stringstream msg__;
-                msg__ << "Undefined transformed parameter: hb_log10";
-                stan::lang::rethrow_located(std::runtime_error(std::string("Error initializing variable hb_log10: ") + msg__.str()), current_statement_begin__, prog_reader__());
-            }
-            current_statement_begin__ = 211;
+            current_statement_begin__ = 214;
             if (stan::math::is_uninitialized(kd_log10)) {
                 std::stringstream msg__;
                 msg__ << "Undefined transformed parameter: kd_log10";
                 stan::lang::rethrow_located(std::runtime_error(std::string("Error initializing variable kd_log10: ") + msg__.str()), current_statement_begin__, prog_reader__());
             }
-            current_statement_begin__ = 212;
+            current_statement_begin__ = 215;
             if (stan::math::is_uninitialized(mw_log10)) {
                 std::stringstream msg__;
                 msg__ << "Undefined transformed parameter: mw_log10";
                 stan::lang::rethrow_located(std::runtime_error(std::string("Error initializing variable mw_log10: ") + msg__.str()), current_statement_begin__, prog_reader__());
             }
-            current_statement_begin__ = 214;
+            current_statement_begin__ = 216;
+            size_t hb_log10_k_0_max__ = nDatasets;
+            for (size_t k_0__ = 0; k_0__ < hb_log10_k_0_max__; ++k_0__) {
+                if (stan::math::is_uninitialized(hb_log10[k_0__])) {
+                    std::stringstream msg__;
+                    msg__ << "Undefined transformed parameter: hb_log10" << "[" << k_0__ << "]";
+                    stan::lang::rethrow_located(std::runtime_error(std::string("Error initializing variable hb_log10: ") + msg__.str()), current_statement_begin__, prog_reader__());
+                }
+            }
+            current_statement_begin__ = 218;
             size_t param_k_0_max__ = 1;
             for (size_t k_0__ = 0; k_0__ < param_k_0_max__; ++k_0__) {
                 if (stan::math::is_uninitialized(param[k_0__])) {
@@ -1026,7 +1057,7 @@ public:
             for (size_t i_0__ = 0; i_0__ < param_i_0_max__; ++i_0__) {
                 check_greater_or_equal(function__, "param[i_0__]", param[i_0__], 0);
             }
-            current_statement_begin__ = 216;
+            current_statement_begin__ = 220;
             size_t y_hat_j_1_max__ = nData_Nsurv;
             size_t y_hat_j_2_max__ = 1;
             for (size_t j_1__ = 0; j_1__ < y_hat_j_1_max__; ++j_1__) {
@@ -1038,7 +1069,7 @@ public:
                     }
                 }
             }
-            current_statement_begin__ = 217;
+            current_statement_begin__ = 221;
             size_t Psurv_hat_j_1_max__ = nData_Nsurv;
             for (size_t j_1__ = 0; j_1__ < Psurv_hat_j_1_max__; ++j_1__) {
                 if (stan::math::is_uninitialized(Psurv_hat(j_1__))) {
@@ -1049,7 +1080,7 @@ public:
             }
             check_greater_or_equal(function__, "Psurv_hat", Psurv_hat, 0);
             check_less_or_equal(function__, "Psurv_hat", Psurv_hat, 1);
-            current_statement_begin__ = 218;
+            current_statement_begin__ = 222;
             size_t Conditional_Psurv_hat_j_1_max__ = nData_Nsurv;
             for (size_t j_1__ = 0; j_1__ < Conditional_Psurv_hat_j_1_max__; ++j_1__) {
                 if (stan::math::is_uninitialized(Conditional_Psurv_hat(j_1__))) {
@@ -1060,32 +1091,26 @@ public:
             }
             check_greater_or_equal(function__, "Conditional_Psurv_hat", Conditional_Psurv_hat, 0);
             check_less_or_equal(function__, "Conditional_Psurv_hat", Conditional_Psurv_hat, 1);
-            current_statement_begin__ = 220;
-            if (stan::math::is_uninitialized(hb)) {
-                std::stringstream msg__;
-                msg__ << "Undefined transformed parameter: hb";
-                stan::lang::rethrow_located(std::runtime_error(std::string("Error initializing variable hb: ") + msg__.str()), current_statement_begin__, prog_reader__());
-            }
-            current_statement_begin__ = 221;
+            current_statement_begin__ = 224;
             if (stan::math::is_uninitialized(mw)) {
                 std::stringstream msg__;
                 msg__ << "Undefined transformed parameter: mw";
                 stan::lang::rethrow_located(std::runtime_error(std::string("Error initializing variable mw: ") + msg__.str()), current_statement_begin__, prog_reader__());
             }
-            current_statement_begin__ = 222;
+            current_statement_begin__ = 225;
             if (stan::math::is_uninitialized(beta)) {
                 std::stringstream msg__;
                 msg__ << "Undefined transformed parameter: beta";
                 stan::lang::rethrow_located(std::runtime_error(std::string("Error initializing variable beta: ") + msg__.str()), current_statement_begin__, prog_reader__());
             }
             // model body
-            current_statement_begin__ = 247;
+            current_statement_begin__ = 255;
             lp_accum__.add(uniform_log(beta_log10, betaMin_log10, betaMax_log10));
-            current_statement_begin__ = 249;
+            current_statement_begin__ = 257;
             lp_accum__.add(normal_log(sigma, 0, 1));
-            current_statement_begin__ = 251;
+            current_statement_begin__ = 259;
             for (int gr = 1; gr <= nGroup; ++gr) {
-                current_statement_begin__ = 253;
+                current_statement_begin__ = 261;
                 lp_accum__.add(binomial_log(stan::model::rvalue(Nsurv, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), "Nsurv"), stan::model::rvalue(Nprec, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), "Nprec"), stan::model::rvalue(Conditional_Psurv_hat, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), "Conditional_Psurv_hat")));
             }
         } catch (const std::exception& e) {
@@ -1110,14 +1135,13 @@ public:
         names__.resize(0);
         names__.push_back("beta_log10");
         names__.push_back("sigma");
-        names__.push_back("hb_log10");
         names__.push_back("kd_log10");
         names__.push_back("mw_log10");
+        names__.push_back("hb_log10");
         names__.push_back("param");
         names__.push_back("y_hat");
         names__.push_back("Psurv_hat");
         names__.push_back("Conditional_Psurv_hat");
-        names__.push_back("hb");
         names__.push_back("mw");
         names__.push_back("beta");
         names__.push_back("Nsurv_ppc");
@@ -1131,13 +1155,14 @@ public:
         dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
-        dims__.push_back(3);
+        dims__.push_back((2 + nDatasets));
         dimss__.push_back(dims__);
         dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
+        dims__.push_back(nDatasets);
         dimss__.push_back(dims__);
         dims__.resize(0);
         dims__.push_back(1);
@@ -1151,8 +1176,6 @@ public:
         dimss__.push_back(dims__);
         dims__.resize(0);
         dims__.push_back(nData_Nsurv);
-        dimss__.push_back(dims__);
-        dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
         dimss__.push_back(dims__);
@@ -1188,12 +1211,12 @@ public:
         double beta_log10 = in__.scalar_constrain();
         vars__.push_back(beta_log10);
         std::vector<double> sigma;
-        size_t sigma_d_0_max__ = 3;
+        size_t sigma_d_0_max__ = (2 + nDatasets);
         sigma.reserve(sigma_d_0_max__);
         for (size_t d_0__ = 0; d_0__ < sigma_d_0_max__; ++d_0__) {
             sigma.push_back(in__.scalar_constrain());
         }
-        size_t sigma_k_0_max__ = 3;
+        size_t sigma_k_0_max__ = (2 + nDatasets);
         for (size_t k_0__ = 0; k_0__ < sigma_k_0_max__; ++k_0__) {
             vars__.push_back(sigma[k_0__]);
         }
@@ -1205,121 +1228,133 @@ public:
         if (!include_tparams__ && !include_gqs__) return;
         try {
             // declare and define transformed parameters
-            current_statement_begin__ = 210;
-            double hb_log10;
-            (void) hb_log10;  // dummy to suppress unused var warning
-            stan::math::initialize(hb_log10, DUMMY_VAR__);
-            stan::math::fill(hb_log10, DUMMY_VAR__);
-            stan::math::assign(hb_log10,(hbMean_log10 + (hbSD_log10 * get_base1(sigma, 1, "sigma", 1))));
-            current_statement_begin__ = 211;
+            current_statement_begin__ = 214;
             double kd_log10;
             (void) kd_log10;  // dummy to suppress unused var warning
             stan::math::initialize(kd_log10, DUMMY_VAR__);
             stan::math::fill(kd_log10, DUMMY_VAR__);
-            stan::math::assign(kd_log10,(kdMean_log10 + (kdSD_log10 * get_base1(sigma, 2, "sigma", 1))));
-            current_statement_begin__ = 212;
+            stan::math::assign(kd_log10,(kdMean_log10 + (kdSD_log10 * get_base1(sigma, 1, "sigma", 1))));
+            current_statement_begin__ = 215;
             double mw_log10;
             (void) mw_log10;  // dummy to suppress unused var warning
             stan::math::initialize(mw_log10, DUMMY_VAR__);
             stan::math::fill(mw_log10, DUMMY_VAR__);
-            stan::math::assign(mw_log10,(mwMean_log10 + (mwSD_log10 * get_base1(sigma, 3, "sigma", 1))));
-            current_statement_begin__ = 214;
+            stan::math::assign(mw_log10,(mwMean_log10 + (mwSD_log10 * get_base1(sigma, 2, "sigma", 1))));
+            current_statement_begin__ = 216;
+            validate_non_negative_index("hb_log10", "nDatasets", nDatasets);
+            std::vector<double> hb_log10(nDatasets, double(0));
+            stan::math::initialize(hb_log10, DUMMY_VAR__);
+            stan::math::fill(hb_log10, DUMMY_VAR__);
+            current_statement_begin__ = 218;
             validate_non_negative_index("param", "1", 1);
             std::vector<double> param(1, double(0));
             stan::math::initialize(param, DUMMY_VAR__);
             stan::math::fill(param, DUMMY_VAR__);
-            current_statement_begin__ = 216;
+            current_statement_begin__ = 220;
             validate_non_negative_index("y_hat", "nData_Nsurv", nData_Nsurv);
             validate_non_negative_index("y_hat", "1", 1);
             Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> y_hat(nData_Nsurv, 1);
             stan::math::initialize(y_hat, DUMMY_VAR__);
             stan::math::fill(y_hat, DUMMY_VAR__);
-            current_statement_begin__ = 217;
+            current_statement_begin__ = 221;
             validate_non_negative_index("Psurv_hat", "nData_Nsurv", nData_Nsurv);
             Eigen::Matrix<double, Eigen::Dynamic, 1> Psurv_hat(nData_Nsurv);
             stan::math::initialize(Psurv_hat, DUMMY_VAR__);
             stan::math::fill(Psurv_hat, DUMMY_VAR__);
-            current_statement_begin__ = 218;
+            current_statement_begin__ = 222;
             validate_non_negative_index("Conditional_Psurv_hat", "nData_Nsurv", nData_Nsurv);
             Eigen::Matrix<double, Eigen::Dynamic, 1> Conditional_Psurv_hat(nData_Nsurv);
             stan::math::initialize(Conditional_Psurv_hat, DUMMY_VAR__);
             stan::math::fill(Conditional_Psurv_hat, DUMMY_VAR__);
-            current_statement_begin__ = 220;
-            double hb;
-            (void) hb;  // dummy to suppress unused var warning
-            stan::math::initialize(hb, DUMMY_VAR__);
-            stan::math::fill(hb, DUMMY_VAR__);
-            stan::math::assign(hb,pow(10, hb_log10));
-            current_statement_begin__ = 221;
+            current_statement_begin__ = 224;
             double mw;
             (void) mw;  // dummy to suppress unused var warning
             stan::math::initialize(mw, DUMMY_VAR__);
             stan::math::fill(mw, DUMMY_VAR__);
             stan::math::assign(mw,pow(10, mw_log10));
-            current_statement_begin__ = 222;
+            current_statement_begin__ = 225;
             double beta;
             (void) beta;  // dummy to suppress unused var warning
             stan::math::initialize(beta, DUMMY_VAR__);
             stan::math::fill(beta, DUMMY_VAR__);
             stan::math::assign(beta,pow(10, beta_log10));
             // do transformed parameters statements
-            current_statement_begin__ = 224;
+            current_statement_begin__ = 227;
+            for (int i = 1; i <= nDatasets; ++i) {
+                current_statement_begin__ = 228;
+                stan::model::assign(hb_log10, 
+                            stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
+                            (hbMean_log10 + (hbSD_log10 * get_base1(sigma, (2 + i), "sigma", 1))), 
+                            "assigning variable hb_log10");
+            }
+            current_statement_begin__ = 231;
             stan::model::assign(param, 
                         stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list()), 
                         pow(10, kd_log10), 
                         "assigning variable param");
-            current_statement_begin__ = 226;
+            current_statement_begin__ = 233;
             for (int gr = 1; gr <= nGroup; ++gr) {
-                current_statement_begin__ = 228;
+                {
+                current_statement_begin__ = 234;
+                local_scalar_t__ hb(DUMMY_VAR__);
+                (void) hb;  // dummy to suppress unused var warning
+                stan::math::initialize(hb, DUMMY_VAR__);
+                stan::math::fill(hb, DUMMY_VAR__);
+                stan::math::assign(hb,pow(10, get_base1(hb_log10, get_base1(groupDataset, gr, "groupDataset", 1), "hb_log10", 1)));
+                current_statement_begin__ = 236;
                 stan::model::assign(y_hat, 
                             stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list())), 
                             stan::model::rvalue(solve_TKTD_varIT(y0, 0, stan::model::rvalue(tNsurv_ode, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), "tNsurv_ode"), param, stan::model::rvalue(tconc_ode, stan::model::cons_list(stan::model::index_min_max(get_base1(idC_lw, gr, "idC_lw", 1), get_base1(idC_up, gr, "idC_up", 1)), stan::model::nil_index_list()), "tconc_ode"), stan::model::rvalue(conc, stan::model::cons_list(stan::model::index_min_max(get_base1(idC_lw, gr, "idC_lw", 1), get_base1(idC_up, gr, "idC_up", 1)), stan::model::nil_index_list()), "conc"), odeParam, pstream__), stan::model::cons_list(stan::model::index_omni(), stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list())), "solve_TKTD_varIT(y0, 0, tNsurv_ode[idS_lw[gr]:idS_up[gr]], param, tconc_ode[idC_lw[gr]:idC_up[gr]], conc[idC_lw[gr]:idC_up[gr]], odeParam, pstream__)"), 
                             "assigning variable y_hat");
-                current_statement_begin__ = 230;
+                current_statement_begin__ = 238;
                 for (int i = get_base1(idS_lw, gr, "idS_lw", 1); i <= get_base1(idS_up, gr, "idS_up", 1); ++i) {
-                    current_statement_begin__ = 232;
+                    current_statement_begin__ = 240;
                     if (as_bool(logical_eq(distribution, 1))) {
-                        current_statement_begin__ = 233;
+                        current_statement_begin__ = 241;
                         stan::model::assign(Psurv_hat, 
                                     stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                     (stan::math::exp((-(hb) * get_base1(tNsurv_ode, i, "tNsurv_ode", 1))) * (1 - stan::math::exp(loglogistic_lcdf(max(stan::model::rvalue(y_hat, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), i), stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list())), "y_hat")), mw, beta, pstream__)))), 
                                     "assigning variable Psurv_hat");
                     }
-                    current_statement_begin__ = 235;
+                    current_statement_begin__ = 243;
                     if (as_bool(logical_eq(distribution, 2))) {
-                        current_statement_begin__ = 236;
+                        current_statement_begin__ = 244;
                         stan::model::assign(Psurv_hat, 
                                     stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                     (stan::math::exp((-(hb) * get_base1(tNsurv_ode, i, "tNsurv_ode", 1))) * (1 - stan::math::exp(lognormal_cdf_log(max(stan::model::rvalue(y_hat, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), i), stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list())), "y_hat")), mw, beta)))), 
                                     "assigning variable Psurv_hat");
                     }
-                    current_statement_begin__ = 239;
+                    current_statement_begin__ = 247;
                     stan::model::assign(Conditional_Psurv_hat, 
                                 stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                 (logical_eq(i, get_base1(idS_lw, gr, "idS_lw", 1)) ? stan::math::promote_scalar<local_scalar_t__>(get_base1(Psurv_hat, i, "Psurv_hat", 1)) : stan::math::promote_scalar<local_scalar_t__>((get_base1(Psurv_hat, i, "Psurv_hat", 1) / get_base1(Psurv_hat, (i - 1), "Psurv_hat", 1))) ), 
                                 "assigning variable Conditional_Psurv_hat");
+                }
                 }
             }
             if (!include_gqs__ && !include_tparams__) return;
             // validate transformed parameters
             const char* function__ = "validate transformed params";
             (void) function__;  // dummy to suppress unused var warning
-            current_statement_begin__ = 214;
+            current_statement_begin__ = 218;
             size_t param_i_0_max__ = 1;
             for (size_t i_0__ = 0; i_0__ < param_i_0_max__; ++i_0__) {
                 check_greater_or_equal(function__, "param[i_0__]", param[i_0__], 0);
             }
-            current_statement_begin__ = 217;
+            current_statement_begin__ = 221;
             check_greater_or_equal(function__, "Psurv_hat", Psurv_hat, 0);
             check_less_or_equal(function__, "Psurv_hat", Psurv_hat, 1);
-            current_statement_begin__ = 218;
+            current_statement_begin__ = 222;
             check_greater_or_equal(function__, "Conditional_Psurv_hat", Conditional_Psurv_hat, 0);
             check_less_or_equal(function__, "Conditional_Psurv_hat", Conditional_Psurv_hat, 1);
             // write transformed parameters
             if (include_tparams__) {
-                vars__.push_back(hb_log10);
                 vars__.push_back(kd_log10);
                 vars__.push_back(mw_log10);
+                size_t hb_log10_k_0_max__ = nDatasets;
+                for (size_t k_0__ = 0; k_0__ < hb_log10_k_0_max__; ++k_0__) {
+                    vars__.push_back(hb_log10[k_0__]);
+                }
                 size_t param_k_0_max__ = 1;
                 for (size_t k_0__ = 0; k_0__ < param_k_0_max__; ++k_0__) {
                     vars__.push_back(param[k_0__]);
@@ -1339,50 +1374,49 @@ public:
                 for (size_t j_1__ = 0; j_1__ < Conditional_Psurv_hat_j_1_max__; ++j_1__) {
                     vars__.push_back(Conditional_Psurv_hat(j_1__));
                 }
-                vars__.push_back(hb);
                 vars__.push_back(mw);
                 vars__.push_back(beta);
             }
             if (!include_gqs__) return;
             // declare and define generated quantities
-            current_statement_begin__ = 262;
+            current_statement_begin__ = 270;
             validate_non_negative_index("Nsurv_ppc", "nData_Nsurv", nData_Nsurv);
             std::vector<int> Nsurv_ppc(nData_Nsurv, int(0));
             stan::math::fill(Nsurv_ppc, std::numeric_limits<int>::min());
-            current_statement_begin__ = 263;
+            current_statement_begin__ = 271;
             validate_non_negative_index("Nsurv_sim", "nData_Nsurv", nData_Nsurv);
             std::vector<int> Nsurv_sim(nData_Nsurv, int(0));
             stan::math::fill(Nsurv_sim, std::numeric_limits<int>::min());
-            current_statement_begin__ = 264;
+            current_statement_begin__ = 272;
             validate_non_negative_index("Nsurv_sim_prec", "nData_Nsurv", nData_Nsurv);
             std::vector<int> Nsurv_sim_prec(nData_Nsurv, int(0));
             stan::math::fill(Nsurv_sim_prec, std::numeric_limits<int>::min());
-            current_statement_begin__ = 266;
+            current_statement_begin__ = 274;
             validate_non_negative_index("log_lik", "nData_Nsurv", nData_Nsurv);
             Eigen::Matrix<double, Eigen::Dynamic, 1> log_lik(nData_Nsurv);
             stan::math::initialize(log_lik, DUMMY_VAR__);
             stan::math::fill(log_lik, DUMMY_VAR__);
             // generated quantities statements
-            current_statement_begin__ = 268;
+            current_statement_begin__ = 276;
             for (int gr = 1; gr <= nGroup; ++gr) {
-                current_statement_begin__ = 270;
+                current_statement_begin__ = 278;
                 for (int i = get_base1(idS_lw, gr, "idS_lw", 1); i <= get_base1(idS_up, gr, "idS_up", 1); ++i) {
-                    current_statement_begin__ = 271;
+                    current_statement_begin__ = 279;
                     stan::model::assign(Nsurv_ppc, 
                                 stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                 binomial_rng(get_base1(Nprec, i, "Nprec", 1), get_base1(Conditional_Psurv_hat, i, "Conditional_Psurv_hat", 1), base_rng__), 
                                 "assigning variable Nsurv_ppc");
-                    current_statement_begin__ = 273;
+                    current_statement_begin__ = 281;
                     stan::model::assign(Nsurv_sim_prec, 
                                 stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                 (logical_eq(i, get_base1(idS_lw, gr, "idS_lw", 1)) ? get_base1(Nprec, i, "Nprec", 1) : get_base1(Nsurv_sim, (i - 1), "Nsurv_sim", 1) ), 
                                 "assigning variable Nsurv_sim_prec");
-                    current_statement_begin__ = 275;
+                    current_statement_begin__ = 283;
                     stan::model::assign(Nsurv_sim, 
                                 stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                 binomial_rng(get_base1(Nsurv_sim_prec, i, "Nsurv_sim_prec", 1), get_base1(Conditional_Psurv_hat, i, "Conditional_Psurv_hat", 1), base_rng__), 
                                 "assigning variable Nsurv_sim");
-                    current_statement_begin__ = 277;
+                    current_statement_begin__ = 285;
                     stan::model::assign(log_lik, 
                                 stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                 binomial_log(stan::model::rvalue(Nsurv, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), "Nsurv"), stan::model::rvalue(Nprec, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), "Nprec"), stan::model::rvalue(Conditional_Psurv_hat, stan::model::cons_list(stan::model::index_min_max(get_base1(idS_lw, gr, "idS_lw", 1), get_base1(idS_up, gr, "idS_up", 1)), stan::model::nil_index_list()), "Conditional_Psurv_hat")), 
@@ -1390,22 +1424,22 @@ public:
                 }
             }
             // validate, write generated quantities
-            current_statement_begin__ = 262;
+            current_statement_begin__ = 270;
             size_t Nsurv_ppc_k_0_max__ = nData_Nsurv;
             for (size_t k_0__ = 0; k_0__ < Nsurv_ppc_k_0_max__; ++k_0__) {
                 vars__.push_back(Nsurv_ppc[k_0__]);
             }
-            current_statement_begin__ = 263;
+            current_statement_begin__ = 271;
             size_t Nsurv_sim_k_0_max__ = nData_Nsurv;
             for (size_t k_0__ = 0; k_0__ < Nsurv_sim_k_0_max__; ++k_0__) {
                 vars__.push_back(Nsurv_sim[k_0__]);
             }
-            current_statement_begin__ = 264;
+            current_statement_begin__ = 272;
             size_t Nsurv_sim_prec_k_0_max__ = nData_Nsurv;
             for (size_t k_0__ = 0; k_0__ < Nsurv_sim_prec_k_0_max__; ++k_0__) {
                 vars__.push_back(Nsurv_sim_prec[k_0__]);
             }
-            current_statement_begin__ = 266;
+            current_statement_begin__ = 274;
             size_t log_lik_j_1_max__ = nData_Nsurv;
             for (size_t j_1__ = 0; j_1__ < log_lik_j_1_max__; ++j_1__) {
                 vars__.push_back(log_lik(j_1__));
@@ -1443,7 +1477,7 @@ public:
         param_name_stream__.str(std::string());
         param_name_stream__ << "beta_log10";
         param_names__.push_back(param_name_stream__.str());
-        size_t sigma_k_0_max__ = 3;
+        size_t sigma_k_0_max__ = (2 + nDatasets);
         for (size_t k_0__ = 0; k_0__ < sigma_k_0_max__; ++k_0__) {
             param_name_stream__.str(std::string());
             param_name_stream__ << "sigma" << '.' << k_0__ + 1;
@@ -1452,14 +1486,17 @@ public:
         if (!include_gqs__ && !include_tparams__) return;
         if (include_tparams__) {
             param_name_stream__.str(std::string());
-            param_name_stream__ << "hb_log10";
-            param_names__.push_back(param_name_stream__.str());
-            param_name_stream__.str(std::string());
             param_name_stream__ << "kd_log10";
             param_names__.push_back(param_name_stream__.str());
             param_name_stream__.str(std::string());
             param_name_stream__ << "mw_log10";
             param_names__.push_back(param_name_stream__.str());
+            size_t hb_log10_k_0_max__ = nDatasets;
+            for (size_t k_0__ = 0; k_0__ < hb_log10_k_0_max__; ++k_0__) {
+                param_name_stream__.str(std::string());
+                param_name_stream__ << "hb_log10" << '.' << k_0__ + 1;
+                param_names__.push_back(param_name_stream__.str());
+            }
             size_t param_k_0_max__ = 1;
             for (size_t k_0__ = 0; k_0__ < param_k_0_max__; ++k_0__) {
                 param_name_stream__.str(std::string());
@@ -1487,9 +1524,6 @@ public:
                 param_name_stream__ << "Conditional_Psurv_hat" << '.' << j_1__ + 1;
                 param_names__.push_back(param_name_stream__.str());
             }
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "hb";
-            param_names__.push_back(param_name_stream__.str());
             param_name_stream__.str(std::string());
             param_name_stream__ << "mw";
             param_names__.push_back(param_name_stream__.str());
@@ -1530,7 +1564,7 @@ public:
         param_name_stream__.str(std::string());
         param_name_stream__ << "beta_log10";
         param_names__.push_back(param_name_stream__.str());
-        size_t sigma_k_0_max__ = 3;
+        size_t sigma_k_0_max__ = (2 + nDatasets);
         for (size_t k_0__ = 0; k_0__ < sigma_k_0_max__; ++k_0__) {
             param_name_stream__.str(std::string());
             param_name_stream__ << "sigma" << '.' << k_0__ + 1;
@@ -1539,14 +1573,17 @@ public:
         if (!include_gqs__ && !include_tparams__) return;
         if (include_tparams__) {
             param_name_stream__.str(std::string());
-            param_name_stream__ << "hb_log10";
-            param_names__.push_back(param_name_stream__.str());
-            param_name_stream__.str(std::string());
             param_name_stream__ << "kd_log10";
             param_names__.push_back(param_name_stream__.str());
             param_name_stream__.str(std::string());
             param_name_stream__ << "mw_log10";
             param_names__.push_back(param_name_stream__.str());
+            size_t hb_log10_k_0_max__ = nDatasets;
+            for (size_t k_0__ = 0; k_0__ < hb_log10_k_0_max__; ++k_0__) {
+                param_name_stream__.str(std::string());
+                param_name_stream__ << "hb_log10" << '.' << k_0__ + 1;
+                param_names__.push_back(param_name_stream__.str());
+            }
             size_t param_k_0_max__ = 1;
             for (size_t k_0__ = 0; k_0__ < param_k_0_max__; ++k_0__) {
                 param_name_stream__.str(std::string());
@@ -1574,9 +1611,6 @@ public:
                 param_name_stream__ << "Conditional_Psurv_hat" << '.' << j_1__ + 1;
                 param_names__.push_back(param_name_stream__.str());
             }
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "hb";
-            param_names__.push_back(param_name_stream__.str());
             param_name_stream__.str(std::string());
             param_name_stream__ << "mw";
             param_names__.push_back(param_name_stream__.str());
