@@ -221,14 +221,14 @@ plot.beeSurvValidation <- function(x,
 
 
   EFSA_criteria <- x$EFSA$Percent_PPC
+  EFSA_criteria$PPC <- round(EFSA_criteria$PPC, digits = 2)
   EFSA_criteria$PPC_global <- ""
-  EFSA_criteria$PPC_global[1] <- x$EFSA$Percent_PPC_global
-  EFSA_criteria$NRMSE <- x$EFSA$Percent_NRMSE$NRMSE
+  EFSA_criteria$PPC_global[1] <- round(x$EFSA$Percent_PPC_global, digits = 2)
+  EFSA_criteria$NRMSE <- round(x$EFSA$Percent_NRMSE$NRMSE, digits = 2)
   EFSA_criteria$NRMSE_global <- ""
-  EFSA_criteria$NRMSE_global[1] <- x$EFSA$Percent_NRMSE_global
-  EFSA_criteria$SPPE <-  x$EFSA$Percent_SPPE$SPPE
+  EFSA_criteria$NRMSE_global[1] <- round(x$EFSA$Percent_NRMSE_global, digits = 2)
+  EFSA_criteria$SPPE <-  round(x$EFSA$Percent_SPPE$SPPE, digits = 2)
   ###############################################
-
   colnames(x$sim)[3] <- "Treatment" # Rename column name for plotting purposes
 
   ggSurv <- ggplot(data = x$sim, aes(x = time, y = Nsurv_q50_valid,  group = Treatment)) +
@@ -401,3 +401,41 @@ traceplot.beeSurvFit <- function(object, ..., incWarmup_trace = TRUE, incWarmup_
   return(ggOut)
 }
 
+
+
+
+
+
+#' Plotting method for \code{ppc} objects
+#'
+#' @param x An object of class \code{ppc}.
+#' @param data_type  A string designating the type of data to be plotted: \code{length},
+#' \code{reproduction} or \code{exposure}
+#' @param \dots  Further arguments to be passed to generic methods.
+#'
+#' @return  an object of class \code{ggplot}.
+#'
+#'
+#' @export
+plot.ppc <- function(x, ...) {
+  Nsurv_ppc <- x
+  ppc_pct<- round(nrow(Nsurv_ppc[Nsurv_ppc$col=="green",])/nrow(Nsurv_ppc)*100, digits = 2)
+  nrmse<- round(sqrt(sum((Nsurv_ppc$value-Nsurv_ppc$median)^2, na.rm = TRUE)/nrow(Nsurv_ppc))/mean(Nsurv_ppc$value,na.rm = TRUE)*100, digits=2)
+
+  ggOut <-ggplot() +
+    geom_segment(aes(x = value, xend = value,
+                     y =q_0.025 , yend =q_0.975 ), data = Nsurv_ppc,
+                 color = Nsurv_ppc$col)+
+    geom_point(aes(x = value, y = median), Nsurv_ppc)+
+    geom_abline(intercept = 0, slope = 1, size=0.7)+
+    expand_limits(y = 0) +
+    expand_limits(x = 0) +
+    theme_minimal()+
+    coord_fixed(ratio=1)+
+    labs(x = "Observed number of survivors",
+         y= "Predicted number of survivors") +
+    theme(axis.title = element_text(size=7))+
+    ggtitle(paste0("Survival \nPPC= ",ppc_pct,"%", "\nNRMSE= ", nrmse,"%"))
+
+  return(ggOut)
+}
