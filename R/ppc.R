@@ -18,6 +18,9 @@ ppc <- function(x){
 #' @return a \code{data.frame} of class \code{ppc}
 #'
 #' @examples
+#' data(fitBetacyfluthrin_Chronic)
+#' out <- ppc(fitBetacyfluthrin_Chronic)
+#'
 #' @export
 #'
 ppc.beeSurvFit <- function(x){

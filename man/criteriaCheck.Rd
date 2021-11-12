@@ -16,17 +16,22 @@ to their uncertainty limits with the observed numbers of survivors.
 Based on experience, PPC resulting in more than \eqn{50\%} of the
 observations within the uncertainty limits indicate good model performance (EFSA 2018). A fit of
 \eqn{100\%} may hide too large uncertainties of prediction (so covering all data).}
-\item{PPC_global}{percentage of PPC for the whole data set by gathering data types.}
 \item{NRMSE}{The criterion, in percent, is based on the classical root-mean-square error (RMSE),
 used to aggregate the magnitudes of the errors in predictions for various time-points
 into a single measure of predictive power. In order to provide a criterion expressed
 as a percentage, NRMSE is the normalised RMSE by the mean of the observations.
 EFSA (2018) recognised that a NRMSE of less than 50\% indicates good model performance}
+\item{SPPE}{A list with the Survival Probability Prediction Error per dataset and condition.
+Each dataset is in a sublist.}
 
 @references
 EFSA PPR Scientific Opinion (2018)
 \emph{Scientific Opinion on the state of the art of Toxicokinetic/Toxicodynamic (TKTD) effect models for regulatory risk assessment of pesticides for aquatic organisms}
 \url{https://www.efsa.europa.eu/en/efsajournal/pub/5377}
+
+@example
+data(fitBetacyfluthrin_Chronic)
+out <- criteriaCheck(fitBetacyfluthrin_Chronic)
 }
 \description{
 Computes PPC and NRMSE as defined in EFSA 2018
