@@ -16,6 +16,8 @@
 #' }
 summary.beeSurvFit <- function(object, ...) {
 
+  warning("Computing summary can take some time. Please be patient...")
+
   # Prepare prior
   lsData_fit <- object$dataFit
 
@@ -150,11 +152,15 @@ summary.beeSurvFit <- function(object, ...) {
       considered as a good indicator. Rhat is an indicator of chains convergence.
       A Rhat <= 1.05 is a good indicator of convergence. For detail results,
       one can call 'rstan::monitor(YOUR_beeSurvFit_OBJECT$stanFit)")
+  cat("\n\n EFSA Criteria (PPC, NRMSE, and SPPE) can be accessed via 'x$EFSA'")
+
+  critEFSA <- criteriaCheck(object)
 
   invisible(list(
       setupMCMC = object$setupMCMC,
       Qpriors = outPrior,
-      Qposteriors = outPost))
+      Qposteriors = outPost,
+      EFSA = critEFSA))
 }
 
 
