@@ -23,7 +23,8 @@ specified time-point for a \code{beeSurvFit} object}
 \item{testType}{Test type for which the \eqn{LC_{X}} is calculated
 amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral". Note that for
 "Acute_Oral" and "Acute_Contact", the concentration will be reconstructed as
-in the \link[=dataGUTS]{dataGUTS} function. Default is "Chronic_Oral"}
+in the \link[=dataGUTS]{dataGUTS} function (not recommended as this might not
+make sense for \eqn{LC_{X}} estimations. Default is "Chronic_Oral"}
 
 \item{timeLCx}{A scalar giving the time at which  \eqn{LC_{x}} is predicted.
 If \code{NULL}, the latest time point of the experiment used in the calibration is used}

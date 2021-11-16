@@ -34,7 +34,8 @@ LCx <- function(object, ...){
 #' @param testType Test type for which the \eqn{LC_{X}} is calculated
 #'  amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral". Note that for
 #'  "Acute_Oral" and "Acute_Contact", the concentration will be reconstructed as
-#'  in the \link[=dataGUTS]{dataGUTS} function. Default is "Chronic_Oral"
+#'  in the \link[=dataGUTS]{dataGUTS} function (not recommended as this might not
+#'  make sense for \eqn{LC_{X}} estimations. Default is "Chronic_Oral"
 #'
 #' @return
 #' @export
@@ -95,6 +96,7 @@ LCx.beeSurvFit <- function(object,
   }
 
   # Perform predictions using the odeGUTS package
+  k <- 1:length(concRange)
   if(testType == "Chronic_Oral") {
     dtheo <- lapply(k, function(kit) { # conc
       tmp <- odeGUTS::predict_ode(morseObject, data.frame(time = c(0,timeLCx),
@@ -104,6 +106,9 @@ LCx.beeSurvFit <- function(object,
       tmp <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
     })
   } else if(testType == "Acute_Oral") {
+    warning("Calculating LCx for 'Acute_Oral' reconstructed concentrations is
+            not in line with guidelines and might not make sense. Prefer to use
+            'Chronic_Oral' for the accepted way of calculating LCx")
     dtheo <- lapply(k, function(kit) { # conc
       tmpConc <- concAO(as.data.frame(concRange[kit]), expTime = timeLCx, ...)
       tmp <- odeGUTS::predict_ode(morseObject, data.frame(time = tmpConc[,1],
@@ -113,6 +118,9 @@ LCx.beeSurvFit <- function(object,
       tmp <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
     })
   } else if(testType == "Acute_Contact") {
+    warning("Calculating LCx for 'Acute_Contact' reconstructed concentrations is
+            not in line with guidelines and might not make sense. Prefer to use
+            'Chronic_Oral' for the accepted way of calculating LCx")
     dtheo <- lapply(k, function(kit) { # conc
       tmpConc <- concAC(as.data.frame(concRange[kit]), expTime = timeLCx, ...)
       tmp <- odeGUTS::predict_ode(morseObject, data.frame(time = tmpConc[,1],
