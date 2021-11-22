@@ -17,12 +17,13 @@ following column:
 \item \code{replicate} A vector replicate name
 }}
 
-\item{...}{Additional arguments to be parsed to the  \code{predict.survFit} method from \code{morse} (e.g.
+\item{...}{Additional arguments to be parsed to the  \code{predict.survFit} method from \code{odeGUTS} (e.g.
 \code{mcmc_size = 1000} is to be used to reduce the number of mcmc samples in order to speed up
 the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
-is 1000. If all MCMC is wanted, set argument to \code{NULL}.,
-\code{hb_value  = FALSE} the background mortality \code{hb} is taken into account from the posterior.
-If \code{FALSE}, parameter \code{hb} is set to a fixed value. The default is \code{FALSE}.
+is 1000. If all MCMC is wanted, set argument to \code{NULL}.
+\code{hb_value  = FALSE} the background mortality \code{hb} is set to a fixed value.
+If \code{TRUE}, parameter \code{hb} taken from the posterior (only works if
+one \code{hb} value was estimated. The default is \code{FALSE}.
 \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}}
 }
 \value{
