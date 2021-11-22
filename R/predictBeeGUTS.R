@@ -13,12 +13,13 @@
 #'     \item \code{conc}: A vector of number of survivors of same length
 #'     \item \code{replicate} A vector replicate name
 #' }
-#' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{morse} (e.g.
+#' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{odeGUTS} (e.g.
 #'  \code{mcmc_size = 1000} is to be used to reduce the number of mcmc samples in order to speed up
 #'  the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
-#'  is 1000. If all MCMC is wanted, set argument to \code{NULL}.,
-#'  \code{hb_value  = FALSE} the background mortality \code{hb} is taken into account from the posterior.
-#' If \code{FALSE}, parameter \code{hb} is set to a fixed value. The default is \code{FALSE}.
+#'  is 1000. If all MCMC is wanted, set argument to \code{NULL}.
+#'  \code{hb_value  = FALSE} the background mortality \code{hb} is set to a fixed value.
+#' If \code{TRUE}, parameter \code{hb} taken from the posterior (only works if
+#' one \code{hb} value was estimated. The default is \code{FALSE}.
 #'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
 #'
 #' @return A \code{beeSurvPred} object containing the results of the forwards prediction
@@ -43,24 +44,77 @@ predict.beeSurvFit <- function(object,
 
   # Transform
 
-  if(object$modelType == "SD"){
-    morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "zw_log10", "bw_log10")),
-                        model_type = object$modelType)
-    class(morseObject) <- "survFit"
+  if(!exists("hb_value")) { # if no hb_value defined
+    # in this case, hb_value is set to FALSE by default in odeGUTS and the value
+    # is forced to 0 by hb_valueFORCED in odeGUTS
 
-    for(i in 1:object$setupMCMC$nChains) {
-      colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "z_log10", "kk_log10")
-    }
-  } else if(object$modelType == "IT") {
-    morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "mw_log10", "beta_log10")),
-                        model_type = object$modelType)
-    class(morseObject) <- "survFit"
+    if(object$modelType == "SD"){
+      morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("kd_log10", "zw_log10", "bw_log10")),
+                          model_type = object$modelType)
+      class(morseObject) <- "survFit"
 
-    for(i in 1:object$setupMCMC$nChains) {
-      colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "alpha_log10", "beta_log10")
+      for(i in 1:object$setupMCMC$nChains) {
+        colnames(morseObject$mcmc[[i]]) <- c("kd_log10", "z_log10", "kk_log10")
+      }
+    } else if(object$modelType == "IT") {
+      morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("kd_log10", "mw_log10", "beta_log10")),
+                          model_type = object$modelType)
+      class(morseObject) <- "survFit"
+
+      for(i in 1:object$setupMCMC$nChains) {
+        colnames(morseObject$mcmc[[i]]) <- c("kd_log10", "alpha_log10", "beta_log10")
+      }
+    } else {
+      stop("Wrong model type. Model type should be 'SD' or 'IT'")
     }
-  } else {
-    stop("Wrong model type. Model type should be 'SD' or 'IT'")
+  } else { # if hb_value exists
+    if (hb_value == FALSE) {
+      # In this case the value of hb is set to 0 via hb_valueFORCED in odeGUTS
+      if(object$modelType == "SD"){
+        morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("kd_log10", "zw_log10", "bw_log10")),
+                            model_type = object$modelType)
+        class(morseObject) <- "survFit"
+
+        for(i in 1:object$setupMCMC$nChains) {
+          colnames(morseObject$mcmc[[i]]) <- c("kd_log10", "z_log10", "kk_log10")
+        }
+      } else if(object$modelType == "IT") {
+        morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("kd_log10", "mw_log10", "beta_log10")),
+                            model_type = object$modelType)
+        class(morseObject) <- "survFit"
+
+        for(i in 1:object$setupMCMC$nChains) {
+          colnames(morseObject$mcmc[[i]]) <- c("kd_log10", "alpha_log10", "beta_log10")
+        }
+      } else {
+        stop("Wrong model type. Model type should be 'SD' or 'IT'")
+      }
+    } else if (hb_value == TRUE) {
+
+      ## TODO Need to include a check for hb_log10 length == 1
+
+      if(object$modelType == "SD"){
+        morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "zw_log10", "bw_log10")),
+                            model_type = object$modelType)
+        class(morseObject) <- "survFit"
+
+        for(i in 1:object$setupMCMC$nChains) {
+          colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "z_log10", "kk_log10")
+        }
+      } else if(object$modelType == "IT") {
+        morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "mw_log10", "beta_log10")),
+                            model_type = object$modelType)
+        class(morseObject) <- "survFit"
+
+        for(i in 1:object$setupMCMC$nChains) {
+          colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "alpha_log10", "beta_log10")
+        }
+      } else {
+        stop("Wrong model type. Model type should be 'SD' or 'IT'")
+      }
+    } else {
+      stop("'hb_value' should be either TRUE or FALSE")
+    }
   }
 
   # Perform predictions using the odeGUTS package
@@ -77,7 +131,7 @@ predict.beeSurvFit <- function(object,
                 setupMCMC = object$setupMCMC,
                 sim = outMorse$df_quantile
   )
-  class(lsOut) <- "beeSurvPred"
+  class(lsOut) <- c("beeSurvPred", class(lsOut))
 
   return(lsOut)
 }
