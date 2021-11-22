@@ -159,6 +159,7 @@ summary.beeSurvFit <- function(object, ...) {
   invisible(list(
       setupMCMC = object$setupMCMC,
       Qpriors = outPrior,
+      Qposteriors_hb = outPost_hb,
       Qposteriors = outPost,
       EFSA = critEFSA))
 }
