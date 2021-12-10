@@ -40,17 +40,18 @@ See detail section for example}
 \item{test_type}{list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
 this list must have the same length of the list of file locations}
 
-\item{bee_species}{the bee type. At the moment only "Honey_Bee" is supported}
+\item{bee_species}{the bee type among "Honey_Bee", "Bumble_Bee", and "User_Bee". If "User_Bee" is selected,
+optional arguments to be passed to the concentration reconstruction need to be defined.}
 
 \item{NA_string}{a character vector of strings which are to be interpreted as NA values}
 
 \item{...}{Optional arguments to be passed to the concentration reconstruction (e.g.
 \itemize{
-\item \code{k_sr =} for the stomach release rate (d-1), default is 0.625,
-\item \code{k_ca =} contact availability rate (d-1), default is 0.4), or
+\item \code{k_sr =} for the stomach release rate (d-1), default is 0.625 for Honey bee,
+\item \code{k_ca =} contact availability rate (d-1), default is 0.4 for Honey bee), or
 \item \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
 \item \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
-\item \code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day)
+\item \code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day for honey bee)
 \item \code{targConc =} numerical scalar, target concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).
 }}
 }
@@ -96,6 +97,8 @@ Concentration time [d]	\tab Control	\tab T1	\tab T2	\tab T3	\tab T4	\tab T5 \cr
 \dontrun{
 file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
 lsData <- dataGUTS(file_location = c(file_location),
-                  test_type = c('Chronic_Oral'), cstConcCal = FALSE)
+                  test_type = c('Acute_Oral'),
+                  bee_species = "Honey_Bee",
+                  cstConcCal = FALSE)
 }
 }

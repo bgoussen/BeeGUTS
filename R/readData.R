@@ -29,15 +29,16 @@
 #'
 #' @param test_type list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
 #' this list must have the same length of the list of file locations
-#' @param bee_species the bee type. At the moment only "Honey_Bee" is supported
+#' @param bee_species the bee type among "Honey_Bee", "Bumble_Bee", and "User_Bee". If "User_Bee" is selected,
+#' optional arguments to be passed to the concentration reconstruction need to be defined.
 #' @param NA_string a character vector of strings which are to be interpreted as NA values
 #' @param ... Optional arguments to be passed to the concentration reconstruction (e.g.
 #' \itemize{
-#'  \item \code{k_sr =} for the stomach release rate (d-1), default is 0.625,
-#'  \item \code{k_ca =} contact availability rate (d-1), default is 0.4), or
+#'  \item \code{k_sr =} for the stomach release rate (d-1), default is 0.625 for Honey bee,
+#'  \item \code{k_ca =} contact availability rate (d-1), default is 0.4 for Honey bee), or
 #'  \item \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
 #'  \item \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
-#'  \item \code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day)
+#'  \item \code{f_rate = } numerical vector, feeding rate used in the concentration recalculation in the Chronic_Oral (default is 25 mg/bee/day for honey bee)
 #'  \item \code{targConc =} numerical scalar, target concentration unit in the recalculation in the Chronic_Oral, 1 for µg/bee, 2 for ng/bee, 3 for mg/bee (default is 1).
 #' }
 #'
@@ -80,13 +81,18 @@
 #' \dontrun{
 #' file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
 #' lsData <- dataGUTS(file_location = c(file_location),
-#'                   test_type = c('Chronic_Oral'), cstConcCal = FALSE)
+#'                   test_type = c('Acute_Oral'),
+#'                   bee_species = "Honey_Bee",
+#'                   cstConcCal = FALSE)
 #' }
 dataGUTS <- function(file_location = NULL,
                      test_type = NULL,
                      bee_species = "Honey_Bee",
                      NA_string = getOption("datatable.na.strings","NA"),
                      ...) { # Possibility to add non default ksR, and kca
+
+  ## Initiate storage for warning messages
+  msg <- data.frame()
 
   ## check that file_location and test_types have the same length
   if (length(file_location) != length(test_type)){
@@ -106,15 +112,77 @@ dataGUTS <- function(file_location = NULL,
     splitpath <- strsplit(strsplit(file_location[i], "_")[[1]],"/")[[1]]
     name_chemical <- append(name_chemical, splitpath[length(splitpath)])
   }
-  if (is.null(bee_species) ||  !(bee_species %in% c("Honey_Bee"))) {
-    stop("You need to specifiy a correct 'bee_species' amongst 'HoneyBee'.
-         Other types of bees are not yet implemented.")
+
+  # Check if correct bee type is entered
+  if (is.null(bee_species) ||  !(bee_species %in% c("Honey_Bee", "Bumble_Bee", "User_Bee"))) {
+    stop("You need to specifiy a correct 'bee_species' amongst 'Honey_Bee', 'Bumble_Bee'.
+    and 'User_Bee'. Other types of bees are not yet implemented.")
   }
+
+  if(bee_species == "Honey_Bee"){
+    if(!exists("k_ca")) {
+      k_ca <- 0.4 # Default value for Honey bees
+    } else {
+      msgTmp <-  warning("User defined 'k_ca' parameter for 'Honey_Bee' of ", k_ca, " d-1")
+      msg <- c(msg, msgTmp)
+    }
+    if(!exists("k_sr")) {
+      k_sr <- 0.625 # Default value for Honey bees
+    } else {
+      msgTmp <-  warning("User defined 'k_sr' parameter for 'Honey_Bee of'", k_sr, " d-1")
+      msg <- c(msg, msgTmp)
+    }
+    if(!exists("cTime")) {
+      cTime <- 0.25 # Default value for Honey bees
+    } else {
+      msgTmp <-  warning("User defined 'cTime' parameter for 'Honey_Bee of'", cTime, " d")
+      msg <- c(msg, msgTmp)
+    }
+
+  } else if(bee_species == "Bumble_Bee") {
+
+    if(!exists("k_ca")) {
+      k_ca <- 0.4 # Default value for Bumble Bee
+    } else {
+      msgTmp <-  warning("User defined 'k_ca' parameter for 'Bumble_Bee' of ", k_ca, " d-1")
+      msg <- c(msg, msgTmp)
+    }
+    if(!exists("k_sr")) {
+      k_sr <- 1 # Default value for Bumble Bee
+    } else {
+      msgTmp <-  warning("User defined 'k_sr' parameter for 'Bumble_Bee' of", k_sr, " d-1")
+      msg <- c(msg, msgTmp)
+    }
+    if(!exists("cTime")) {
+      cTime <- 0.25 # Default value for Bumble Bee
+    } else {
+      msgTmp <-  warning("User defined 'cTime' parameter for 'Bumble_Bee' of", cTime, " d")
+      msg <- c(msg, msgTmp)
+    }
+
+  } else if(bee_species == "User_Bee"){ # If user defined bee type, check that correct parameters are entered
+    if(!exists("k_ca") || !exists("k_sr") || !exists("cTime")){
+      stop("'k_ca', 'k_sr', and 'cTime' arguments must be defined for a user defined bee")
+    }
+    msgTmp <- warning("User defined bee with parameters k_ca = ", k_ca, "k_sr =", k_sr,
+                      "cTime = ", cTime)
+    msg <- c(msg, msgTmp)
+    if(exists("cstConcCal")) {
+      if(!exists("f_rate") || !exists("targConc")){
+        stop("'f_rate' and 'targConc' arguments must be defined when 'cstConcCal' is
+             set to TRUE for a user defined bee")
+      }
+      msgTmp <- warning("f_rate = ", f_rate, "targConc = ", targConc)
+      msg <- c(msg, msgTmp)
+    }
+  }
+
   # check that there are no multiple entries in the bee_species argument
   if (length(bee_species) > 1){
-    warning("You entered multiple entries for the bee species. Only one is required.
+    msgTmp <- warning("You entered multiple entries for the bee species. Only one is required.
             Calibration on different species is not possible.
             Using only the first entry.")
+    msg <- c(msg, msgTmp)
     bee_species <- bee_species[[1]] # to make sure that the entry is always a string even if a list is passed
   }
 
@@ -162,10 +230,10 @@ dataGUTS <- function(file_location = NULL,
 
     # Recalculate the concentrations based on the experiment type
     if(test_type[i] == "Acute_Oral") {
-      dfConcModel_aux <- concAO(tbConc_aux[1,-1], expTime = max(tbSurv_aux[,1]), ...)
+      dfConcModel_aux <- concAO(tbConc_aux[1,-1], expTime = max(tbSurv_aux[,1]), k_sr = k_sr, ...)
       dfConcModel_aux$Dataset <- i # reallocate the column because it gets overwritten
     } else if(test_type[i] == "Acute_Contact") {
-      dfConcModel_aux <- concAC(tbConc_aux[1,-1], expTime = max(tbSurv_aux[,1]), ...)
+      dfConcModel_aux <- concAC(tbConc_aux[1,-1], expTime = max(tbSurv_aux[,1]), k_ca = k_ca, ...)
       dfConcModel_aux$Dataset <- i # reallocate the column because it gets overwritten
     } else {
       lsConcModel_aux <- concCst(tbConc_aux, ...)
@@ -193,19 +261,21 @@ dataGUTS <- function(file_location = NULL,
   ##       possible ways to write the units in the experimental data file.
   units_check <- length(unique(chUnits)) == 1
   if (!units_check){
-    warning("!!! IMPORTANT NOTE !!!
+    msgTmp <- warning("!!! IMPORTANT NOTE !!!
             Check the units in the data file. There seems to be a mismatch.
             You can continue with the fit, but the results might be incorrect.
             See 'object$unitData' for more information.")
+    msg <- c(msg, msgTmp)
   }
   ## TODO: Find a good strategy to ensure safety checks
   ## to ensure using the same chemical species
   chemical_check <- length(unique(tolower(name_chemical))) == 1
   if (!chemical_check){
-    warning("!!! IMPORTANT NOTE !!!
+  msgTmp <- warning("!!! IMPORTANT NOTE !!!
               Make sure you know what you are doing.
               Chemical species extracted from filename of the two files does not match.
               The data will continue to be read, but there might be inconsistencies.")
+  msg <- c(msg, msgTmp)
   }
 
   # Return
@@ -218,7 +288,8 @@ dataGUTS <- function(file_location = NULL,
                 typeData = test_type,
                 beeSpecies = bee_species,
                 concModel = dfConcModel,
-                concModel_long = dfConcModel_long)
+                concModel_long = dfConcModel_long,
+                messages = msg)
   class(lsOut) <- "beeSurvData"
 
   # This is to keep the compatibility with the current code if there is a single file passed
