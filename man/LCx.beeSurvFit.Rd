@@ -35,6 +35,8 @@ highest tested concentration of the calibration experiment.}
 
 \item{nPoints}{Number of time point in \code{concRange} between 0 and the
 maximal concentration. 100 by default.}
+
+\item{...}{Further arguments to be passed to generic methods}
 }
 \value{
 

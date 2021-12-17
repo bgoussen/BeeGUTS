@@ -409,8 +409,6 @@ traceplot.beeSurvFit <- function(object, ..., incWarmup_trace = TRUE, incWarmup_
 #' Plotting method for \code{ppc} objects
 #'
 #' @param x An object of class \code{ppc}.
-#' @param data_type  A string designating the type of data to be plotted: \code{length},
-#' \code{reproduction} or \code{exposure}
 #' @param \dots  Further arguments to be passed to generic methods.
 #'
 #' @return  an object of class \code{ggplot}.

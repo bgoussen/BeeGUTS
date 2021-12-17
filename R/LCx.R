@@ -30,7 +30,7 @@ LCx <- function(object, ...){
 #' highest tested concentration of the calibration experiment.
 #' @param nPoints Number of time point in \code{concRange} between 0 and the
 #' maximal concentration. 100 by default.
-#' @param ...
+#' @param ... Further arguments to be passed to generic methods
 #' @param testType Test type for which the \eqn{LC_{X}} is calculated
 #'  amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral". Note that for
 #'  "Acute_Oral" and "Acute_Contact", the concentration will be reconstructed as
