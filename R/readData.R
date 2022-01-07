@@ -278,6 +278,11 @@ dataGUTS <- function(file_location = NULL,
   msg <- c(msg, msgTmp)
   }
 
+  # Check if messages exists, otherwise return NA
+  if (length(msg) == 0){
+    msg <- c(msg, 'NA')
+  }
+
   # Return
   lsOut <- list(nDatasets = nDatasets,
                 survData = tbSurv,
