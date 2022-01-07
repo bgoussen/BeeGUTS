@@ -97,7 +97,7 @@ Concentration time [d]	\tab Control	\tab T1	\tab T2	\tab T3	\tab T4	\tab T5 \cr
 \dontrun{
 file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
 lsData <- dataGUTS(file_location = c(file_location),
-                  test_type = c('Acute_Oral'),
+                  test_type = c('Chronic_Oral'),
                   bee_species = "Honey_Bee",
                   cstConcCal = FALSE)
 }
