@@ -29,12 +29,12 @@
 #'
 #' @param test_type list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
 #' this list must have the same length of the list of file locations
-#' @param bee_species the bee type among "Honey_Bee", "Bumble_Bee", and "User_Bee". If "User_Bee" is selected,
+#' @param bee_species the bee type among "Honey_Bee", "Bumble_Bee", "Osmia_bicornis", and "User_Bee". If "User_Bee" is selected,
 #' optional arguments to be passed to the concentration reconstruction need to be defined.
 #' @param NA_string a character vector of strings which are to be interpreted as NA values
 #' @param ... Optional arguments to be passed to the concentration reconstruction (e.g.
 #' \itemize{
-#'  \item \code{k_sr =} for the stomach release rate (d-1), default is 0.625 for Honey bee,
+#'  \item \code{k_sr =} for the stomach release rate (d-1), default is 0.675 for Honey bee,
 #'  \item \code{k_ca =} contact availability rate (d-1), default is 0.4 for Honey bee), or
 #'  \item \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
 #'  \item \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
@@ -113,10 +113,19 @@ dataGUTS <- function(file_location = NULL,
     name_chemical <- append(name_chemical, splitpath[length(splitpath)])
   }
 
+  # check that there are no multiple entries in the bee_species argument
+  if (length(bee_species) > 1){
+    msgTmp <- warning("You entered multiple entries for the bee species. Only one is required.
+            Calibration on different species is not possible.
+            Using only the first entry.")
+    msg <- c(msg, msgTmp)
+    bee_species <- bee_species[[1]] # to make sure that the entry is always a string even if a list is passed
+  }
+
   # Check if correct bee type is entered
-  if (is.null(bee_species) ||  !(bee_species %in% c("Honey_Bee", "Bumble_Bee", "User_Bee"))) {
+  if (is.null(bee_species) ||  !(bee_species %in% c("Honey_Bee", "Bumble_Bee", "Osmia_bicornis", "User_Bee"))) {
     stop("You need to specifiy a correct 'bee_species' amongst 'Honey_Bee', 'Bumble_Bee'.
-    and 'User_Bee'. Other types of bees are not yet implemented.")
+    'Osmia_bicornis', and 'User_Bee'. Other types of bees are not yet implemented.")
   }
 
   if(bee_species == "Honey_Bee"){
@@ -127,7 +136,7 @@ dataGUTS <- function(file_location = NULL,
       msg <- c(msg, msgTmp)
     }
     if(!exists("k_sr")) {
-      k_sr <- 0.625 # Default value for Honey bees
+      k_sr <- 0.675 # Default value for Honey bees
     } else {
       msgTmp <-  warning("User defined 'k_sr' parameter for 'Honey_Bee of'", k_sr, " d-1")
       msg <- c(msg, msgTmp)
@@ -160,6 +169,27 @@ dataGUTS <- function(file_location = NULL,
       msg <- c(msg, msgTmp)
     }
 
+  } else if(bee_species == "Osmia_bicornis") {
+
+    if(!exists("k_ca")) {
+      k_ca <- 2.0 # Default value for Osmia bicornis
+    } else {
+      msgTmp <-  warning("User defined 'k_ca' parameter for 'Osmia_bicornis' of ", k_ca, " d-1")
+      msg <- c(msg, msgTmp)
+    }
+    if(!exists("k_sr")) {
+      k_sr <- 1.5 # Default value for Osmia bicornis
+    } else {
+      msgTmp <-  warning("User defined 'k_sr' parameter for 'Osmia_bicornis' of", k_sr, " d-1")
+      msg <- c(msg, msgTmp)
+    }
+    if(!exists("cTime")) {
+      cTime <- 0.25 # Default value for Osmia bicornis
+    } else {
+      msgTmp <-  warning("User defined 'cTime' parameter for 'Osmia_bicornis' of", cTime, " d")
+      msg <- c(msg, msgTmp)
+    }
+
   } else if(bee_species == "User_Bee"){ # If user defined bee type, check that correct parameters are entered
     if(!exists("k_ca") || !exists("k_sr") || !exists("cTime")){
       stop("'k_ca', 'k_sr', and 'cTime' arguments must be defined for a user defined bee")
@@ -177,14 +207,6 @@ dataGUTS <- function(file_location = NULL,
     }
   }
 
-  # check that there are no multiple entries in the bee_species argument
-  if (length(bee_species) > 1){
-    msgTmp <- warning("You entered multiple entries for the bee species. Only one is required.
-            Calibration on different species is not possible.
-            Using only the first entry.")
-    msg <- c(msg, msgTmp)
-    bee_species <- bee_species[[1]] # to make sure that the entry is always a string even if a list is passed
-  }
 
   # Empty arrays for the objects to be returned. Values for each test are appended
   tbSurv <- list()

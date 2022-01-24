@@ -40,14 +40,14 @@ See detail section for example}
 \item{test_type}{list of test types amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral"
 this list must have the same length of the list of file locations}
 
-\item{bee_species}{the bee type among "Honey_Bee", "Bumble_Bee", and "User_Bee". If "User_Bee" is selected,
+\item{bee_species}{the bee type among "Honey_Bee", "Bumble_Bee", "Osmia_bicornis", and "User_Bee". If "User_Bee" is selected,
 optional arguments to be passed to the concentration reconstruction need to be defined.}
 
 \item{NA_string}{a character vector of strings which are to be interpreted as NA values}
 
 \item{...}{Optional arguments to be passed to the concentration reconstruction (e.g.
 \itemize{
-\item \code{k_sr =} for the stomach release rate (d-1), default is 0.625 for Honey bee,
+\item \code{k_sr =} for the stomach release rate (d-1), default is 0.675 for Honey bee,
 \item \code{k_ca =} contact availability rate (d-1), default is 0.4 for Honey bee), or
 \item \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
 \item \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)
