@@ -38,9 +38,6 @@ maximal concentration. 100 by default.}
 
 \item{...}{Further arguments to be passed to generic methods}
 }
-\value{
-
-}
 \description{
 Predict the Lethal Concentration at which \eqn{x}\\% of organisms die for any
 specified time-point for a \code{beeSurvFit} object
