@@ -41,8 +41,10 @@ LCx <- function(object, ...){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data(fitBetacyfluthrin_Chronic)
 #' out <- LCx(fitBetacyfluthrin_Chronic)
+#' }
 LCx.beeSurvFit <- function(object,
                            X = 50,
                            testType = "Chronic_Oral",
