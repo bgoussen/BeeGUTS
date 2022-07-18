@@ -166,3 +166,28 @@ summary.beeSurvFit <- function(object, ...) {
 
 
 
+#' Summary of \code{LCx} objects
+#'
+#' @description This is the generic \code{summary} S3 method for the \code{LCx} class.
+#' It shows the median and 95% credible interval of the calculated LCx.
+#'
+#' @param object An object of class \code{LCx}
+#' @param ... Additional arguments to be parsed to the generic \code{summary} method (not used)
+#'
+#' @return A summary of the \code{LCx} object
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' data(fitBetacyfluthrin_Chronic)
+#' out <- LCx(fitBetacyfluthrin_Chronic)
+#' summary(out)
+#' }
+summary.beeSurvFit <- function(object, ...) {
+  cat("Summary: \n\n")
+  cat("LC",object$X_prop, " calculation. \n",
+      "Time for which the LCx is calculated:", object$timeLCx, "\n",
+      "Bee species:", object$beeSpecies, "\n",
+      "Test type:", object$testType, "\n",
+      "LCx:", object$dfLCx)
+}

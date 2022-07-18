@@ -37,10 +37,12 @@ LCx <- function(object, ...){
 #'  in the \link[=dataGUTS]{dataGUTS} function (not recommended as this might not
 #'  make sense for \eqn{LC_{X}} estimations. Default is "Chronic_Oral"
 #'
-#' @return
+#' @return A \code{LCx} object containing the results of the lethal concentration predictions
 #' @export
 #'
 #' @examples
+#' data(fitBetacyfluthrin_Chronic)
+#' out <- LCx(fitBetacyfluthrin_Chronic)
 LCx.beeSurvFit <- function(object,
                            X = 50,
                            testType = "Chronic_Oral",
@@ -143,6 +145,8 @@ LCx.beeSurvFit <- function(object,
   out <- list(X_prop = X_prop,
               timeLCx = timeLCx,
               testType = testType,
+              modelType = object$modelType,
+              beeType = object$data$beeSpecies,
               dfLCx = dfLCx,
               dfDose = dtheo)
   class(out) <- c("LCx", class(out))

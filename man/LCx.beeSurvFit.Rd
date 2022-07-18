@@ -38,7 +38,14 @@ maximal concentration. 100 by default.}
 
 \item{...}{Further arguments to be passed to generic methods}
 }
+\value{
+A \code{LCx} object containing the results of the lethal concentration predictions
+}
 \description{
 Predict the Lethal Concentration at which \eqn{x}\\% of organisms die for any
 specified time-point for a \code{beeSurvFit} object
+}
+\examples{
+data(fitBetacyfluthrin_Chronic)
+out <- LCx(fitBetacyfluthrin_Chronic)
 }
