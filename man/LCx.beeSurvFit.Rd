@@ -46,6 +46,8 @@ Predict the Lethal Concentration at which \eqn{x}\\% of organisms die for any
 specified time-point for a \code{beeSurvFit} object
 }
 \examples{
+\dontrun{
 data(fitBetacyfluthrin_Chronic)
 out <- LCx(fitBetacyfluthrin_Chronic)
+}
 }
