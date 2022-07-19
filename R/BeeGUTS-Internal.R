@@ -4,5 +4,5 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c(
   "conc", "Treatment", "SurvivalTime", "idAll", "NSurv", "simQ50", "simQinf95",
   "simQsup95", "time", "q50", "qinf95", "qsup95", "Nsurv_q50_valid",
   "Nsurv_qinf95_valid", "Nsurv_qsup95_valid", "Conc", "Dataset", "Nsurv",
-  "qnorm", "qunif", "na.omit", "value", "q_0.025", "q_0975", "median", "data",
-  "ppcMatching_valid", "SE_id", "hb_value"))
+  "qnorm", "qunif", "na.omit", "value", "q_0.025", "q_0.975", "median", "data",
+  "ppcMatching_valid", "SE_id", "id", "hb_value", "approx"))
