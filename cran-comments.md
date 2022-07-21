@@ -1,7 +1,7 @@
 ## Test environments
 * local R installation, R 4.1.2
 * Windows Server 2022, R-devel, 64 bit
-
+* Fedora Linux, R-devel, clang, gfortran
 
 ## R CMD check results
 
