@@ -62,9 +62,9 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(betacyfluthrinChronic)
-#' fit <- fitBeeGUTS(betacyfluthrinChronic, modelType = "SD", nIter = 1000)
+#' fit <- fitBeeGUTS(betacyfluthrinChronic, modelType = "SD", nIter = 1000, nCores = 2)
 #' }
 fitBeeGUTS <- function(data, # CHECK CORRECT DATA OBJECT IS USED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                        modelType = NULL,
@@ -118,6 +118,8 @@ fitBeeGUTS <- function(data, # CHECK CORRECT DATA OBJECT IS USED !!!!!!!!!!!!!!!
   if (parallel == TRUE) {
     op <- options()
     options(mc.cores = as.integer(nCores))
+    on.exit(options(op))
+
   }
 
   # Sample MCMC chains

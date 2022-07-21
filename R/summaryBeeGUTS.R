@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(fitBetacyfluthrin_Chronic)
 #' summary(fitBetacyfluthrin_Chronic)
 #' }
@@ -178,7 +178,7 @@ summary.beeSurvFit <- function(object, ...) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(fitBetacyfluthrin_Chronic)
 #' out <- LCx(fitBetacyfluthrin_Chronic)
 #' summary(out)

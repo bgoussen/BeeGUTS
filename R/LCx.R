@@ -10,6 +10,7 @@
 #' @param object An object used to select a method
 #' @param \dots Further arguments to be passed to generic methods
 #'
+#' @return A \code{LCx} object containing the results of the lethal concentration predictions
 #' @export
 #'
 LCx <- function(object, ...){
@@ -41,7 +42,7 @@ LCx <- function(object, ...){
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(fitBetacyfluthrin_Chronic)
 #' out <- LCx(fitBetacyfluthrin_Chronic)
 #' }

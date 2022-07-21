@@ -44,7 +44,7 @@ validate <- function(object,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(betacyfluthrinChronic)
 #' data(fitBetacyfluthrin_Chronic)
 #' validation <- validate(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)

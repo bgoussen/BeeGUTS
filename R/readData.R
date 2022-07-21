@@ -77,7 +77,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
 #' lsData <- dataGUTS(file_location = c(file_location),
 #'                   test_type = c('Chronic_Oral'), cstConcCal = FALSE)

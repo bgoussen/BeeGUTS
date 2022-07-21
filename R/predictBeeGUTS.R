@@ -26,7 +26,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' dataPredict <- data.frame(time = c(1:5, 1:15),
 #'                           conc = c(rep(5, 5), rep(15, 15)),
 #'                           replicate = c(rep("rep1", 5), rep("rep2", 15)))

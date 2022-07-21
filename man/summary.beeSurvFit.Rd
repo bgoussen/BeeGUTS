@@ -26,11 +26,11 @@ This is the generic \code{summary} S3 method for the \code{LCx} class.
 It shows the median and 95\% credible interval of the calculated LCx.
 }
 \examples{
-\dontrun{
+\donttest{
 data(fitBetacyfluthrin_Chronic)
 summary(fitBetacyfluthrin_Chronic)
 }
-\dontrun{
+\donttest{
 data(fitBetacyfluthrin_Chronic)
 out <- LCx(fitBetacyfluthrin_Chronic)
 summary(out)

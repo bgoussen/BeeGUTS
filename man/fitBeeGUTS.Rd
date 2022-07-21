@@ -97,9 +97,9 @@ Similarly, the minimal kd considered for the prior calculation was reduced to al
 more chance to capture slow kinetics.
 }
 \examples{
-\dontrun{
+\donttest{
 data(betacyfluthrinChronic)
-fit <- fitBeeGUTS(betacyfluthrinChronic, modelType = "SD", nIter = 1000)
+fit <- fitBeeGUTS(betacyfluthrinChronic, modelType = "SD", nIter = 1000, nCores = 2)
 }
 }
 \references{

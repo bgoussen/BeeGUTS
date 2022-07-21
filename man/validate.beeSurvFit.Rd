@@ -27,7 +27,7 @@ This is the generic \code{validate} S3 method for the \code{beeSurvFit}
 class. It predict the survival over time for the concentration profiles entered by the user.
 }
 \examples{
-\dontrun{
+\donttest{
 data(betacyfluthrinChronic)
 data(fitBetacyfluthrin_Chronic)
 validation <- validate(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)

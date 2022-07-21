@@ -36,7 +36,7 @@ class. It plots the number of survivors as a function of time as well as the rec
 concentrations for \code{"Acute_Oral"} and \code{"Acute_Contact"} test types.
 }
 \examples{
-\dontrun{
+\donttest{
 data(betacyfluthrinChronic) # Load dataset for validation
 data(fitBetacyfluthrin_Chronic)
 validation <- validate(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
