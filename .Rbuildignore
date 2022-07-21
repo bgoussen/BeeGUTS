@@ -7,3 +7,4 @@
 ^testing_implementation\.R$
 ^cran-comments\.md$
 ^README.Rmd
+^CRAN-SUBMISSION$
