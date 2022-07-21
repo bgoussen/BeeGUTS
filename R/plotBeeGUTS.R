@@ -413,7 +413,7 @@ traceplot.beeSurvFit <- function(object, ..., incWarmup_trace = TRUE, incWarmup_
 #'
 #' @return  an object of class \code{ggplot}.
 #'
-#' @example
+#' @examples
 #' data(fitBetacyfluthrin_Chronic)
 #' out <- ppc(fitBetacyfluthrin_Chronic)
 #' plot(out)

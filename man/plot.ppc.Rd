@@ -17,3 +17,9 @@ an object of class \code{ggplot}.
 \description{
 Plotting method for \code{ppc} objects
 }
+\examples{
+data(fitBetacyfluthrin_Chronic)
+out <- ppc(fitBetacyfluthrin_Chronic)
+plot(out)
+
+}

@@ -1,6 +1,7 @@
 ## Test environments
 * local R installation, R 4.1.2
-* win-builder (devel)
+* Windows Server 2022, R-devel, 64 bit
+
 
 ## R CMD check results
 

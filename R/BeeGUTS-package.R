@@ -12,7 +12,9 @@
 #' @aliases BeeGUTS
 #' @useDynLib BeeGUTS, .registration = TRUE
 #' @import methods
-#' @import Rcpp
+#' @importFrom Rcpp loadModule
+#' @import rstantools
+#' @import RcppParallel
 #' @importFrom rstan sampling
 #' @importFrom magrittr %>%
 #'
