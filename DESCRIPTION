@@ -22,7 +22,7 @@ Authors@R:
 Description: Tools to calibrate, validate, and make predictions with the 
     General Unified Threshold model of Survival adapted for Bee species. The 
     model is presented in the publication from Baas, J., Goussen, B., Miles, M., 
-    Preuss, T.G., Roessing, I. (submitted) and is based on the GUTS framework 
+    Preuss, T.G., Roessing, I. (2022) <doi:10.1002/etc.5423> and is based on the GUTS framework 
     Jager, T., Albert, C., Preuss, T.G. and Ashauer, R. (2011) <doi:10.1021/es103092a>.
     The authors are grateful to Bayer A.G. for its financial support.
 License: GPL-3
