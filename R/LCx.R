@@ -1,7 +1,7 @@
-#' Predict the Lethal Concentration method at which \eqn{x}\% of organisms die for any
+#' Predict the Lethal Concentration method at which \eqn{x\%} of organisms die for any
 #' specified time-point for a \code{beeSurvFit} object
 #'
-#' Predict median and 95\% credible interval of the x\% Lethal Concentration.
+#' Predict median and 95% credible interval of the \eqn{x\%} Lethal Concentration.
 #'
 #' When class of \code{object} is \code{beeSurvFit}, see \link[=LCx.beeSurvFit]{LCx.beeSurvFit}.
 #'
@@ -19,7 +19,7 @@ LCx <- function(object, ...){
 
 
 
-#' Predict the Lethal Concentration at which \eqn{x}\% of organisms die for any
+#' Predict the Lethal Concentration at which \eqn{x\%} of organisms die for any
 #' specified time-point for a \code{beeSurvFit} object
 #'
 #' @param object An object of class \code{beeSurvFit}
@@ -38,7 +38,7 @@ LCx <- function(object, ...){
 #'  in the \link[=dataGUTS]{dataGUTS} function (not recommended as this might not
 #'  make sense for \eqn{LC_{X}} estimations. Default is "Chronic_Oral"
 #'
-#' @return A \code{LCx} object containing the results of the lethal concentration predictions
+#' @return A object of class \code{LCx} containing the results of the lethal concentration predictions
 #' @export
 #'
 #' @examples
