@@ -183,7 +183,7 @@ summary.beeSurvFit <- function(object, ...) {
 #' out <- LCx(fitBetacyfluthrin_Chronic)
 #' summary(out)
 #' }
-summary.beeSurvFit <- function(object, ...) {
+summary.LCx <- function(object, ...) {
   cat("Summary: \n\n")
   cat("LC",object$X_prop, " calculation. \n",
       "Time for which the LCx is calculated:", object$timeLCx, "\n",
