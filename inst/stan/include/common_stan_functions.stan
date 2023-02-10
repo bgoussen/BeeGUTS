@@ -53,15 +53,15 @@ real linearInterp( real t_x, real t_before, real t_after, real y_before, real y_
 }
 
  /*    Function for loglogistic law */
-real loglogistic_lpdf(real y_hat, real mw, real beta) {
+real loglogistic_2_lpdf(real y_hat, real mw, real beta) {
       return log(beta) - log(mw) + (beta - 1) * (log(y_hat) - log(mw)) -
              2 * log1p_exp(beta * (log(y_hat) - log(mw)));
 }
 
-real  loglogistic_lcdf(real y_hat, real mw, real beta){
+real  loglogistic_2_lcdf(real y_hat, real mw, real beta){
   return -log1p_exp(-beta * (log(y_hat) - log(mw))) ;
 }
 
-real  loglogistic_lccdf(real y_hat, real mw, real beta){
+real  loglogistic_2_lccdf(real y_hat, real mw, real beta){
   return -log1p_exp(beta * (log(y_hat) - log(mw))) ;
 }

@@ -46,7 +46,7 @@ functions {
     return(dy_dt);
   }
 
-  matrix solve_TKTD_varSD(real[] y0, real t0, real[] ts, real[] theta, real[] tconc, real[] conc, real[] odeParam){
+  matrix solve_TKTD_varSD(real[] y0, real t0, real[] ts, real[] theta, data real[] tconc, data real[] conc, data real[] odeParam){
 
     int x_i[1];
     x_i[1] = size(tconc);
