@@ -36,7 +36,7 @@ functions {
     return(dy_dt);
   }
 
-  matrix solve_TKTD_varIT(real[] y0, real t0, real[] ts, real[] theta, real[] tconc, real[] conc, real[] odeParam){
+  matrix solve_TKTD_varIT(real[] y0, real t0, real[] ts, real[] theta, data real[] tconc, data real[] conc, data real[] odeParam){
 
     int x_i[1];
     x_i[1] = size(tconc);
@@ -123,7 +123,7 @@ transformed parameters{
     for(i in idS_lw[gr]:idS_up[gr]){
 
      if(distribution == 1){
-       Psurv_hat[i] = exp(- hb * tNsurv_ode[i]) * (1-exp(loglogistic_lcdf(max(y_hat[idS_lw[gr]:i, 1]) | mw, beta)));
+       Psurv_hat[i] = exp(- hb * tNsurv_ode[i]) * (1-exp(loglogistic_2_lcdf(max(y_hat[idS_lw[gr]:i, 1]) | mw, beta)));
      }
      if(distribution == 2){
        Psurv_hat[i] = exp(- hb * tNsurv_ode[i]) * (1-exp(lognormal_lcdf(max(y_hat[idS_lw[gr]:i, 1]) | mw, beta)));
