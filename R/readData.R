@@ -137,7 +137,10 @@ dataGUTS <- function(file_location = NULL,
     skipLine_surv <- grep("Survival", rawData)
     nrowLine_surv <- grep("Concentration unit", rawData)
     # Load the survival data
-    tbSurv_aux <- data.table::fread(file_location[i], skip = skipLine_surv - 1L, header = T, nrow = nrowLine_surv - (skipLine_surv + 1L),
+    tbSurv_aux <- data.table::fread(text = rawData,
+                                    skip = skipLine_surv - 1L,
+                                    header = T,
+                                    nrow = nrowLine_surv - (skipLine_surv + 1L),
                                     na.strings = NA_string)
     colnames(tbSurv_aux)[1] <- c("SurvivalTime") # Set unique name for time column
     tbSurv_aux$Dataset <- i
@@ -146,7 +149,7 @@ dataGUTS <- function(file_location = NULL,
     # Check where the concentration data starts and ends
     skipLine_conc <- grep("Concentration time", rawData)
     # Load the concentration data
-    tbConc_aux <- data.table::fread(file_location[i], skip = skipLine_conc - 1L, header = T, na.strings = NA_string)
+    tbConc_aux <- data.table::fread(text = rawData, skip = skipLine_conc - 1L, header = T, na.strings = NA_string)
     tbConc_aux$Dataset <- i
     colnames(tbConc_aux)[1] <- c("SurvivalTime")
     tbConc <- append(tbConc, list(tbConc_aux))
