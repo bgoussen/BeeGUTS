@@ -1,7 +1,7 @@
 Package: BeeGUTS
 Title: General Unified Threshold Model of Survival for Bees using Bayesian Inference
 Version: 1.0.1
-Authors@R: 
+Authors@R:
     c(
     person(given = "Benoit",
            family = "Goussen",
@@ -19,10 +19,10 @@ Authors@R:
     person("Bayer AG",
            role = "cph")
      )
-Description: Tools to calibrate, validate, and make predictions with the 
-    General Unified Threshold model of Survival adapted for Bee species. The 
-    model is presented in the publication from Baas, J., Goussen, B., Miles, M., 
-    Preuss, T.G., Roessing, I. (2022) <doi:10.1002/etc.5423> and is based on the GUTS framework 
+Description: Tools to calibrate, validate, and make predictions with the
+    General Unified Threshold model of Survival adapted for Bee species. The
+    model is presented in the publication from Baas, J., Goussen, B., Miles, M.,
+    Preuss, T.G., Roessing, I. (2022) <doi:10.1002/etc.5423> and is based on the GUTS framework
     Jager, T., Albert, C., Preuss, T.G. and Ashauer, R. (2011) <doi:10.1021/es103092a>.
     The authors are grateful to Bayer A.G. for its financial support.
 License: GPL-3
@@ -32,9 +32,10 @@ LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Biarch: true
-Depends: 
+NeedsCompilation: yes
+Depends:
     R (>= 3.4.0)
-Imports: 
+Imports:
     methods,
     Rcpp (>= 0.12.0),
     RcppParallel (>= 5.0.1),
@@ -49,7 +50,7 @@ Imports:
     utils,
     gridExtra,
     odeGUTS
-LinkingTo: 
+LinkingTo:
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),
     RcppEigen (>= 0.3.3.3.0),
@@ -59,7 +60,7 @@ LinkingTo:
 SystemRequirements: GNU make
 URL: https://github.com/bgoussen/BeeGUTS
 BugReports: https://github.com/bgoussen/BeeGUTS/issues
-Suggests: 
+Suggests:
     rmarkdown,
     knitr
 VignetteBuilder: knitr
