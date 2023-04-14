@@ -187,9 +187,10 @@ summary.beeSurvFit <- function(object, ...) {
 #' }
 summary.LCx <- function(object, ...) {
   cat("Summary: \n\n")
-  cat("LC",object$X_prop, " calculation. \n",
+  cat("LC",object$X_prop*100, " calculation. \n",
       "Time for which the LCx is calculated:", object$timeLCx, "\n",
       "Bee species:", object$beeSpecies, "\n",
       "Test type:", object$testType, "\n",
-      "LCx:", object$dfLCx)
+      "LCx:", "\n")
+  print(object$dfLCx)
 }
