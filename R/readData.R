@@ -78,7 +78,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS")
 #' lsData <- dataGUTS(file_location = c(file_location),
 #'                   test_type = c('Chronic_Oral'),
@@ -227,7 +227,10 @@ dataGUTS <- function(file_location = NULL,
     skipLine_surv <- grep("Survival", rawData)
     nrowLine_surv <- grep("Concentration unit", rawData)
     # Load the survival data
-    tbSurv_aux <- data.table::fread(file_location[i], skip = skipLine_surv - 1L, header = T, nrow = nrowLine_surv - (skipLine_surv + 1L),
+    tbSurv_aux <- data.table::fread(text = rawData,
+                                    skip = skipLine_surv - 1L,
+                                    header = T,
+                                    nrow = nrowLine_surv - (skipLine_surv + 1L),
                                     na.strings = NA_string)
     colnames(tbSurv_aux)[1] <- c("SurvivalTime") # Set unique name for time column
     tbSurv_aux$Dataset <- i
@@ -236,7 +239,7 @@ dataGUTS <- function(file_location = NULL,
     # Check where the concentration data starts and ends
     skipLine_conc <- grep("Concentration time", rawData)
     # Load the concentration data
-    tbConc_aux <- data.table::fread(file_location[i], skip = skipLine_conc - 1L, header = T, na.strings = NA_string)
+    tbConc_aux <- data.table::fread(text = rawData, skip = skipLine_conc - 1L, header = T, na.strings = NA_string)
     tbConc_aux$Dataset <- i
     colnames(tbConc_aux)[1] <- c("SurvivalTime")
     tbConc <- append(tbConc, list(tbConc_aux))
@@ -347,7 +350,7 @@ dataGUTS <- function(file_location = NULL,
 #'
 #' @examples conc <- concAO(cExt = cbind(3.5, 6, 8, 10), cTime = 0.25, expTime = 4)
 concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625, ...) {
-  timePoint <- seq(0, expTime, 0.1)
+  timePoint <- seq(0, expTime, 0.05)
   cExt <- cExt[rep(seq_len(nrow(cExt)), each = length(timePoint)),] # Expend cExt to allow concentration calculation for all time points
   out <- (cExt * (timePoint / cTime) * (timePoint <= cTime))  + (cExt * exp(-k_sr * (timePoint - cTime)) * (timePoint > cTime))
   return(data.frame(SurvivalTime = timePoint, out))
@@ -367,7 +370,7 @@ concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625, ...) {
 #'
 #' @examples conc <- concAC(cbind(3.1, 4, 6, 8), 4)
 concAC <- function(cExt, expTime, k_ca = 0.4, ...) {
-  timePoint <- seq(0, expTime, 0.1)
+  timePoint <- seq(0, expTime, 0.05)
   cExt <- cExt[rep(seq_len(nrow(cExt)), each = length(timePoint)),] # Expend cExt to allow concentration calculation for all time points
   out <-cExt * exp(-k_ca * timePoint)
   return(data.frame(SurvivalTime = timePoint, out))

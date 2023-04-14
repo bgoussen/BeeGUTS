@@ -10,13 +10,16 @@
 \item{x}{An object of class \code{ppc}.}
 
 \item{\dots}{Further arguments to be passed to generic methods.}
-
-\item{data_type}{A string designating the type of data to be plotted: \code{length},
-\code{reproduction} or \code{exposure}}
 }
 \value{
 an object of class \code{ggplot}.
 }
 \description{
 Plotting method for \code{ppc} objects
+}
+\examples{
+data(fitBetacyfluthrin_Chronic)
+out <- ppc(fitBetacyfluthrin_Chronic)
+plot(out)
+
 }

@@ -9,6 +9,9 @@ ppc(x)
 \arguments{
 \item{x}{an object used to select a method \code{ppc}}
 }
+\value{
+a \code{data.frame} of class \code{ppc}
+}
 \description{
 Generates an object to be used in posterior predictive check for \code{beeSurvFit}, \code{beeSurvPred}
 }

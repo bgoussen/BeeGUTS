@@ -1,7 +1,7 @@
-#' Predict the Lethal Concentration method at which \eqn{x}\% of organisms die for any
+#' Predict the Lethal Concentration method at which \eqn{x\%} of organisms die for any
 #' specified time-point for a \code{beeSurvFit} object
 #'
-#' Predict median and 95\% credible interval of the x\% Lethal Concentration.
+#' Predict median and 95% credible interval of the \eqn{x\%} Lethal Concentration.
 #'
 #' When class of \code{object} is \code{beeSurvFit}, see \link[=LCx.beeSurvFit]{LCx.beeSurvFit}.
 #'
@@ -10,6 +10,7 @@
 #' @param object An object used to select a method
 #' @param \dots Further arguments to be passed to generic methods
 #'
+#' @return A \code{LCx} object containing the results of the lethal concentration predictions
 #' @export
 #'
 LCx <- function(object, ...){
@@ -18,7 +19,7 @@ LCx <- function(object, ...){
 
 
 
-#' Predict the Lethal Concentration at which \eqn{x}\% of organisms die for any
+#' Predict the Lethal Concentration at which \eqn{x\%} of organisms die for any
 #' specified time-point for a \code{beeSurvFit} object
 #'
 #' @param object An object of class \code{beeSurvFit}
@@ -30,17 +31,21 @@ LCx <- function(object, ...){
 #' highest tested concentration of the calibration experiment.
 #' @param nPoints Number of time point in \code{concRange} between 0 and the
 #' maximal concentration. 100 by default.
-#' @param ...
+#' @param ... Further arguments to be passed to generic methods
 #' @param testType Test type for which the \eqn{LC_{X}} is calculated
 #'  amongst "Acute_Oral", "Acute_Contact", and "Chronic_Oral". Note that for
 #'  "Acute_Oral" and "Acute_Contact", the concentration will be reconstructed as
 #'  in the \link[=dataGUTS]{dataGUTS} function (not recommended as this might not
 #'  make sense for \eqn{LC_{X}} estimations. Default is "Chronic_Oral"
 #'
-#' @return
+#' @return A object of class \code{LCx} containing the results of the lethal concentration predictions
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' data(fitBetacyfluthrin_Chronic)
+#' out <- LCx(fitBetacyfluthrin_Chronic)
+#' }
 LCx.beeSurvFit <- function(object,
                            X = 50,
                            testType = "Chronic_Oral",
@@ -143,6 +148,8 @@ LCx.beeSurvFit <- function(object,
   out <- list(X_prop = X_prop,
               timeLCx = timeLCx,
               testType = testType,
+              modelType = object$modelType,
+              beeType = object$data$beeSpecies,
               dfLCx = dfLCx,
               dfDose = dtheo)
   class(out) <- c("LCx", class(out))

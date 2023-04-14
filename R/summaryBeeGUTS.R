@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(fitBetacyfluthrin_Chronic)
 #' summary(fitBetacyfluthrin_Chronic)
 #' }
@@ -20,6 +20,7 @@ summary.beeSurvFit <- function(object, ...) {
 
   # Prepare prior
   lsData_fit <- object$dataFit
+  lsData_fit$nDatasets <- ifelse(is.null(lsData_fit$nDatasets), 1, lsData_fit$nDatasets)
 
   ## Common parameters
   hb <- 10^qnorm(p = c(0.5, 0.025, 0.975),
@@ -71,9 +72,10 @@ summary.beeSurvFit <- function(object, ...) {
   hb_inf95 <- c()
   hb_sup95 <- c()
   for(i in 1:lsData_fit$nDatasets){
-    hb_med[i] <- 10^tmpRes[[paste0("hb_log10[",i,"]"), "50%"]]
-    hb_inf95[i] <- 10^tmpRes[[paste0("hb_log10[",i,"]"), "2.5%"]]
-    hb_sup95[i] <- 10^tmpRes[[paste0("hb_log10[",i,"]"), "97.5%"]]
+    parname <- ifelse(lsData_fit$nDatasets == 1, "hb_log10", paste0("hb_log10[",i,"]"))
+    hb_med[i] <- 10^tmpRes[[parname, "50%"]]
+    hb_inf95[i] <- 10^tmpRes[[parname, "2.5%"]]
+    hb_sup95[i] <- 10^tmpRes[[parname, "97.5%"]]
   }
   kd_med <- 10^tmpRes[["kd_log10", "50%"]]
   kd_inf95 <- 10^tmpRes[["kd_log10", "2.5%"]]
@@ -166,3 +168,28 @@ summary.beeSurvFit <- function(object, ...) {
 
 
 
+#' Summary of \code{LCx} objects
+#'
+#' @description This is the generic \code{summary} S3 method for the \code{LCx} class.
+#' It shows the median and 95% credible interval of the calculated LCx.
+#'
+#' @param object An object of class \code{LCx}
+#' @param ... Additional arguments to be parsed to the generic \code{summary} method (not used)
+#'
+#' @return A summary of the \code{LCx} object
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' data(fitBetacyfluthrin_Chronic)
+#' out <- LCx(fitBetacyfluthrin_Chronic)
+#' summary(out)
+#' }
+summary.LCx <- function(object, ...) {
+  cat("Summary: \n\n")
+  cat("LC",object$X_prop, " calculation. \n",
+      "Time for which the LCx is calculated:", object$timeLCx, "\n",
+      "Bee species:", object$beeSpecies, "\n",
+      "Test type:", object$testType, "\n",
+      "LCx:", object$dfLCx)
+}

@@ -1,3 +1,7 @@
+# Version 1.0.1
+* Correct bug in the summary function where the summary of the `beeSurvFit` class would
+use the wrong function.
+
 # Version 1.0.0
 * Add possibility to use more than one dataset at a time. One file should be loaded
 per datasets. The concentrations should be expressed in the same unit.

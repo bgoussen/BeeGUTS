@@ -2,6 +2,7 @@
 #'
 #' @param x  an object used to select a method \code{ppc}
 #'
+#' @return a \code{data.frame} of class \code{ppc}
 #' @export
 #'
 ppc <- function(x){

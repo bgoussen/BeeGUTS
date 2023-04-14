@@ -552,8 +552,9 @@ to the start of each source file to most effectively state the exclusion of warr
 and each file should have at least the “copyright” line and a pointer to
 where the full notice is found.
 
-    <one line to give the program's name and a brief idea of what it does.>
+    BeeGUTS - General Unified Threshold Model of Survival for Bees using Bayesian Inference
     Copyright (C) 2020 Benoit Goussen
+    Copyright (C) 2022 Bayer AG
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -574,6 +575,7 @@ If the program does terminal interaction, make it output a short notice like thi
 when it starts in an interactive mode:
 
     BeeGUTS Copyright (C) 2020 Benoit Goussen
+    BeeGUTS Copyright (C) 2022 Bayer AG
     This program comes with ABSOLUTELY NO WARRANTY; for details type 'show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type 'show c' for details.

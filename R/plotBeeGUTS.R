@@ -63,24 +63,7 @@ plot.beeSurvData <- function(x,
       ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
       plotlist <- append(plotlist, list(ggOut))
   }
-  # return(ggOut)
 
-  # Change the layout of the plots in order to use plotly so as to
-  # have interactivity (to in the end switch datasets)
-  # this is a test using plotly but does not work very well
-  # x <- list(title = "Time [d]")
-  # y1 <- list(title = "Nsurv")
-  # y2 <- list(title = paste0(ylab2,"\n", x$unitData))
-  # ggSurvy <- ggplotly(ggSurv + ylab(" ") + xlab(" "))
-  # ggConcy <- ggplotly(ggConc + ylab(" ") + xlab(" "))
-  # ggConcy %>% layout(xaxis = x, yaxis = y2)#, margin = list(l = 75, b =50))
-  # ggSurvy %>% layout(xaxis = x, yaxis = y1)#, margin = list(l = 75, b =50))
-  # #return(ggConcy)
-  # subplots <- subplot(ggConcy, ggSurvy, nrows = 2, margin=0.03,heights = c(0.4,0.4), titleX = TRUE, titleY = TRUE)
-  # #layout(subplots, xaxis=list(title=x))
-  # #, titleY = TRUE,nrows = 2, margin=0.03, )%>%
-  #    #layout(xaxis = list(title = x, anchor="y2"), yaxis = c(yy2,y1))
-  # return(subplots)
   return(plotlist)
 }
 
@@ -199,7 +182,7 @@ plot.beeSurvFit <- function(x,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(betacyfluthrinChronic) # Load dataset for validation
 #' data(fitBetacyfluthrin_Chronic)
 #' validation <- validate(fitBetacyfluthrin_Chronic, betacyfluthrinChronic)
@@ -287,7 +270,7 @@ plot.beeSurvValidation <- function(x,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' dataPredict <- data.frame(time = c(1:10, 1:10, 1:10),
 #'                      conc = c(rep(5, 10), rep(10, 10), rep(15, 10)),
 #'                      replicate = c(rep("rep1", 10), rep("rep2", 10), rep("rep3", 10)),
@@ -409,13 +392,11 @@ traceplot.beeSurvFit <- function(object, ..., incWarmup_trace = TRUE, incWarmup_
 #' Plotting method for \code{ppc} objects
 #'
 #' @param x An object of class \code{ppc}.
-#' @param data_type  A string designating the type of data to be plotted: \code{length},
-#' \code{reproduction} or \code{exposure}
 #' @param \dots  Further arguments to be passed to generic methods.
 #'
 #' @return  an object of class \code{ggplot}.
 #'
-#' @example
+#' @examples
 #' data(fitBetacyfluthrin_Chronic)
 #' out <- ppc(fitBetacyfluthrin_Chronic)
 #' plot(out)

@@ -12,6 +12,9 @@ LCx(object, ...)
 
 \item{\dots}{Further arguments to be passed to generic methods}
 }
+\value{
+A \code{LCx} object containing the results of the lethal concentration predictions
+}
 \description{
 Predict median and 95\\% credible interval of the x\\% Lethal Concentration.
 }

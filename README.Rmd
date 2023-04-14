@@ -1,22 +1,24 @@
 ---
-title: "Tutorial"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Tutorial}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output: github_document
 ---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/Tutorial-",
+  fig.path = "man/figures/README-",
   out.width = "100%"
 )
 ```
 
 # BeeGUTS
+
+<!-- badges: start -->
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![CRAN status](https://www.r-pkg.org/badges/version/BeeGUTS)](https://CRAN.R-project.org/package=BeeGUTS)
+<!-- badges: end -->
 
 The goal of BeeGUTS is to analyse the survival toxicity tests performed for
 bee species. It can be used to fit a Toxicokinetic-Toxicodynamic (TKTD) model
@@ -46,7 +48,7 @@ library(BeeGUTS)
 file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS") # Load the path to one of the example file
 lsData <- dataGUTS(file_location = file_location, test_type = 'Chronic_Oral') # Read the example file
 plot(lsData) # Plot the data
-fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 2000, nChains = 1) # Fit a SD model. This can take some time...
+fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 2000) # Fit a SD model. This can take some time...
 traceplot(fit) # Produce a diagnostic plot of the fit
 plot(fit) # Plot the fit results
 summary(fit) # Gives a summary of the results
@@ -56,3 +58,4 @@ dataPredict <- data.frame(time = c(1:5, 1:15), conc = c(rep(5, 5), rep(15, 15)),
 prediction <- predict(fit, dataPredict) # Perform forwards prediction. At the moment, no concentration recalculation is performed in the forwards prediction. The concentrations are taken as in a chronic test
 plot(prediction) # Plot of the prediction results
 ```
+
