@@ -9,6 +9,7 @@
 stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/BeeGUTS)](https://CRAN.R-project.org/package=BeeGUTS)
+[![R-CMD-check](https://github.com/bgoussen/BeeGUTS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bgoussen/BeeGUTS/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of BeeGUTS is to analyse the survival toxicity tests performed
@@ -39,7 +40,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(BeeGUTS)
-#> BeeGUTS (Version 1.0.0, packaged on the: 2022-07-21 14:42:01 UTC)
+#> BeeGUTS (Version 1.1.0, packaged on the: )
 #> - For execution on a local, multicore CPU with excess RAM we recommend calling
 #>       options(mc.cores = parallel::detectCores()-1)
 #> - In addition to the functions provided by 'BeeGUTS', we recommend using the packages:
@@ -77,13 +78,46 @@ plot(fit) # Plot the fit results
 
 ``` r
 summary(fit) # Gives a summary of the results
-#> Summary: 
+#> Computing summary can take some time. Please be patient...Summary: 
 #> 
-#> LC  calculation. 
-#>  Time for which the LCx is calculated: 
-#>  Bee species: 
-#>  Test type: 
-#>  LCx:
+#> Bayesian Inference performed with Stan.
+#>  Model type: SD 
+#>  Bee species: Honey_Bee 
+#> 
+#>  MCMC sampling setup (select with '$setupMCMC')
+#>  Iterations: 2000 
+#>  Warmup iterations: 1000 
+#>  Thinning interval: 1 
+#>  Number of chains: 3
+#> 
+#> Priors of the parameters (quantiles) (select with '$Qpriors'):
+#> 
+#>  parameters      median        Q2.5       Q97.5
+#>          hb 8.32763e-03 1.09309e-04 6.34432e-01
+#>          kd 2.62826e-03 1.17073e-06 5.90041e+00
+#>          zw 1.30384e-03 1.15441e-06 1.47261e+00
+#>          bw 7.36245e-02 6.78843e-05 7.98500e+01
+#> 
+#> Posteriors of the parameters (quantiles) (select with '$Qposteriors'):
+#> 
+#>  parameters      median        Q2.5       Q97.5
+#>       hb[1] 6.93314e-03 3.08725e-03 1.04814e-02
+#>  parameters      median        Q2.5       Q97.5
+#>          kd 9.97843e-01 7.23590e-01 2.06939e+00
+#>          zw 2.37124e-01 1.43607e-01 2.79624e-01
+#>          bw 3.55765e-01 2.57360e-01 4.46323e-01
+#> 
+#> 
+#>  Maximum Rhat computed (na.rm = TRUE): 1.045232 
+#>  Minimum Bulk_ESS: 181 
+#>  Minimum Tail_ESS: 104 
+#>  Bulk_ESS and Tail_ESS are crude measures of effecting sampling size for
+#>       bulk and tail quantities respectively. An ESS > 100 per chain can be
+#>       considered as a good indicator. Rhat is an indicator of chains convergence.
+#>       A Rhat <= 1.05 is a good indicator of convergence. For detail results,
+#>       one can call 'rstan::monitor(YOUR_beeSurvFit_OBJECT$stanFit)
+#> 
+#>  EFSA Criteria (PPC, NRMSE, and SPPE) can be accessed via 'x$EFSA'
 validation <- validate(fit, lsData) # produce a validation of the fit (here it uses the same dataset as calibration as an example, so not relevant…)
 #> Note that computing can be quite long (several minutes).
 #>   Tips: To reduce that time you can reduce Number of MCMC chains (default mcmc_size is set to 1000).

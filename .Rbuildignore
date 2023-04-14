@@ -8,3 +8,6 @@
 ^cran-comments\.md$
 ^README.Rmd
 ^CRAN-SUBMISSION$
+^rjarticle$
+^Manuscript$
+^Goussen-et-al-BeeGUTS\.log$
