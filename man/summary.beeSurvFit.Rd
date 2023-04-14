@@ -5,34 +5,22 @@
 \title{Summary of \code{beeSurvFit} objects}
 \usage{
 \method{summary}{beeSurvFit}(object, ...)
-
-\method{summary}{beeSurvFit}(object, ...)
 }
 \arguments{
-\item{object}{An object of class \code{LCx}}
+\item{object}{An object of class \code{beeSurvFit}}
 
 \item{...}{Additional arguments to be parsed to the generic \code{summary} method (not used)}
 }
 \value{
 A summary of the \code{beeSurvFit} object
-
-A summary of the \code{LCx} object
 }
 \description{
 This is the generic \code{summary} S3 method for the \code{beeSurvFit} class.
 It shows the quantiles of priors and posteriors on parameters.
-
-This is the generic \code{summary} S3 method for the \code{LCx} class.
-It shows the median and 95\% credible interval of the calculated LCx.
 }
 \examples{
 \donttest{
 data(fitBetacyfluthrin_Chronic)
 summary(fitBetacyfluthrin_Chronic)
-}
-\donttest{
-data(fitBetacyfluthrin_Chronic)
-out <- LCx(fitBetacyfluthrin_Chronic)
-summary(out)
 }
 }

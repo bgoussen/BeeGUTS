@@ -2,7 +2,7 @@
 % Please edit documentation in R/LCx.R
 \name{LCx}
 \alias{LCx}
-\title{Predict the Lethal Concentration method at which \eqn{x}\\% of organisms die for any
+\title{Predict the Lethal Concentration method at which \eqn{x\%} of organisms die for any
 specified time-point for a \code{beeSurvFit} object}
 \usage{
 LCx(object, ...)
@@ -16,7 +16,7 @@ LCx(object, ...)
 A \code{LCx} object containing the results of the lethal concentration predictions
 }
 \description{
-Predict median and 95\\% credible interval of the x\\% Lethal Concentration.
+Predict median and 95\% credible interval of the \eqn{x\%} Lethal Concentration.
 }
 \details{
 When class of \code{object} is \code{beeSurvFit}, see \link[=LCx.beeSurvFit]{LCx.beeSurvFit}.
