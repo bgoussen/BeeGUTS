@@ -103,11 +103,16 @@ validate.beeSurvFit <- function(object,
   # Calculate summary to embed mean posteriors values with outputs
   invisible(utils::capture.output(outSummary <- summary(object)))
 
+  if(object$data$beeSpecies != dataValidate$beeSpecies){
+    warning("BeeGUTS was calibrated on a ", object$data$beeSpecies, " and is validated on a ", dataValidate$beeSpecies)
+  }
+
   # Return
   lsOut <- list(parsPost = outSummary$Qposteriors,
                 modelType = object$modelType,
                 unitData = object$data$unitData,
                 beeSpecies = object$data$beeSpecies,
+                beeSpeciesVal = dataValidate$beeSpecies,
                 typeData = dataValidate$typeData,
                 setupMCMC = object$setupMCMC,
                 sim = outMorse$df_quantile,

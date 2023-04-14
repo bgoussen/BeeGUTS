@@ -193,8 +193,8 @@ plot.beeSurvValidation <- function(x,
                                    xlab = "Time [d]",
                                    ylab1 = "Number of survivors",
                                    ylab2 = "Concentration",
-                                   main = paste("Validation results for a BeeGUTS", x$typeData, "calibrated for",
-                                                x$beeSpecies) ) {
+                                   main = paste("Validation of a BeeGUTS model calibrated for",
+                                                x$beeSpecies, "on a ", x$typeData, "for", x$beeSpeciesVal) ) {
   # Check for correct class
   if (!is(x,"beeSurvValidation")) {
     stop("plot.beeSurvValidation: an object of class 'beeSurvValidation' is expected")

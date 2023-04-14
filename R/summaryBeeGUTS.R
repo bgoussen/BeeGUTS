@@ -16,7 +16,7 @@
 #' }
 summary.beeSurvFit <- function(object, ...) {
 
-  warning("Computing summary can take some time. Please be patient...")
+  cat("Computing summary can take some time. Please be patient...")
 
   # Prepare prior
   lsData_fit <- object$dataFit

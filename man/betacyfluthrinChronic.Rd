@@ -8,6 +8,7 @@ constant concentration of Betacyfluthrin for 10 days.}
 \format{
 A list of class \code{beeSurvData} constructed by \code{dataGUTS} containing:
 \describe{
+\item{\code{nDatasets}}{An integer representing the number of datasets used.}
 \item{\code{survData}}{A data frame containing the survival information over time
 for five treatments and a control in a wide format.}
 \item{\code{survData_long}}{A data frame containing the survival information over time
@@ -23,6 +24,7 @@ for five treatments and a control in a long format.}
 for the species of bee and test type of interest in a wide format.}
 \item{\code{concModel_long}}{A data frame containing the concentration information recalculated
 for the species of bee and test type of interest in a long format.}
+\item{\code{messages}}{A data frame containing the warning messages returned by the function.}
 }
 }
 \usage{

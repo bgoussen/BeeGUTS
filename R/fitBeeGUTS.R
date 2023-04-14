@@ -83,6 +83,9 @@ fitBeeGUTS <- function(data, # CHECK CORRECT DATA OBJECT IS USED !!!!!!!!!!!!!!!
                        maxSteps = 1000,
                        ...) {
   # Check correct user inputs
+  if (!is(data,"beeSurvData")) {
+    stop("fitBeeGUTS: a 'data' object of class 'beeSurvData' is expected")
+  }
   if (is.null(modelType) || !(modelType %in% c("SD", "IT"))) {
     stop("You need to specifiy a correct 'modelType' amongst 'SD' and 'IT'.
          'PROPER' is not yet implemented. When selecting 'IT' please also
