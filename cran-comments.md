@@ -1,35 +1,24 @@
-# Resubmission
-This is a resubmission. In this version I have:
+# R CMD check results
 
-* Identified the relevant reference in the DESCRIPTION files as indicated (authors (year) <https:...>)
+0 errors | 0 warnings | 2 note
 
-* Added the missing value fields in the corresponding .Rd files
+* GNU make is a SystemRequirements
+* checking installed package size ... NOTE
+  installed size is 63.0Mb
+  sub-directories of 1Mb or more:
+    data   4.1Mb
+    libs  58.1Mb
 
-* Replace dontrun by donttest (these examples require more then 5 seconds)
+# Reverse dependencies
 
-* Added a on.exit statement in the 'fitBeeGUTS' function
+There are no reverse dependencies listed for BeeGUTS
 
-* restricted the examples to two cores
 
-## Test environments
-* local R installation, R 4.1.2
-* Windows Server 2022, R-devel, 64 bit
-* Fedora Linux, R-devel, clang, gfortran
+# Test environment
 
-## R CMD check results
-
-0 errors | 0 warnings | 3 note
-
-* This is a new release.
-
-* checking installed package size
-    installed size is 10.0Mb
-    sub-directories of 1Mb or more:
-      data   4.1Mb
-      libs   5.5Mb
-
-* checking for GNU extensions in Makefiles
-  GNU make is a SystemRequirements.
-
-## Downstream dependencies
-There are no downstream dependencies
+GitHub actions performed on 
+- macos-latest (release)
+- windows-latest (release)
+- ubuntu-latest (devel)
+- ubuntu-latest (release)
+- ubuntu-latest (oldrel-1)
