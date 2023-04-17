@@ -1,3 +1,8 @@
+# Version 1.1.1
+* Correction of the default value for parameter k_sr for _Honey Bee_.
+* Update of the Tutorial
+
+
 # Version 1.1.0
 ## New features
 * Added new species. It is now possible to use the package for _Honey Bee_, 
