@@ -1,22 +1,25 @@
-# R CMD check results
+## Resubmission
+In this version we have reduced the size of the package as a response to the request from CRAN
 
-0 errors | 0 warnings | 2 note
+## R CMD check results
+
+0 errors | 0 warnings | 1 note
 
 * GNU make is a SystemRequirements
-* checking installed package size ... NOTE
-  installed size is 63.0Mb
-  sub-directories of 1Mb or more:
-    data   4.1Mb
-    libs  58.1Mb
 
-# Reverse dependencies
+
+## Reverse dependencies
 
 There are no reverse dependencies listed for BeeGUTS
 
 
-# Test environment
+## Test environment
 
-GitHub actions performed on 
+* local environment (Windows 10, R version 4.2.1 (2022-06-23 ucrt))
+
+* devtools::check_win_devel()
+
+* GitHub actions performed on 
 - macos-latest (release)
 - windows-latest (release)
 - ubuntu-latest (devel)

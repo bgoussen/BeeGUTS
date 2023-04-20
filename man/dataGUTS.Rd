@@ -47,7 +47,7 @@ optional arguments to be passed to the concentration reconstruction need to be d
 
 \item{...}{Optional arguments to be passed to the concentration reconstruction (e.g.
 \itemize{
-\item \code{k_sr =} for the stomach release rate (d-1), default is 0.675 for Honey bee,
+\item \code{k_sr =} for the stomach release rate (d-1), default is 0.625 for Honey bee,
 \item \code{k_ca =} contact availability rate (d-1), default is 0.4 for Honey bee), or
 \item \code{cTime =} the duration of exposure in days for the acute oral tests, default is 0.25 d
 \item \code{cstConcCal = } logical, recalculate concentration in the Chronic_Oral test from mg a.s./kg feed to Xg/bee (default is TRUE)

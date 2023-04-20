@@ -58,12 +58,9 @@ plot(lsData) # Plot the data
 
 ``` r
 fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 3000) # Fit a SD model. This can take some time...
-#> Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-#> Running the chains for more iterations may help. See
-#> http://mc-stan.org/misc/warnings.html#bulk-ess
 #> Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 #> Running the chains for more iterations may help. See
-#> http://mc-stan.org/misc/warnings.html#tail-ess
+#> https://mc-stan.org/misc/warnings.html#tail-ess
 traceplot(fit) # Produce a diagnostic plot of the fit
 ```
 
@@ -100,17 +97,17 @@ summary(fit) # Gives a summary of the results
 #> 
 #> Posteriors of the parameters (quantiles) (select with '$Qposteriors'):
 #> 
-#>  parameters      median        Q2.5      Q97.5
-#>       hb[1] 6.88457e-03 3.48433e-03 1.0463e-02
 #>  parameters      median        Q2.5       Q97.5
-#>          kd 1.00987e+00 7.25197e-01 1.90307e+00
-#>          zw 9.46786e+00 5.96611e+00 1.12689e+01
-#>          bw 8.92361e-03 6.57105e-03 1.10876e-02
+#>       hb[1] 6.96115e-03 4.13864e-03 1.00067e-02
+#>  parameters      median        Q2.5       Q97.5
+#>          kd 9.95000e-01 7.31699e-01 1.75382e+00
+#>          zw 9.47898e+00 6.86992e+00 1.06977e+01
+#>          bw 8.93266e-03 6.98425e-03 1.06284e-02
 #> 
 #> 
-#>  Maximum Rhat computed (na.rm = TRUE): 1.02032 
-#>  Minimum Bulk_ESS: 261 
-#>  Minimum Tail_ESS: 124 
+#>  Maximum Rhat computed (na.rm = TRUE): 1.027004 
+#>  Minimum Bulk_ESS: 514 
+#>  Minimum Tail_ESS: 143 
 #>  Bulk_ESS and Tail_ESS are crude measures of effecting sampling size for
 #>       bulk and tail quantities respectively. An ESS > 100 per chain can be
 #>       considered as a good indicator. Rhat is an indicator of chains convergence.

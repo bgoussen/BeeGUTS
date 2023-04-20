@@ -1,3 +1,6 @@
+# Version 1.1.2
+* Reduce the size of the package to fulfil CRAN requirements
+
 # Version 1.1.1
 * Correction of the default value for parameter k_sr for _Honey Bee_.
 * Update of the Tutorial
