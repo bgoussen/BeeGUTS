@@ -1,3 +1,5 @@
+# BeeGUTS (development version)
+
 # BeeGUTS 1.1.2
 * Reduce the size of the package to fulfil CRAN requirements
 
