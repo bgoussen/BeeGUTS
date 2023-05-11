@@ -12,3 +12,5 @@ Manuscript
 rjarticle
 src
 testing_implementation.R
+R/stanmodels.R
+revdep
