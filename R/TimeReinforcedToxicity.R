@@ -6,7 +6,6 @@
 #' @rdname TRT
 #'
 #' @param object An object used to select a method
-#' @param \dots Further arguments to be passed to generic methods
 #'
 #' @return A \code{ggplot} object with graph of the LDD extrapolation compared
 #' to the Haber's law and a data.frame with the calculations
@@ -15,7 +14,7 @@
 #'
 #' @export
 #'
-TRT <- function(object, ...){
+TRT <- function(object){
   UseMethod("TRT")
 }
 
@@ -30,6 +29,11 @@ TRT <- function(object, ...){
 #'
 #' @export
 #'
+#' @examples
+#' \donttest{
+#' data(fitBetacyfluthrin_Chronic)
+#' TRT(fitBetacyfluthrin_Chronic)
+#' }
 TRT.beeSurvFit <- function(object){
   if (!is(object,"beeSurvFit")) {
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
