@@ -6,24 +6,24 @@ int <lower=1> nDatasets;
 
 // Number of groups
 int<lower=1> nGroup; // Number of groups (one group is combination of one dataset and one treatment)
-int groupDataset[nGroup]; // Corresponding dataset for each group
+array[nGroup] int groupDataset; // Corresponding dataset for each group
 
 // Concentration
 int<lower=1> nData_conc; // length of data for concentration
-real conc[nData_conc]; // concentration
-real tconc[nData_conc]; // time of concentration
+array[nData_conc] real conc; // concentration
+array[nData_conc] real tconc; // time of concentration
 
-int<lower=1> idC_lw[nGroup]; // e.g. 1 6 12 18
-int<lower=1> idC_up[nGroup]; // e.g. 6 12 18 24
+array[nGroup] int<lower=1> idC_lw; // e.g. 1 6 12 18
+array[nGroup] int<lower=1> idC_up; // e.g. 6 12 18 24
 
 // Survivors
 int<lower=1> nData_Nsurv; // number of group: 4
-int Nsurv[nData_Nsurv];
-int Nprec[nData_Nsurv];
-real tNsurv[nData_Nsurv]; // time of Nbr survival
+array[nData_Nsurv] int Nsurv;
+array[nData_Nsurv] int Nprec;
+array[nData_Nsurv] real tNsurv; // time of Nbr survival
 
-int<lower=1> idS_lw[nGroup]; // e.g. 1 6 12 18
-int<lower=1> idS_up[nGroup]; // e.g. 6 12 18 24
+array[nGroup] int<lower=1> idS_lw; // e.g. 1 6 12 18
+array[nGroup] int<lower=1> idS_up; // e.g. 6 12 18 24
 
 // PRIORS
 real hbMean_log10;

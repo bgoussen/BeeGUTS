@@ -7,11 +7,11 @@ functions {
 
 #include /include/common_stan_functions.stan
 
-  real[] TKTD_varSD( real t,
-                     real[] y,
-                     real[] theta,
-                     real[] x_r,
-                     int[]  x_i) {
+  vector TKTD_varSD( real t,
+                     vector y,
+                     array[] real theta,
+                     array[] real x_r,
+                     array[] int  x_i) {
 
     // - parameters
     real kd = theta[1];
@@ -20,8 +20,8 @@ functions {
     real hb = theta[4];
 
     // - new variables
-    real max_zw[2]; //
-    real dy_dt[2]; //
+    array[2] real max_zw; //
+    vector[2] dy_dt; //
 
     // - latent variables
     int Nconc = x_i[1]; // Number of point measuring concentration
@@ -46,17 +46,22 @@ functions {
     return(dy_dt);
   }
 
-  matrix solve_TKTD_varSD(real[] y0, real t0, real[] ts, real[] theta, data real[] tconc, data real[] conc, data real[] odeParam){
+  matrix solve_TKTD_varSD(array[] real y0, real t0, array[] real ts, array[] real theta, data array[] real tconc, data array[] real conc, data array[] real odeParam){
 
-    int x_i[1];
+    array[1] int x_i;
     x_i[1] = size(tconc);
 
-    return(to_matrix(
-      integrate_ode_rk45(TKTD_varSD, y0, t0, ts, theta,
-                         to_array_1d(append_row(to_vector(tconc), to_vector(conc))),
-                         x_i,
+    array[size(ts)] vector[2] ode_res
+      = ode_rk45_tol(TKTD_varSD, to_vector(y0), t0, ts,
                          // additional control parameters for the solver: real rel_tol, real abs_tol, int max_num_steps
-                          odeParam[1], odeParam[2], odeParam[3])));
+                         odeParam[1], odeParam[2], to_int(odeParam[3]), theta,
+                         to_array_1d(append_row(to_vector(tconc), to_vector(conc))),
+                         x_i);
+    matrix[size(ts), 2] rtn;
+    for(i in 1:size(ts)) {
+      rtn[i] = transpose(ode_res[i]);
+    }
+    return rtn;
   }
 }
 
@@ -73,11 +78,11 @@ data {
 }
 transformed data{
 
-  real<lower=0> y0[2];
-  real odeParam[3];
+  array[2] real<lower=0> y0;
+  array[3] real odeParam;
 
-  real tNsurv_ode[nData_Nsurv]; // time of Nbr survival to include in the ode !
-  real tconc_ode[nData_conc]; // time of Nbr survival to include in the ode !
+  array[nData_Nsurv] real tNsurv_ode; // time of Nbr survival to include in the ode !
+  array[nData_conc] real tconc_ode; // time of Nbr survival to include in the ode !
 
   y0[1] = 0;
   y0[2] = 0;
@@ -98,7 +103,7 @@ transformed data{
 }
 parameters {
 
-  real sigma[3 + nDatasets];
+  array[3 + nDatasets] real sigma;
 
 }
 transformed parameters{
@@ -106,9 +111,9 @@ transformed parameters{
   real kd_log10 = kdMean_log10 + kdSD_log10 * sigma[1];
   real zw_log10 = zwMean_log10 + zwSD_log10 * sigma[2];
   real bw_log10 = bwMean_log10 + bwSD_log10 * sigma[3];
-  real hb_log10[nDatasets];
+  array[nDatasets] real hb_log10;
 
-  real<lower=0> param[4]; //
+  array[4] real<lower=0> param; //
 
   matrix[nData_Nsurv,2] y_hat;
   vector<lower=0, upper=1>[nData_Nsurv] Psurv_hat;

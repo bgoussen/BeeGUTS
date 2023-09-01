@@ -1,9 +1,9 @@
 /* Code adapted from Virgile Baudrot
 https://github.com/virgile-baudrot/gutsRstan */
 
-int Nsurv_ppc[nData_Nsurv];
-int Nsurv_sim[nData_Nsurv];
-int Nsurv_sim_prec[nData_Nsurv];
+array[nData_Nsurv] int Nsurv_ppc;
+array[nData_Nsurv] int Nsurv_sim;
+array[nData_Nsurv] int Nsurv_sim_prec;
 
 vector[nData_Nsurv] log_lik;
 

@@ -33,7 +33,7 @@ int find_interval_elem(real x, vector sorted, int start_ind){
         int mid_ind;
         real mid;
         // is there a controlled way without being yelled at with a warning?
-        mid_ind = (left_ind + right_ind) / 2;
+        mid_ind = (left_ind + right_ind) %/% 2;
         mid = sorted[mid_ind] - x;
         if (mid == 0) return(mid_ind-1);
         if (left  * mid < 0) { right = mid; right_ind = mid_ind; }
