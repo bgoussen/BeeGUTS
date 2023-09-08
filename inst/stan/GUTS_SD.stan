@@ -46,7 +46,7 @@ functions {
     return(dy_dt);
   }
 
-  matrix solve_TKTD_varSD(array[] real y0, real t0, array[] real ts, array[] real theta, data array[] real tconc, data array[] real conc, data array[] real odeParam){
+  matrix solve_TKTD_varSD(array[] real y0, real t0, array[] real ts, array[] real theta, data array[] real tconc, data array[] real conc, data real relTol, data real absTol, int maxSteps){
 
     array[1] int x_i;
     x_i[1] = size(tconc);
@@ -54,7 +54,7 @@ functions {
     array[size(ts)] vector[2] ode_res
       = ode_rk45_tol(TKTD_varSD, to_vector(y0), t0, ts,
                          // additional control parameters for the solver: real rel_tol, real abs_tol, int max_num_steps
-                         odeParam[1], odeParam[2], to_int(odeParam[3]), theta,
+                         relTol, absTol, maxSteps, theta,
                          to_array_1d(append_row(to_vector(tconc), to_vector(conc))),
                          x_i);
     matrix[size(ts), 2] rtn;
@@ -79,18 +79,12 @@ data {
 transformed data{
 
   array[2] real<lower=0> y0;
-  array[3] real odeParam;
 
   array[nData_Nsurv] real tNsurv_ode; // time of Nbr survival to include in the ode !
   array[nData_conc] real tconc_ode; // time of Nbr survival to include in the ode !
 
   y0[1] = 0;
   y0[2] = 0;
-
-  // Add odeSolveParameters
-  odeParam[1] = relTol;
-  odeParam[2] = absTol;
-  odeParam[3] = maxSteps;
 
   for(gr in 1:nGroup){
     tNsurv_ode[idS_lw[gr]:idS_up[gr]] = tNsurv[idS_lw[gr]:idS_up[gr]];
@@ -133,7 +127,7 @@ transformed parameters{
     param[4] = 10^hb_log10[groupDataset[gr]]; // hb
 
   /* initial time must be less than t0 = 0, so we use a very small close small number 1e-9 to at at time tNsurv and tconc */
-    y_hat[idS_lw[gr]:idS_up[gr],1:2] = solve_TKTD_varSD(y0, 0, tNsurv_ode[idS_lw[gr]:idS_up[gr]], param, tconc_ode[idC_lw[gr]:idC_up[gr]], conc[idC_lw[gr]:idC_up[gr]], odeParam);
+    y_hat[idS_lw[gr]:idS_up[gr],1:2] = solve_TKTD_varSD(y0, 0, tNsurv_ode[idS_lw[gr]:idS_up[gr]], param, tconc_ode[idC_lw[gr]:idC_up[gr]], conc[idC_lw[gr]:idC_up[gr]], relTol, absTol, maxSteps);
 
     Psurv_hat[idS_lw[gr]:idS_up[gr]] = exp( - y_hat[idS_lw[gr]:idS_up[gr], 2]);
 
