@@ -7,17 +7,17 @@ functions {
 
 #include /include/common_stan_functions.stan
 
-  real[] TKTD_varIT( real t,
-                     real[] y,
-                     real[] theta,
-                     real[] x_r,
-                     int[]  x_i) {
+  vector TKTD_varIT( real t,
+                     vector y,
+                     array[] real theta,
+                     array[] real x_r,
+                     array[] int  x_i) {
 
     // - parameters
     real kd = theta[1];
 
     // - new variables
-    real dy_dt[1]; //
+    vector[1] dy_dt; //
 
       // - latent variables
     int Nconc = x_i[1]; // Number of point measuring concentration
@@ -36,18 +36,21 @@ functions {
     return(dy_dt);
   }
 
-  matrix solve_TKTD_varIT(real[] y0, real t0, real[] ts, real[] theta, data real[] tconc, data real[] conc, data real[] odeParam){
+  matrix solve_TKTD_varIT(array[] real y0, real t0, array[] real ts, array[] real theta, data array[] real tconc, data array[] real conc, data real relTol, data real absTol, int maxSteps){
 
-    int x_i[1];
+    array[1] int x_i;
     x_i[1] = size(tconc);
-
-    return(to_matrix(
-      integrate_ode_rk45(TKTD_varIT, y0, t0, ts, theta,
-                         to_array_1d(append_row(to_vector(tconc), to_vector(conc))),
-                         x_i,
+    array[size(ts)] vector[1] ode_res
+      = ode_rk45_tol(TKTD_varIT, to_vector(y0), t0, ts,
                          // additional control parameters for the solver: real rel_tol, real abs_tol, int max_num_steps
-                         odeParam[1], odeParam[2], odeParam[3])));
-
+                         relTol, absTol, maxSteps, theta,
+                         to_array_1d(append_row(to_vector(tconc), to_vector(conc))),
+                         x_i);
+    matrix[size(ts), 1] rtn;
+    for(i in 1:size(ts)) {
+      rtn[i] = transpose(ode_res[i]);
+    }
+    return rtn;
   }
 }
 
@@ -65,18 +68,12 @@ data {
 }
 transformed data{
 
-  real<lower=0> y0[1];
-  real odeParam[3];
+  array[1] real<lower=0> y0;
 
-  real tNsurv_ode[nData_Nsurv]; // time of Nbr survival to include in the ode !
-  real tconc_ode[nData_conc]; // time of Nbr survival to include in the ode !
+  array[nData_Nsurv] real tNsurv_ode; // time of Nbr survival to include in the ode !
+  array[nData_conc] real tconc_ode; // time of Nbr survival to include in the ode !
 
   y0[1] = 1e-20; // cannot start at 0 for log(0)
-
-  // Add odeSolveParameters
-  odeParam[1] = relTol;
-  odeParam[2] = absTol;
-  odeParam[3] = maxSteps;
 
   for(gr in 1:nGroup){
     tNsurv_ode[idS_lw[gr]:idS_up[gr]] = tNsurv[idS_lw[gr]:idS_up[gr]];
@@ -90,7 +87,7 @@ parameters {
 
   real beta_log10  ;
 
-  real sigma[2 + nDatasets] ;
+  array[2 + nDatasets] real sigma ;
 
 
 }
@@ -98,9 +95,9 @@ transformed parameters{
 
   real kd_log10 = kdMean_log10 + kdSD_log10 * sigma[1] ;
   real mw_log10 = mwMean_log10 + mwSD_log10 * sigma[2] ;
-  real hb_log10[nDatasets];
+  array[nDatasets] real hb_log10;
 
-  real<lower=0> param[1]; //
+  array[1] real<lower=0> param; //
 
   matrix[nData_Nsurv, 1] y_hat;
   vector<lower=0, upper=1>[nData_Nsurv] Psurv_hat;
@@ -118,7 +115,7 @@ transformed parameters{
   for(gr in 1:nGroup){
      real hb  = 10^hb_log10[groupDataset[gr]]; // hb
     /* initial time must be less than t0 = 0, so we use a very small close small number -1e-9 */
-      y_hat[idS_lw[gr]:idS_up[gr], 1] = solve_TKTD_varIT(y0, 0, tNsurv_ode[idS_lw[gr]:idS_up[gr]], param, tconc_ode[idC_lw[gr]:idC_up[gr]], conc[idC_lw[gr]:idC_up[gr]], odeParam)[,1];
+      y_hat[idS_lw[gr]:idS_up[gr], 1] = solve_TKTD_varIT(y0, 0, tNsurv_ode[idS_lw[gr]:idS_up[gr]], param, tconc_ode[idC_lw[gr]:idC_up[gr]], conc[idC_lw[gr]:idC_up[gr]], relTol, absTol, maxSteps)[,1];
 
     for(i in idS_lw[gr]:idS_up[gr]){
 
