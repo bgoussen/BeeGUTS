@@ -1,8 +1,11 @@
 # BeeGUTS 1.2
 * Introduce calculations for Time Reinforced Toxicity test
 
+# BeeGUTS 1.1.3
+* Update to rstan version 2.26
+
 # BeeGUTS 1.1.2
-* Reduce the size of the package to fulfil CRAN requirements
+* Reduce the size of the package to fulfill CRAN requirements
 
 # Version 1.1.1
 * Correction of the default value for parameter k_sr for _Honey Bee_.

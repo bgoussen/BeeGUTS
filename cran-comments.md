@@ -1,6 +1,3 @@
-## Resubmission
-In this version we have reduced the size of the package as a response to the request from CRAN
-
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note
