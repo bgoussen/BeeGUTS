@@ -1,3 +1,5 @@
+# BeeGUTS (development version)
+
 # BeeGUTS 1.1.3
 * Update to rstan version 2.26
 
