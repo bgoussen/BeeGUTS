@@ -1,6 +1,8 @@
 #' Perform the extrapolation of the LDD50 to 27 days and check the presence of
 #' reinforced toxicity as for EFSA revised guideline (2023) - Annex G
 #'
+#' Copyright: C. Romoli, ibacon GmbH, 2023-2024
+#'
 #' When class of \code{object} is \code{beeSurvFit}, see \link[=TRT.beeSurvFit]{TRT.beeSurvFit}.
 #'
 #' @rdname TRT
