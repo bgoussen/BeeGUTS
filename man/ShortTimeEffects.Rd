@@ -20,9 +20,9 @@ A object of class \code{ggplot} containing the graph of the comparison
 between LDD50 at day 2 and day 10 and the data.frame with the plotted values.
 }
 \description{
-Copyright: C. Romoli, ibacon GmbH, 2024
-}
-\details{
 When class of \code{object} is \code{beeSurvFit},
 see \link[=ShortTimeEffects.beeSurvFit]{ShortTimeEffects.beeSurvFit}.
+}
+\details{
+Copyright 2024 C. Romoli, ibacon GmbH
 }

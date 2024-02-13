@@ -15,8 +15,8 @@ A \code{ggplot} object with graph of the LDD extrapolation compared
 to the Haber's law and a data.frame with the calculations
 }
 \description{
-Copyright: C. Romoli, ibacon GmbH, 2023-2024
+When class of \code{object} is \code{beeSurvFit}, see \link[=TRT.beeSurvFit]{TRT.beeSurvFit}.
 }
 \details{
-When class of \code{object} is \code{beeSurvFit}, see \link[=TRT.beeSurvFit]{TRT.beeSurvFit}.
+Copyright 2023-2024 C. Romoli, ibacon GmbH
 }

@@ -1,10 +1,10 @@
 #' Perform comparison between LLD50 at 2 days and at 10 days
 #' as for EFSA revised guideline (2023) - Section 6.6
 #'
-#' Copyright: C. Romoli, ibacon GmbH, 2024
-#'
 #' When class of \code{object} is \code{beeSurvFit},
 #' see \link[=ShortTimeEffects.beeSurvFit]{ShortTimeEffects.beeSurvFit}.
+#'
+#' Copyright 2024 C. Romoli, ibacon GmbH
 #'
 #' @rdname ShortTimeEffects
 #'
