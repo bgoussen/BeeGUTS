@@ -52,6 +52,8 @@ ShortTimeEffects.beeSurvFit <- function(object, concRange = NULL, fullcalculatio
   LDD50_2 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 2,
                   concRange = concRange, nPoints = 100)
   if (is.na(LDD50_2$dfLCx$LCx[3])){
+    warning("95% upperlimit on LDD50 value at 2 days is outside the given range.\n
+New search with range increased by a factor 2.")
     maxcon = 2*maxcon
     LDD50_2 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 2,
                    concRange = c(0,maxcon*2), nPoints = 200)
@@ -118,9 +120,6 @@ ShortTimeEffects.beeSurvFit <- function(object, concRange = NULL, fullcalculatio
       xlab("Time (d)") +
       ylab("LDD_50 (conc./bee/day)") + ylim(c(0, max(LCx3)))
   }
-
-  # show graphical results comparing Haber's law and model predictions
-
 
   #return plot and dataframe for further use
   return(list(ste_plot, dfplot))
