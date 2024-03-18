@@ -107,6 +107,10 @@ New search with range increased by a factor 2.")
     }
     LDD50[[2]] = LDD50_2$dfLCx
     LDD50[[10]] = LDD50_10$dfLCx
+    temp=unlist(LDD50)
+    LCx1 = as.numeric(temp[grepl("LCx1", names(temp))])
+    LCx2 = as.numeric(temp[grepl("LCx2", names(temp))])
+    LCx3 = as.numeric(temp[grepl("LCx3", names(temp))])
 
     dfplot <- data.frame(time=c(1:10), ldd50 = LCx1,
                          ldd50_q2p5 = LCx2,
