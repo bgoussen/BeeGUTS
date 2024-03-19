@@ -17,6 +17,8 @@ Authors@R:
            role = c("ctb"),
            email = "carlo.romoli@ibacon.com"),
     person("Bayer AG",
+           role = "cph"),
+    person("ibacon GmbH",
            role = "cph")
      )
 Description: Tools to calibrate, validate, and make predictions with the
