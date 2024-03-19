@@ -1,6 +1,5 @@
 Package: BeeGUTS
 Title: General Unified Threshold Model of Survival for Bees using Bayesian Inference
-
 Version: 1.2
 Authors@R: 
     c(
