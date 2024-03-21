@@ -37,14 +37,17 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("bgoussen/BeeGUTS")
 ```
+
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to solve a common problem.
+Beware that for space constrains with CRAN, the fit has been limited to a single
+chain, but more chains can be used. 
 
 ```{r example}
 library(BeeGUTS)
 file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS") # Load the path to one of the example file
-lsData <- dataGUTS(file_location = file_location, test_type = 'Chronic_Oral') # Read the example file
+lsData <- dataGUTS(file_location = file_location, test_type = 'Chronic_Oral', cstConcCal = FALSE) # Read the example file
 plot(lsData) # Plot the data
 fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 2000, nChains = 1) # Fit a SD model. This can take some time...
 traceplot(fit) # Produce a diagnostic plot of the fit
@@ -56,3 +59,7 @@ dataPredict <- data.frame(time = c(1:5, 1:15), conc = c(rep(5, 5), rep(15, 15)),
 prediction <- predict(fit, dataPredict) # Perform forwards prediction. At the moment, no concentration recalculation is performed in the forwards prediction. The concentrations are taken as in a chronic test
 plot(prediction) # Plot of the prediction results
 ```
+
+## Documentation
+
+For the complete documentation, refer to the [github page](https://github.com/bgoussen/BeeGUTS)

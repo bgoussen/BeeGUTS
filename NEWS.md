@@ -1,4 +1,5 @@
-# BeeGUTS (development version)
+# BeeGUTS 1.2
+* Introduce calculations for Time Reinforced Toxicity test and time of effect
 
 # BeeGUTS 1.1.3
 * Update to rstan version 2.26

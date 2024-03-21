@@ -350,7 +350,9 @@ dataGUTS <- function(file_location = NULL,
 #'
 #' @examples conc <- concAO(cExt = cbind(3.5, 6, 8, 10), cTime = 0.25, expTime = 4)
 concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625, ...) {
-  timePoint <- seq(0, expTime, 0.05)
+  binning <- 0.05
+  #timePoint <- seq(0, expTime, binning)
+  timePoint <- unique(c(seq(0, cTime, binning), seq(cTime, expTime, binning), expTime))
   cExt <- cExt[rep(seq_len(nrow(cExt)), each = length(timePoint)),] # Expend cExt to allow concentration calculation for all time points
   out <- (cExt * (timePoint / cTime) * (timePoint <= cTime))  + (cExt * exp(-k_sr * (timePoint - cTime)) * (timePoint > cTime))
   return(data.frame(SurvivalTime = timePoint, out))
@@ -370,7 +372,7 @@ concAO <- function(cExt, cTime = 0.25, expTime, k_sr = 0.625, ...) {
 #'
 #' @examples conc <- concAC(cbind(3.1, 4, 6, 8), 4)
 concAC <- function(cExt, expTime, k_ca = 0.4, ...) {
-  timePoint <- seq(0, expTime, 0.05)
+  timePoint <- unique(c(seq(0, expTime, 0.05), expTime))
   cExt <- cExt[rep(seq_len(nrow(cExt)), each = length(timePoint)),] # Expend cExt to allow concentration calculation for all time points
   out <-cExt * exp(-k_ca * timePoint)
   return(data.frame(SurvivalTime = timePoint, out))
