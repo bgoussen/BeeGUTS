@@ -47,14 +47,13 @@ ShortTimeEffects.beeSurvFit <- function(object, concRange = NULL, fullcalculatio
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
   # get the maximum concentration
-  maxcon=max(object$data$concData[[1]][2,c(2:ncol(object$data$concData[[1]])-1)])
+  maxcon=max(object$dataFit$conc)
   # compute LDD50 at 2 days assuming constant concentration
   LDD50_2 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 2,
                   concRange = concRange, nPoints = 100)
   if (is.na(LDD50_2$dfLCx$LCx[3])){
     warning("95% upperlimit on LDD50 value at 2 days is outside the given range.\n
 New search with range increased by a factor 2.")
-    maxcon = 2*maxcon
     LDD50_2 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 2,
                    concRange = c(0,maxcon*2), nPoints = 200)
   }
