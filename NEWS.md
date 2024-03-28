@@ -1,3 +1,6 @@
+# BeeGUTS 1.2.1
+* Parallelization of LC/LD calculations
+
 # BeeGUTS 1.2
 * Introduce calculations for Time Reinforced Toxicity test and time of effect
 
