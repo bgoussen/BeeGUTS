@@ -103,7 +103,7 @@ LCx.beeSurvFit <- function(object,
     stop("Wrong model type. Model type should be 'SD' or 'IT'")
   }
 
-  cl <- parallel::makeCluster(mc <- getOption("cl.cores",parallel::detectCores()-1L))
+  cl <- parallel::makeCluster(mc <- getOption("cl.cores",parallel::detectCores(logical = FALSE)-1L))
 
   doParallel::registerDoParallel(cl)
 
