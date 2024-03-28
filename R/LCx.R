@@ -53,6 +53,9 @@ LCx.beeSurvFit <- function(object,
                            concRange = NULL,
                            nPoints = 100,
                            ...) {
+
+  # library(doParallel)
+  # how to do this properly?? is it enough to have imports in BeeGUTS-package.R
   # Check for correct class
   if (!is(object,"beeSurvFit")) {
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
@@ -100,17 +103,28 @@ LCx.beeSurvFit <- function(object,
     stop("Wrong model type. Model type should be 'SD' or 'IT'")
   }
 
+  cl <- parallel::makeCluster(mc <- getOption("cl.cores",parallel::detectCores()-1L))
+
+  doParallel::registerDoParallel(cl)
+
   # Perform predictions using the odeGUTS package
+  func =  function(kit){ # conc
+    tmp <- odeGUTS::predict_ode(morseObject, data.frame(time = c(0,timeLCx),
+                                                        conc = concRange[kit],
+                                                        replicate = "rep")
+    )
+    tmp <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
+    return(tmp)
+  }
+
   k <- 1:length(concRange)
   if(testType == "Chronic_Oral") {
-    dtheo <- lapply(k, function(kit) { # conc
-      tmp <- odeGUTS::predict_ode(morseObject, data.frame(time = c(0,timeLCx),
-                                                          conc = concRange[kit],
-                                                          replicate = "rep")
-      )
-      tmp <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
-    })
-  } else if(testType == "Acute_Oral") {
+    dtheo <- foreach::foreach(i=1:length(concRange),.combine="cbind" ) %dopar% {
+      val = func(i)
+      list(val)
+    }
+    stopCluster(cl)
+    } else if(testType == "Acute_Oral") {
     warning("Calculating LCx for 'Acute_Oral' reconstructed concentrations is
             not in line with guidelines and might not make sense. Prefer to use
             'Chronic_Oral' for the accepted way of calculating LCx")
