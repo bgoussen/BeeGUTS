@@ -51,7 +51,10 @@ Imports:
     magrittr,
     utils,
     gridExtra,
-    odeGUTS
+    odeGUTS,
+    parallel,
+    doParallel,
+    foreach
 LinkingTo:
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),

@@ -15,11 +15,9 @@
 #' @importFrom Rcpp loadModule
 #' @import rstantools
 #' @import RcppParallel
-#' @import doParallel
-#' @import parallel
+#' @importFrom foreach %dopar%
 #' @importFrom rstan sampling
 #' @importFrom magrittr %>%
-#' @importFrom doParallel %dopar%
 #'
 #' @references
 #' Baas, J., Goussen, B., Miles, M., Preuss, T.G., Roessing, I. (submitted).
