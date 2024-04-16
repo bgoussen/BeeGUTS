@@ -46,20 +46,27 @@ ShortTimeEffects.beeSurvFit <- function(object, concRange = NULL, fullcalculatio
   if (!is(object,"beeSurvFit")) {
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
-  # get the maximum concentration
+
+  # get the maximum concentration and a reasonable number of points
+  if (length(concRange)<1){
   maxcon=max(object$dataFit$conc)
+  nPoints = 100} else {
+    maxcon = max(concRange)
+    nPoints = max(100,floor(100*max(object$dataFit$conc)/max(concRange)))
+  }
+
   # compute LDD50 at 2 days assuming constant concentration
   LDD50_2 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 2,
-                  concRange = concRange, nPoints = 100)
+                  concRange = c(0,maxcon), nPoints = nPoints)
   if (is.na(LDD50_2$dfLCx$LCx[3])){
-    warning("95% upperlimit on LDD50 value at 2 days is outside the given range.\n
-New search with range increased by a factor 2.")
+    warning("95% upperlimit on LDD50 value at 2 days is outside the given range.
+New calculation done with range increased by a factor 5.")
     LDD50_2 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 2,
-                   concRange = c(0,maxcon*2), nPoints = 200)
+                   concRange = c(0,maxcon*5), nPoints = 5*nPoints)
   }
   # compute LDD50 at 10 days assuming constant concentration
   LDD50_10 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 10,
-                  concRange = c(0,maxcon), nPoints = 100)
+                  concRange = c(0,maxcon), nPoints = nPoints)
   LDD50=list(LDD50_2$dfLCx,LDD50_10$dfLCx)
 
   # Check for fast expression of effects (EFSA, 2023 - Ch. 6.6)
@@ -97,10 +104,12 @@ New search with range increased by a factor 2.")
     LDD50=list(1:10)
     for (i in c(1,3,4,5,6,7,8,9)){
       LDD50_val <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = i,
-                       concRange = c(0,maxcon), nPoints = 100)$dfLCx
+                       concRange = c(0,maxcon), nPoints = nPoints)$dfLCx
       if(is.na(LDD50_val$LCx[3])){
+        # largely increase the range to be able to calculate LDD50 at early times
+        # in case the predefined ranges failed
         LDD50_val <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = i,
-                         concRange = c(0,5*maxcon), nPoints = 500)$dfLCx
+                         concRange = c(0,5*maxcon), nPoints = 5*nPoints)$dfLCx
       }
       LDD50[[i]] = LDD50_val
     }

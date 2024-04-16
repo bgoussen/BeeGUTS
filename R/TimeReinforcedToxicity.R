@@ -8,6 +8,7 @@
 #' @rdname TRT
 #'
 #' @param object An object used to select a method
+#' @param concRange Argument of LCx, range of concentrations to find LDD50
 #'
 #' @return A \code{ggplot} object with graph of the LDD extrapolation compared
 #' to the Haber's law and a data.frame with the calculations
@@ -16,7 +17,7 @@
 #'
 #' @export
 #'
-TRT <- function(object){
+TRT <- function(object, concRange = NULL){
   UseMethod("TRT")
 }
 
@@ -24,6 +25,7 @@ TRT <- function(object){
 #' calibrated model \code{beeSurvFit} object.
 #'
 #' @param object An object of class \code{beeSurvFit}
+#' @param concRange Argument of LCx, range of concentrations to find LDD50
 #'
 #' @return A object of class \code{ggplot} containing the graph of the comparison
 #' between Haber's law and the predicted lethal doses at 10 and 27 days and a
@@ -36,16 +38,40 @@ TRT <- function(object){
 #' data(fitBetacyfluthrin_Chronic)
 #' TRT(fitBetacyfluthrin_Chronic)
 #' }
-TRT.beeSurvFit <- function(object){
+TRT.beeSurvFit <- function(object, concRange = NULL){
   if (!is(object,"beeSurvFit")) {
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
+
+  # get the maximum concentration and a reasonable number of points
+  if (length(concRange)<1){
+    maxcon=max(object$dataFit$conc)
+    nPoints = 100} else {
+      maxcon = max(concRange)
+      nPoints = max(100,floor(100*max(object$dataFit$conc)/max(concRange)))
+    }
+
   # compute LDD50 at 10 days assuming constant concentration
   LDD50_10 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 10,
-                  concRange = NULL, nPoints = 100)
+                  concRange = c(0,maxcon), nPoints = nPoints)
+  # rerun if unfortunately we are out of the range
+  if (is.na(LDD50_10$dfLCx$LCx[3])){
+    warning("95% upperlimit on LDD50 value at 2 days is outside the given range.
+New calculation done with range increased by a factor 5.")
+    LDD50_10 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 10,
+                   concRange = c(0,maxcon*5), nPoints = 5*nPoints)
+  }
+
   # compute LDD50 at 27 days assuming constant concentration
   LDD50_27 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 27,
-                  concRange = NULL, nPoints = 100)
+                  concRange = c(0,maxcon), nPoints = nPoints)
+  # rerun if unfortunately we are out of the range
+  if (is.na(LDD50_27$dfLCx$LCx[3])){
+    warning("95% upperlimit on LDD50 value at 2 days is outside the given range.
+New calculation done with range increased by a factor 5.")
+    LDD50_27 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 27,
+                    concRange = c(0,maxcon*5), nPoints =  5*nPoints)
+  }
 
   # Check for Time Reinforced Toxicity (EFSA, 2023 - Annex G)
   ReinfTox <- LDD50_27$dfLCx$LCx[1] >= (LDD50_10$dfLCx$LCx[1] / 2.7)
