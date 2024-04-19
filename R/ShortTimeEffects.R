@@ -46,7 +46,8 @@ ShortTimeEffects.beeSurvFit <- function(object, concRange = NULL, fullcalculatio
   if (!is(object,"beeSurvFit")) {
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
-
+  msg = NULL
+  msgeff = NULL
   # get the maximum concentration and a reasonable number of points
   if (length(concRange)<1){
   maxcon=max(object$dataFit$conc)
