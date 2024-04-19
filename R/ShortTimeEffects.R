@@ -59,9 +59,9 @@ ShortTimeEffects.beeSurvFit <- function(object, concRange = NULL, fullcalculatio
   LDD50_2 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 2,
                   concRange = c(0,maxcon), nPoints = nPoints)
   if (is.na(LDD50_2$dfLCx$LCx[3])){
-    cat("95% upperlimit on LDD50 value at 2 days is outside the given range.
+    cat(paste0("95% upperlimit on LDD50 value at 2 days is outside the given range [", 0,"-",maxcon ,"].
 New calculation done with range increased by a factor 5.
-If calculation still fails, provide a larger range using the concRange argument.\n")
+If calculation still fails, try providing a larger range using the concRange argument.\n\n"))
     LDD50_2 <- LCx(object, X = 50, testType = "Chronic_Oral", timeLCx = 2,
                    concRange = c(0,maxcon*5), nPoints = 5*nPoints)
   # use updated values
@@ -75,8 +75,10 @@ If calculation still fails, provide a larger range using the concRange argument.
   LDD50=list(LDD50_2$dfLCx,LDD50_10$dfLCx)
 
   if (anyNA(c(LDD50_2$dfLCx$LCx[2],LDD50_10$dfLCx$LCx[3],LDD50_2$dfLCx$LCx[1],LDD50_10$dfLCx$LCx[1]))){
-    warning(paste0("With the given concentration range [", 0,"-",maxcon ,"], it was not possible to calculate
-all the LDD50 values. Try again with a wider range using the concRange argument."))
+    msg = paste(paste0("With the given concentration range [", 0,"-",maxcon ,"],"),
+    "it was not possible to calculate all the LDD50 values.",
+    "Try again with a wider range using the concRange argument.", sep = '\n')
+    warning(msg)
   }
 
   # Check for fast expression of effects (EFSA, 2023 - Ch. 6.6)
@@ -84,8 +86,10 @@ all the LDD50 values. Try again with a wider range using the concRange argument.
     (LDD50_2$dfLCx$LCx[1] > 3.*(LDD50_10$dfLCx$LCx[1] ))
 
   if (NoShortTox){
+    msgeff = "No fast expression of effects"
     cat("No fast expression of effects\n")
   } else {
+    msgeff = "Fast expression of effects is present"
     cat("Fast expression of effects is present\n")
   }
 
@@ -143,6 +147,6 @@ all the LDD50 values. Try again with a wider range using the concRange argument.
   }
 
   #return plot and dataframe for further use
-  return(list(ste_plot, dfplot))
+  return(list(ste_plot, dfplot, paste(msgeff, msg, sep='\n')))
 }
 
