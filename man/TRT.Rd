@@ -5,10 +5,12 @@
 \title{Perform the extrapolation of the LDD50 to 27 days and check the presence of
 reinforced toxicity as for EFSA revised guideline (2023) - Annex G}
 \usage{
-TRT(object)
+TRT(object, concRange = NULL)
 }
 \arguments{
 \item{object}{An object used to select a method}
+
+\item{concRange}{Argument of LCx, range of concentrations to find LDD50}
 }
 \value{
 A \code{ggplot} object with graph of the LDD extrapolation compared
