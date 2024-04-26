@@ -34,13 +34,17 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("bgoussen/BeeGUTS")
 ```
 
-## Example
+## Documentation
+
+Detailed documentation is available [here](./docs/home.md)
+
+## Short Example
 
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(BeeGUTS)
-#> BeeGUTS (Version 1.1.3, packaged on the: )
+#> BeeGUTS (Version 1.2.1, packaged on the: )
 #> - For execution on a local, multicore CPU with excess RAM we recommend calling
 #>       options(mc.cores = parallel::detectCores()-1)
 #> - In addition to the functions provided by 'BeeGUTS', we recommend using the packages:
@@ -98,16 +102,16 @@ summary(fit) # Gives a summary of the results
 #> Posteriors of the parameters (quantiles) (select with '$Qposteriors'):
 #> 
 #>  parameters      median        Q2.5       Q97.5
-#>       hb[1] 6.88053e-03 2.53108e-03 1.00538e-02
+#>       hb[1] 6.88749e-03 2.79028e-03 1.03156e-02
 #>  parameters      median        Q2.5       Q97.5
-#>          kd 9.97012e-01 7.25191e-01 2.30604e+00
-#>          zw 9.44638e+00 5.62942e+00 1.07292e+01
-#>          bw 8.88840e-03 6.22759e-03 1.06406e-02
+#>          kd 9.97583e-01 7.40568e-01 2.19665e+00
+#>          zw 9.46457e+00 5.53218e+00 1.08968e+01
+#>          bw 8.90579e-03 6.21034e-03 1.08304e-02
 #> 
 #> 
-#>  Maximum Rhat computed (na.rm = TRUE): 1.007025 
-#>  Minimum Bulk_ESS: 617 
-#>  Minimum Tail_ESS: 295 
+#>  Maximum Rhat computed (na.rm = TRUE): 1.021212 
+#>  Minimum Bulk_ESS: 339 
+#>  Minimum Tail_ESS: 188 
 #>  Bulk_ESS and Tail_ESS are crude measures of effecting sampling size for
 #>       bulk and tail quantities respectively. An ESS > 100 per chain can be
 #>       considered as a good indicator. Rhat is an indicator of chains convergence.
