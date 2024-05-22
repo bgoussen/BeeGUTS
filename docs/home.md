@@ -19,3 +19,5 @@ the various aspects of the BeeGUTS package
 - [Model predictions](./predictions.md)
 - [LCx calculations](./lc_x_calculation.md)
 - [Time Reinforced Toxicity check](./TRT_check.md)
+- [Short Time of Effect](./ShortTimeEffect.md)
+
