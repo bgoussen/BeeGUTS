@@ -53,3 +53,6 @@ lc50 <- LCx(object = fitSD,                # the model object
             nPoints=200)                   # number of bins for concRange
 ```            
 
+[Back to top](#lcx-calculations)
+
+Back to [home](./home.md)

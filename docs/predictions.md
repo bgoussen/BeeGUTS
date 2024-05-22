@@ -25,3 +25,9 @@ plot(pred_res)
 ```
 
 <img src="figures/DOCS-showpred-1.png" width="75%" />
+
+
+[Back to top](#model-predictions)
+
+Back to [home](./home.md)
+

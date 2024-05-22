@@ -18,9 +18,16 @@ The functionality is inspired by section 6.6 of the guidance document:
 the function will produce a figure similar to what is shown in Figure 8 
 of the aforementioned document.
 
-Short time of effect happens if ...
+Short time of effect happens if the initial exposure is the one that drives
+most of the effect.
 
-Identification of short time of effect is based on ...
+Identification of short time of effect is based on the results of a chornic
+oral test via the comparison between the lethal daily dose for 50% of the
+effect (LDD50) at day 2 and at day 10. According to the guidance document:
+"If the LDD50 after 2 days and after 
+10 days are significantly different or present a ratio > 3, it can be 
+concluded that the exposure time plays an important role in the overall
+expression of effect ..." [EFSA, 2023](https://www.efsa.europa.eu/en/efsajournal/pub/3295).
 
 ### Usage
 
@@ -70,7 +77,12 @@ The optional parameter `concRange` is inherited from the function
 the maximum range of the data.
 
 As the LDD50 value at very early times can be significantly larger than
-the range, even without the specifying the range, the function can
-extend the range for the calculation up to a factor 5 (after showing a 
-message on screen). If the calculation still fails, then it is recommended
-to manually provide a range for the calculation.
+the range of concentrations in the experiment, even without the specifying 
+the range, the function can extend the range for the calculation up to a
+factor 5 (after showing a message on screen). If the calculation still
+fails, then it is recommended to manually provide a range for the calculation.
+
+
+[Back to top](#short-time-of-effect-check)
+
+Back to [home](./home.md)

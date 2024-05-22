@@ -63,3 +63,7 @@ This argument might be needed as the funciton `TRT` calls internally
 [`LCx`](./lc_x_calculation.md) and it might happen that the default range is not
 sufficient and needs to be eypanded.
 
+
+[Back to top](#time-reinforced-toxicity-check)
+
+Back to [home](./home.md)

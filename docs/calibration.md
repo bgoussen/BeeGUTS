@@ -150,4 +150,6 @@ plot( ppc(fitSD) )
 
 <img src="figures/DOCS-plotppc-1.png" width="75%" />
 
-[Back to top](##)
+[Back to top](#model-calibration)
+
+Back to [home](./home.md)
