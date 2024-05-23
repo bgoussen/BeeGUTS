@@ -49,8 +49,7 @@ No Time Reinforced Toxicity
 ```
 <img src="figures/DOCS-trt-1.png" width="75%" />
 
-The function returns a plot that shows the value of the LDD50 at day 10 and 
-its predicted value at day 27, together with a red dashed line that indicates
+The function returns a plot that shows the value of the LDD50 at day 10 and its predicted value at day 27, together with a red dashed line that
 helps discriminate the presence of TRT or not: if the LDD50 at day 27 is below
 the red line, TRT cannot be excluded.
 
@@ -61,7 +60,12 @@ generate the plot.
 An additional argument that can be passed to the `TRT` function is `concRange`.
 This argument might be needed as the funciton `TRT` calls internally 
 [`LCx`](./lc_x_calculation.md) and it might happen that the default range is not
-sufficient and needs to be eypanded.
+sufficient and needs to be eypanded. If a range is not given, the default 
+option is to use the maximum range of the data with the default 100 steps for 
+the concentration interval. If a range is given, the number of steps will
+be automatically adjusted to maintain the default resolution (e.g.,
+doubling the range implies a doubling of the number of steps for the 
+calculation of the LDD50).
 
 
 [Back to top](#time-reinforced-toxicity-check)

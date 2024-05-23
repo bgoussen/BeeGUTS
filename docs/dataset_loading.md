@@ -1,4 +1,4 @@
-Datasets and Data read
+Datasets and data read
 ================
 2023-10-13
 
@@ -80,14 +80,13 @@ once all the parameters related to the test will be passed (see below).
 Acute contact tests are tests in which a drop of contaminated liquid is
 placed on the back of the bee.
 
-Because of the …, in this case there is a non-constant evolution of the
-exposure profile.
+It has been observed that in this case there is a non-constant evolution 
+of the exposure profile.
 
 As for the acute oral test, also here is sufficient to give only the
 maximum value of the exposure and the software will reconstruct an
-accurate full time-dependent profile.
-
-*Add short explanation about the time dependency of the exposure*
+accurate full time-dependent profile, which will follow an exponential
+decay.
 
 ## Load the datasets
 
@@ -125,7 +124,7 @@ be specified.
 - `cstConcCal=TRUE` if the concentration units are in mg/kg (so
   concentration in food). This argument ensures the conversion in units
   of µg/bee/day. If the bee species is not “Honey_bee”, `f_rate` must be
-  specified (value of 25 mg/bee/day for Honey bee).
+  specified (default value of 25 mg/bee/day for Honey bee).
 - `cstConcCal=FALSE` if the concentration units are already set as
   µg/bee/day.
 
