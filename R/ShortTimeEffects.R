@@ -9,7 +9,8 @@
 #' @rdname ShortTimeEffects
 #'
 #' @param object An object used to select a method
-#' @param concRange Argument of LCx, range of concentrations to find LDD50
+#' @param nPoints Argument of LCx, Number of time point in \code{concRange} between 0 and the
+#' maximal concentration. 100 by default.
 #' @param fullcalculation Compute the LDD50 from day 1 to day 10 of the Chronic test.
 #' This can increase the computation time
 #'
@@ -20,7 +21,7 @@
 #'
 #' @export
 #'
-ShortTimeEffects <- function(object, concRange = NULL, fullcalculation=FALSE){
+ShortTimeEffects <- function(object, fullcalculation=FALSE, concRange=NULL, nPoints=NULL){
   UseMethod("ShortTimeEffects")
 }
 
@@ -29,6 +30,8 @@ ShortTimeEffects <- function(object, concRange = NULL, fullcalculation=FALSE){
 #'
 #' @param object An object of class \code{beeSurvFit}
 #' @param concRange Argument of LCx, range of concentrations to find LDD50
+#' @param nPoints Argument of LCx, Number of time point in \code{concRange} between 0 and the
+#' maximal concentration. 100 by default.
 #' @param fullcalculation Compute the LDD50 from day 1 to day 10 of the Chronic test.
 #' This can increase the computation time
 #'
@@ -42,18 +45,22 @@ ShortTimeEffects <- function(object, concRange = NULL, fullcalculation=FALSE){
 #' data(fitBetacyfluthrin_Chronic)
 #' ShortTimeEffects(fitBetacyfluthrin_Chronic)
 #' }
-ShortTimeEffects.beeSurvFit <- function(object, concRange = NULL, fullcalculation=FALSE){
+ShortTimeEffects.beeSurvFit <- function(object, fullcalculation=FALSE, concRange=NULL, nPoints=NULL){
   if (!is(object,"beeSurvFit")) {
     stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
   msg = NULL
   msgeff = NULL
   # get the maximum concentration and a reasonable number of points
-  if (length(concRange)<1){
-  maxcon=max(object$dataFit$conc)
-  nPoints = 100} else {
+  if (is.null(concRange)){
+    maxcon=max(object$dataFit$conc)
+    nPoints = ifelse(is.null(nPoints),100,nPoints)
+  } else {
     maxcon = max(concRange)
-    nPoints = max(100,floor(100*max(object$dataFit$conc)/max(concRange)))
+    #at least 20 bins for each multiple of the initial max concentration
+    nPoints = ifelse(is.null(nPoints),
+                     max(100,floor(20*max(concRange)/max(object$dataFit$conc))),
+                     nPoints)
   }
 
   # compute LDD50 at 2 days assuming constant concentration

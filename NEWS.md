@@ -1,7 +1,11 @@
 # BeeGUTS 1.3
 * Parallelization of LC/LD calculations
+* Minor fixes to Short time of Effect calculations
 
 # BeeGUTS 1.2.1
+* Minor fixes
+
+# BeeGUTS 1.2.0
 * Introduce calculations for Time Reinforced Toxicity test and time of effect
 
 # BeeGUTS 1.1.3
