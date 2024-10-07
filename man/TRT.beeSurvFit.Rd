@@ -5,10 +5,12 @@
 \title{Calculate the presence of Time Reinforced Toxicity for the compound from the
 calibrated model \code{beeSurvFit} object.}
 \usage{
-\method{TRT}{beeSurvFit}(object)
+\method{TRT}{beeSurvFit}(object, concRange = NULL)
 }
 \arguments{
 \item{object}{An object of class \code{beeSurvFit}}
+
+\item{concRange}{Argument of LCx, range of concentrations to find LDD50}
 }
 \value{
 A object of class \code{ggplot} containing the graph of the comparison
