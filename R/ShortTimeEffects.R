@@ -9,10 +9,11 @@
 #' @rdname ShortTimeEffects
 #'
 #' @param object An object used to select a method
-#' @param nPoints Argument of LCx, Number of time point in \code{concRange} between 0 and the
-#' maximal concentration. 100 by default.
 #' @param fullcalculation Compute the LDD50 from day 1 to day 10 of the Chronic test.
 #' This can increase the computation time
+#' @param concRange Argument of LCx, range of concentrations to find LDD50
+#' @param nPoints Argument of LCx, Number of time point in \code{concRange} between 0 and the
+#' maximal concentration. 100 by default.
 #'
 #' @return A object of class \code{ggplot} containing the graph of the comparison
 #' between LDD50 at day 2 and day 10 and the data.frame with the plotted values.
@@ -29,11 +30,11 @@ ShortTimeEffects <- function(object, fullcalculation=FALSE, concRange=NULL, nPoi
 #' calibrated model \code{beeSurvFit} object.
 #'
 #' @param object An object of class \code{beeSurvFit}
+#' @param fullcalculation Compute the LDD50 from day 1 to day 10 of the Chronic test.
+#' This can increase the computation time
 #' @param concRange Argument of LCx, range of concentrations to find LDD50
 #' @param nPoints Argument of LCx, Number of time point in \code{concRange} between 0 and the
 #' maximal concentration. 100 by default.
-#' @param fullcalculation Compute the LDD50 from day 1 to day 10 of the Chronic test.
-#' This can increase the computation time
 #'
 #' @return A object of class \code{ggplot} containing the graph of the comparison
 #' between LDD50 at day 2 and day 10 and the data.frame with the plotted values.

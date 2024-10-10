@@ -5,15 +5,23 @@
 \title{Calculate the presence of Time Reinforced Toxicity for the compound from the
 calibrated model \code{beeSurvFit} object.}
 \usage{
-\method{ShortTimeEffects}{beeSurvFit}(object, concRange = NULL, fullcalculation = FALSE)
+\method{ShortTimeEffects}{beeSurvFit}(
+  object,
+  fullcalculation = FALSE,
+  concRange = NULL,
+  nPoints = NULL
+)
 }
 \arguments{
 \item{object}{An object of class \code{beeSurvFit}}
 
-\item{concRange}{Argument of LCx, range of concentrations to find LDD50}
-
 \item{fullcalculation}{Compute the LDD50 from day 1 to day 10 of the Chronic test.
 This can increase the computation time}
+
+\item{concRange}{Argument of LCx, range of concentrations to find LDD50}
+
+\item{nPoints}{Argument of LCx, Number of time point in \code{concRange} between 0 and the
+maximal concentration. 100 by default.}
 }
 \value{
 A object of class \code{ggplot} containing the graph of the comparison

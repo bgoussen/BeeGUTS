@@ -58,7 +58,7 @@ LCx.beeSurvFit <- function(object,
   # how to do this properly?? is it enough to have imports in BeeGUTS-package.R
   # Check for correct class
   if (!is(object,"beeSurvFit")) {
-    stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
+    stop("LCx.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
 
   # Set concentration range to test
@@ -103,7 +103,15 @@ LCx.beeSurvFit <- function(object,
     stop("Wrong model type. Model type should be 'SD' or 'IT'")
   }
 
-  cl <- parallel::makeCluster(mc <- getOption("cl.cores",parallel::detectCores(logical = FALSE)-1L))
+  chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+  if (nzchar(chk) && chk == "TRUE") {
+    # use 2 cores in CRAN/Travis/AppVeyor
+    ncores <- 2L
+  } else {
+    # use all cores in devtools::test()
+    ncores = parallel::detectCores(logical = FALSE)-1L
+  }
+  cl <- parallel::makeCluster(mc <- getOption("cl.cores",ncores))
   doParallel::registerDoParallel(cl)
 
   # Perform predictions using the odeGUTS package

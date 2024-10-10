@@ -403,7 +403,7 @@ traceplot.beeSurvFit <- function(object, ..., incWarmup_trace = TRUE, incWarmup_
 #' data(fitBetacyfluthrin_Chronic)
 #' correlation_plot(fitBetacyfluthrin_Chronic)
 correlation_plot = function(object){
-  if(!is(fitBetacyfluthrin_Chronic,"beeSurvFit")){
+  if(!is(object,"beeSurvFit")){
     stop("function expects an object of class 'beeSurvFit'")
   }
   if (object$modelType == "SD"){
@@ -481,7 +481,7 @@ correlation_plot = function(object){
 #' data(fitBetacyfluthrin_Chronic)
 #' priorposterior_plot(fitBetacyfluthrin_Chronic)
 priorposterior_plot = function(object){
-  if(!is(fitBetacyfluthrin_Chronic,"beeSurvFit")){
+  if(!is(object,"beeSurvFit")){
     stop("function expects an object of class 'beeSurvFit'")
   }
 

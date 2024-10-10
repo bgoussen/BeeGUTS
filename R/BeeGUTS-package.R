@@ -18,6 +18,9 @@
 #' @importFrom foreach %dopar%
 #' @importFrom rstan sampling
 #' @importFrom magrittr %>%
+#' @importFrom stats runif
+#' @importFrom stats rnorm
+#' @importFrom utils combn
 #'
 #' @references
 #' Baas, J., Goussen, B., Miles, M., Preuss, T.G., Roessing, I. (submitted).
