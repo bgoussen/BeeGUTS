@@ -19,6 +19,7 @@
 #' @export
 validate <- function(object,
                      dataValidate,
+                     hb_value = FALSE,
                      ...){
   UseMethod("validate")
 }
@@ -52,6 +53,7 @@ validate <- function(object,
 
 validate.beeSurvFit <- function(object,
                                 dataValidate,
+                                hb_value=FALSE,
                                 ...) {
 
   # Check for correct class
@@ -64,37 +66,78 @@ validate.beeSurvFit <- function(object,
     for (name in names(dataValidate)) {dataValidate[name]<-dataValidate[name][[1]]}
   }
 
-  ### prepare experimental dataset for
-  dfData <- dplyr::full_join(dplyr::select(dataValidate$survData_long,!Dataset),
-                           dplyr::select(dataValidate$concModel_long, !Dataset),
-                           by =c("SurvivalTime", "Treatment"))
+   ### prepare experimental dataset for
+   dfData <- dplyr::full_join(dplyr::select(dataValidate$survData_long,!Dataset),
+                            dplyr::select(dataValidate$concModel_long, !Dataset),
+                            by =c("SurvivalTime", "Treatment"))
   colnames(dfData) <- c("time", "replicate", "Nsurv", "conc")
 
   dfData <- dfData[with(dfData, order(replicate, time)),]
 
   ## run prediction with odeGUTS::predict_Nsurv_ode function
   if(object$modelType == "SD"){
-    morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("kd_log10", "zw_log10", "bw_log10")),
-                        model_type = object$modelType)
-    class(morseObject) <- "survFit"
+     morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("kd_log10", "zw_log10", "bw_log10")),
+                       model_type = object$modelType)
+     class(morseObject) <- "survFit"
 
-    for(i in 1:object$setupMCMC$nChains) {
-      colnames(morseObject$mcmc[[i]]) <- c("kd_log10", "z_log10", "kk_log10")
-    }
-  } else if(object$modelType == "IT") {
-    morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("kd_log10", "mw_log10", "beta_log10")),
-                        model_type = object$modelType)
-    class(morseObject) <- "survFit"
+     for(i in 1:object$setupMCMC$nChains) {
+       colnames(morseObject$mcmc[[i]]) <- c("kd_log10", "z_log10", "kk_log10")
+     }
+   } else if(object$modelType == "IT") {
+     morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("kd_log10", "mw_log10", "beta_log10")),
+                         model_type = object$modelType)
+     class(morseObject) <- "survFit"
 
-    for(i in 1:object$setupMCMC$nChains) {
-      colnames(morseObject$mcmc[[i]]) <- c("kd_log10", "alpha_log10", "beta_log10")
+     for(i in 1:object$setupMCMC$nChains) {
+       colnames(morseObject$mcmc[[i]]) <- c("kd_log10", "alpha_log10", "beta_log10")
+     }
+   } else {
+     stop("Wrong model type. Model type should be 'SD' or 'IT'")
+   }
+
+  if (hb_value){
+    # Need here to perform a fit of the hb value on the validation dataset
+    data_control = NULL
+    data_control$survData_long[[1]] = dataValidate$survData_long %>% filter(Treatment == "Control")
+    data_control$concModel_long[[1]] = dataValidate$concModel_long %>% filter(Treatment == "Control")
+    priorlist = c(hbMean_log10 =  -2.079479,
+                  hbSD_log10 = 0.9601521)
+    data_control$nDatasets = 1
+    lsStanData <- dataFitStan(data_control, "SD", NULL, priorlist)
+    lsStanData$nGroups = 1
+    lsStanData$groupDataset = 1
+
+    modelObject <- stanmodels$GUTS_hb_only
+    chcr <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+    if (nzchar(chcr) && chcr == "TRUE") {
+      # this is needed in order to pass CRAN checks
+      # use 2 cores in CRAN/Travis/AppVeyor
+      nCores <- 2L
+    } else {
+      # use all cores in devtools::test()
+      nCores = parallel::detectCores(logical = FALSE)-1L
     }
-  } else {
-    stop("Wrong model type. Model type should be 'SD' or 'IT'")
+    op <- options()
+    options(mc.cores = as.integer(nCores))
+    on.exit(options(op))
+
+    hbfit <- rstan::sampling(
+      object = modelObject,
+      data = lsStanData,
+      chains = object$setupMCMC$nChains,
+      iter = object$setupMCMC$nIter,
+      warmup = object$setupMCMC$nWarmup,
+      thin = object$setupMCMC$thinInterval,
+      control = list(adapt_delta = 0.95))
+
+    morseObj_hb = list(mcmc = rstan::As.mcmc.list(hbfit, pars = c("hb_log10")))
+    for (i in 1:length(morseObject$mcmc)){
+        morseObject$mcmc[[i]] = cbind(morseObject$mcmc[[i]],morseObj_hb$mcmc[[i]])
+    }
   }
 
   # Perform predictions using the odeGUTS package
-  outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, dfData, ...)
+  outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, dfData, hb_value = hb_value,...)
 
 
   # Calculate EFSA criteria using the odeGUTS package
@@ -118,7 +161,8 @@ validate.beeSurvFit <- function(object,
                 sim = outMorse$df_quantile,
                 EFSA = EFSA_Criteria,
                 data = dataValidate$concData_long,
-                dataModel = dataValidate$concModel_long
+                dataModel = dataValidate$concModel_long,
+                hbfit = hbfit
   )
 
 
