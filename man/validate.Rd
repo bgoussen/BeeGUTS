@@ -4,7 +4,7 @@
 \alias{validate}
 \title{Validation method for \code{beeSurvFit } objects}
 \usage{
-validate(object, dataValidate, ...)
+validate(object, dataValidate, hb_value = FALSE, ...)
 }
 \arguments{
 \item{object}{An object of class \code{beeSurvFit}}

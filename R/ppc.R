@@ -71,7 +71,7 @@ ppc.beeSurvValidation <- function(x){
                          value  = x$sim$Nsurv,
                          data   = rep("Survival",length(x$sim$Nsurv_q50_valid)))
 
-  NSurv_ppc = NSurv_ppc %>% mutate(col = ifelse(value<q_0.025|value>q_0.975, "red", "green"))
+  NSurv_ppc = NSurv_ppc %>% dplyr::mutate(col = ifelse(value<q_0.025|value>q_0.975, "red", "green"))
   class(NSurv_ppc) <- c("ppc", class(NSurv_ppc))
   return(NSurv_ppc)
 }

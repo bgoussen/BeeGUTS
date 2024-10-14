@@ -96,44 +96,14 @@ validate.beeSurvFit <- function(object,
    }
 
   if (hb_value){
-    # Need here to perform a fit of the hb value on the validation dataset
-    data_control = NULL
-    data_control$survData_long[[1]] = dataValidate$survData_long %>% filter(Treatment == "Control")
-    data_control$concModel_long[[1]] = dataValidate$concModel_long %>% filter(Treatment == "Control")
-    priorlist = c(hbMean_log10 =  -2.079479,
-                  hbSD_log10 = 0.9601521)
-    data_control$nDatasets = 1
-    lsStanData <- dataFitStan(data_control, "SD", NULL, priorlist)
-    lsStanData$nGroups = 1
-    lsStanData$groupDataset = 1
-
-    modelObject <- stanmodels$GUTS_hb_only
-    chcr <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
-    if (nzchar(chcr) && chcr == "TRUE") {
-      # this is needed in order to pass CRAN checks
-      # use 2 cores in CRAN/Travis/AppVeyor
-      nCores <- 2L
-    } else {
-      # use all cores in devtools::test()
-      nCores = parallel::detectCores(logical = FALSE)-1L
-    }
-    op <- options()
-    options(mc.cores = as.integer(nCores))
-    on.exit(options(op))
-
-    hbfit <- rstan::sampling(
-      object = modelObject,
-      data = lsStanData,
-      chains = object$setupMCMC$nChains,
-      iter = object$setupMCMC$nIter,
-      warmup = object$setupMCMC$nWarmup,
-      thin = object$setupMCMC$thinInterval,
-      control = list(adapt_delta = 0.95))
+    hbfit = refit_hb(object, dataValidate)
 
     morseObj_hb = list(mcmc = rstan::As.mcmc.list(hbfit, pars = c("hb_log10")))
     for (i in 1:length(morseObject$mcmc)){
         morseObject$mcmc[[i]] = cbind(morseObject$mcmc[[i]],morseObj_hb$mcmc[[i]])
     }
+  } else {
+    hbfit = NULL
   }
 
   # Perform predictions using the odeGUTS package
@@ -171,3 +141,75 @@ validate.beeSurvFit <- function(object,
   return(lsOut)
 }
 
+refit_hb = function(object, dataValidate){
+  # Need here to perform a fit of the hb value on the validation dataset
+  cat("Fitting the background mortality parameter on the control data of the
+        validation dataset.","\n")
+  data_control = NULL
+  data_control$survData_long[[1]] = dataValidate$survData_long %>%
+    dplyr::filter(Treatment == "Control")
+  data_control$concModel_long[[1]] = dataValidate$concModel_long %>%
+    dplyr::filter(Treatment == "Control")
+  priorlist = c(hbMean_log10 =  object$dataFit$hbMean_log10,
+                hbSD_log10 = object$dataFit$hbSD_log10)
+  data_control$nDatasets = 1
+  lsStanData <- dataFitStan(data_control, "SD", NULL, priorlist)
+  lsStanData$nGroups = 1
+  lsStanData$groupDataset = 1
+
+  modelObject <- stanmodels$GUTS_hb_only
+  chcr <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+  if (nzchar(chcr) && chcr == "TRUE") {
+    # this is needed in order to pass CRAN checks
+    # use 2 cores in CRAN/Travis/AppVeyor
+    nCores <- 2L
+  } else {
+    # use all cores in devtools::test()
+    nCores = parallel::detectCores(logical = FALSE)-1L
+  }
+  op <- options()
+  options(mc.cores = as.integer(nCores))
+  on.exit(options(op))
+
+  hbfit <- rstan::sampling(
+    object = modelObject,
+    data = lsStanData,
+    chains = object$setupMCMC$nChains,
+    iter = object$setupMCMC$nIter,
+    warmup = object$setupMCMC$nWarmup,
+    thin = object$setupMCMC$thinInterval,
+    control = list(adapt_delta = 0.95))
+
+  tmpRes <- rstan::monitor(hbfit, print = FALSE)
+  maxRhat <- max(rstan::summary(hbfit)$summary[,"Rhat"], na.rm= TRUE)
+  minBulk_ESS <- min(tmpRes$Bulk_ESS)
+  minTail_ESS <- min(tmpRes$Tail_ESS)
+
+  hb_med   <- 10^tmpRes[["hb_log10", "50%"]]
+  hb_inf95 <- 10^tmpRes[["hb_log10", "2.5%"]]
+  hb_sup95 <- 10^tmpRes[["hb_log10", "97.5%"]]
+  outPost_hb <- data.frame(parameters = "hb",
+                           median = hb_med,
+                           Q2.5 = hb_inf95,
+                           Q97.5 = hb_sup95)
+
+  cat("Bayesian Inference performed with Stan.\n",
+      "MCMC sampling setup (select with '$setupMCMC')\n",
+      "Iterations:", object$setupMCMC$nIter, "\n",
+      "Warmup iterations:", object$setupMCMC$nWarmup, "\n",
+      "Thinning interval:", object$setupMCMC$thinInterval, "\n",
+      "Number of chains:", object$setupMCMC$nChains,"\n")
+  cat("\nMaximum Rhat computed (na.rm = TRUE):", maxRhat, "\n",
+      "Minimum Bulk_ESS:", minBulk_ESS, "\n",
+      "Minimum Tail_ESS:", minTail_ESS, "\n",
+      "Bulk_ESS and Tail_ESS are crude measures of effecting sampling size for
+      bulk and tail quantities respectively. An ESS > 100 per chain can be
+      considered as a good indicator. Rhat is an indicator of chains convergence.
+      A Rhat <= 1.05 is a good indicator of convergence. For detail results,
+      one can call 'rstan::monitor(beeSurvValidation$hbfit)","\n\n")
+
+  cat("Results for hb:","\n")
+  print(outPost_hb, row.names = FALSE)
+
+  return(hbfit)
+}

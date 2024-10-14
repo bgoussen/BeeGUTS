@@ -14,8 +14,9 @@ The TKTD model used is the General Unified Threshold model of Survival (GUTS).
 The package follows the concept and assumptions presented in Baas et al (submitted)
 }
 \references{
-Baas, J., Goussen, B., Miles, M., Preuss, T.G., Roessing, I. (submitted).
-BeeGUTS – new integrative TKTD model for honey bees approach moving from single point estimates of toxicity and exposure to a holistic link between exposure and effect.
+Baas, J., Goussen, B., Miles, M., Preuss, T.G., Roessing, I. (2022).
+BeeGUTS—A Toxicokinetic–Toxicodynamic Model for the Interpretation and Integration of Acute and Chronic Honey Bee Tests.
+\doi{10.1002/etc.5423}
 
 Jager, T., Albert, C., Preuss, T.G. and Ashauer, R. (2011). General Unified Threshold model of Survival - a toxicokinetic-toxicodynamic framework for ecotoxicology.
 \doi{10.1021/es103092a}

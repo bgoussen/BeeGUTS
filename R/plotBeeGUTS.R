@@ -310,7 +310,8 @@ plot.beeSurvPred <- function(x,
     ggtitle(main) +
     facet_grid(~replicate) +
     theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank())
+          axis.text.x=element_blank())+
+    expand_limits(y=0)
 
   ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
   return(ggOut)
