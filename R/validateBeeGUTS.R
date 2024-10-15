@@ -6,20 +6,21 @@
 #'
 #' @param object An object of class \code{beeSurvFit}
 #' @param dataValidate Data to validate in the format of the experimental data used for fit (dataGUTS)
+#' @param fithb Logical argument. If \code{TRUE}, control data of the validation experiment are
+#'  fitted to estimate the value of the background mortality rate. If \code{FALSE},
+#'  background mortality can be fixed with the optional argument \code{hb_valueFORCED}
 #' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{odeGUTS} (e.g.
 #'  \code{mcmc_size = 1000} is to be used to reduce the number of mcmc samples in order to speed up
 #'  the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
 #'  is 1000. If all MCMC is wanted, set argument to \code{NULL}.,
-#'  \code{hb_value  = FALSE} the background mortality \code{hb} is taken into account from the posterior.
-#' If \code{FALSE}, parameter \code{hb} is set to a fixed value. The default is \code{FALSE}.
-#'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
+#'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{fithb} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
 #'
 #' @return An object of class \code{beeSurvValidation}.
 #'
 #' @export
 validate <- function(object,
                      dataValidate,
-                     hb_value = FALSE,
+                     fithb = FALSE,
                      ...){
   UseMethod("validate")
 }
@@ -33,13 +34,14 @@ validate <- function(object,
 #'
 #' @param object An object of class \code{beeSurvFit}
 #' @param dataValidate Data to validate in the format of the experimental data used for fit (dataGUTS)
+#' @param fithb Logical argument. If \code{TRUE}, control data of the validation experiment are
+#'  fitted to estimate the value of the background mortality rate. If \code{FALSE},
+#'  background mortality can be fixed with the optional argument \code{hb_valueFORCED}
 #' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{odeGUTS} (e.g.
 #'  \code{mcmc_size = 1000} is to be used to reduce the number of mcmc samples in order to speed up
 #'  the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
 #'  is 1000. If all MCMC is wanted, set argument to \code{NULL}.,
-#'  \code{hb_value  = FALSE} the background mortality \code{hb} is taken into account from the posterior.
-#' If \code{FALSE}, parameter \code{hb} is set to a fixed value. The default is \code{FALSE}.
-#'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
+#'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{fithb} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
 #'
 #' @return A \code{beeSurvValidation} object with the results of the validation
 #' @export
@@ -53,7 +55,7 @@ validate <- function(object,
 
 validate.beeSurvFit <- function(object,
                                 dataValidate,
-                                hb_value=FALSE,
+                                fithb = FALSE,
                                 ...) {
 
   # Check for correct class
@@ -95,20 +97,20 @@ validate.beeSurvFit <- function(object,
      stop("Wrong model type. Model type should be 'SD' or 'IT'")
    }
 
-  if (hb_value){
+  if (fithb){
     hbfit = refit_hb(object, dataValidate)
 
     morseObj_hb = list(mcmc = rstan::As.mcmc.list(hbfit, pars = c("hb_log10")))
     for (i in 1:length(morseObject$mcmc)){
         morseObject$mcmc[[i]] = cbind(morseObject$mcmc[[i]],morseObj_hb$mcmc[[i]])
     }
+    # Perform predictions using the odeGUTS package
+    outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, dfData, hb_value = TRUE,...)
   } else {
     hbfit = NULL
+    # Perform predictions using the odeGUTS package
+    outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, dfData, hb_value = FALSE,...)
   }
-
-  # Perform predictions using the odeGUTS package
-  outMorse <- odeGUTS::predict_Nsurv_ode(morseObject, dfData, hb_value = hb_value,...)
-
 
   # Calculate EFSA criteria using the odeGUTS package
   EFSA_Criteria <- odeGUTS::predict_Nsurv_check(outMorse, ...)

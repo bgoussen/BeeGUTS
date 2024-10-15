@@ -34,13 +34,18 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("bgoussen/BeeGUTS")
 ```
 
+## Documentation
+
+Detailed documentation is available
+[here](https://github.com/bgoussen/BeeGUTS/blob/dev-docs/docs/home.md)
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(BeeGUTS)
-#> BeeGUTS (Version 1.1.3, packaged on the: )
+#> BeeGUTS (Version 1.3.0, packaged on the: )
 #> - For execution on a local, multicore CPU with excess RAM we recommend calling
 #>       options(mc.cores = parallel::detectCores()-1)
 #> - In addition to the functions provided by 'BeeGUTS', we recommend using the packages:
@@ -57,10 +62,32 @@ plot(lsData) # Plot the data
 <img src="man/figures/README-example-1.png" width="100%" />
 
 ``` r
-fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 3000) # Fit a SD model. This can take some time...
-#> Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-#> Running the chains for more iterations may help. See
-#> https://mc-stan.org/misc/warnings.html#tail-ess
+fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 3000, nChains = 1) # Fit a SD model. This can take some time...
+#> 
+#> SAMPLING FOR MODEL 'GUTS_SD' NOW (CHAIN 1).
+#> Chain 1: 
+#> Chain 1: Gradient evaluation took 0.000401 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 4.01 seconds.
+#> Chain 1: Adjust your expectations accordingly!
+#> Chain 1: 
+#> Chain 1: 
+#> Chain 1: Iteration:    1 / 3000 [  0%]  (Warmup)
+#> Chain 1: Iteration:  300 / 3000 [ 10%]  (Warmup)
+#> Chain 1: Iteration:  600 / 3000 [ 20%]  (Warmup)
+#> Chain 1: Iteration:  900 / 3000 [ 30%]  (Warmup)
+#> Chain 1: Iteration: 1200 / 3000 [ 40%]  (Warmup)
+#> Chain 1: Iteration: 1500 / 3000 [ 50%]  (Warmup)
+#> Chain 1: Iteration: 1501 / 3000 [ 50%]  (Sampling)
+#> Chain 1: Iteration: 1800 / 3000 [ 60%]  (Sampling)
+#> Chain 1: Iteration: 2100 / 3000 [ 70%]  (Sampling)
+#> Chain 1: Iteration: 2400 / 3000 [ 80%]  (Sampling)
+#> Chain 1: Iteration: 2700 / 3000 [ 90%]  (Sampling)
+#> Chain 1: Iteration: 3000 / 3000 [100%]  (Sampling)
+#> Chain 1: 
+#> Chain 1:  Elapsed Time: 141.899 seconds (Warm-up)
+#> Chain 1:                106.124 seconds (Sampling)
+#> Chain 1:                248.023 seconds (Total)
+#> Chain 1:
 traceplot(fit) # Produce a diagnostic plot of the fit
 ```
 
@@ -85,7 +112,7 @@ summary(fit) # Gives a summary of the results
 #>  Iterations: 3000 
 #>  Warmup iterations: 1500 
 #>  Thinning interval: 1 
-#>  Number of chains: 3
+#>  Number of chains: 1
 #> 
 #> Priors of the parameters (quantiles) (select with '$Qpriors'):
 #> 
@@ -98,16 +125,16 @@ summary(fit) # Gives a summary of the results
 #> Posteriors of the parameters (quantiles) (select with '$Qposteriors'):
 #> 
 #>  parameters      median        Q2.5       Q97.5
-#>       hb[1] 6.88053e-03 2.53108e-03 1.00538e-02
+#>       hb[1] 7.01822e-03 4.11649e-03 1.02855e-02
 #>  parameters      median        Q2.5       Q97.5
-#>          kd 9.97012e-01 7.25191e-01 2.30604e+00
-#>          zw 9.44638e+00 5.62942e+00 1.07292e+01
-#>          bw 8.88840e-03 6.22759e-03 1.06406e-02
+#>          kd 9.84329e-01 7.11145e-01 1.62671e+00
+#>          zw 9.47394e+00 6.69596e+00 1.06831e+01
+#>          bw 8.94078e-03 7.11622e-03 1.06966e-02
 #> 
 #> 
-#>  Maximum Rhat computed (na.rm = TRUE): 1.007025 
-#>  Minimum Bulk_ESS: 617 
-#>  Minimum Tail_ESS: 295 
+#>  Maximum Rhat computed (na.rm = TRUE): 1.009446 
+#>  Minimum Bulk_ESS: 324 
+#>  Minimum Tail_ESS: 171 
 #>  Bulk_ESS and Tail_ESS are crude measures of effecting sampling size for
 #>       bulk and tail quantities respectively. An ESS > 100 per chain can be
 #>       considered as a good indicator. Rhat is an indicator of chains convergence.
@@ -115,7 +142,54 @@ summary(fit) # Gives a summary of the results
 #>       one can call 'rstan::monitor(YOUR_beeSurvFit_OBJECT$stanFit)
 #> 
 #>  EFSA Criteria (PPC, NRMSE, and SPPE) can be accessed via 'x$EFSA'
-validation <- validate(fit, lsData) # produce a validation of the fit (here it uses the same dataset as calibration as an example, so not relevant…)
+validation <- validate(fit, lsData, fithb = TRUE) # produce a validation of the fit after refitting background mortality from the control data (here it uses the same dataset as calibration as an example, so not relevant…)
+#> Fitting the background mortality parameter on the control data of the
+#>         validation dataset.
+#> Warning in lsOUT$nDatasets <- nDatasets: Wandle linke Seite in eine Liste um
+#> 
+#> SAMPLING FOR MODEL 'GUTS_hb_only' NOW (CHAIN 1).
+#> Chain 1: 
+#> Chain 1: Gradient evaluation took 1.3e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#> Chain 1: Adjust your expectations accordingly!
+#> Chain 1: 
+#> Chain 1: 
+#> Chain 1: Iteration:    1 / 3000 [  0%]  (Warmup)
+#> Chain 1: Iteration:  300 / 3000 [ 10%]  (Warmup)
+#> Chain 1: Iteration:  600 / 3000 [ 20%]  (Warmup)
+#> Chain 1: Iteration:  900 / 3000 [ 30%]  (Warmup)
+#> Chain 1: Iteration: 1200 / 3000 [ 40%]  (Warmup)
+#> Chain 1: Iteration: 1500 / 3000 [ 50%]  (Warmup)
+#> Chain 1: Iteration: 1501 / 3000 [ 50%]  (Sampling)
+#> Chain 1: Iteration: 1800 / 3000 [ 60%]  (Sampling)
+#> Chain 1: Iteration: 2100 / 3000 [ 70%]  (Sampling)
+#> Chain 1: Iteration: 2400 / 3000 [ 80%]  (Sampling)
+#> Chain 1: Iteration: 2700 / 3000 [ 90%]  (Sampling)
+#> Chain 1: Iteration: 3000 / 3000 [100%]  (Sampling)
+#> Chain 1: 
+#> Chain 1:  Elapsed Time: 0.088 seconds (Warm-up)
+#> Chain 1:                0.07 seconds (Sampling)
+#> Chain 1:                0.158 seconds (Total)
+#> Chain 1: 
+#> Bayesian Inference performed with Stan.
+#>  MCMC sampling setup (select with '$setupMCMC')
+#>  Iterations: 3000 
+#>  Warmup iterations: 1500 
+#>  Thinning interval: 1 
+#>  Number of chains: 1 
+#> 
+#> Maximum Rhat computed (na.rm = TRUE): 1.002137 
+#>  Minimum Bulk_ESS: 487 
+#>  Minimum Tail_ESS: 522 
+#>  Bulk_ESS and Tail_ESS are crude measures of effecting sampling size for
+#>       bulk and tail quantities respectively. An ESS > 100 per chain can be
+#>       considered as a good indicator. Rhat is an indicator of chains convergence.
+#>       A Rhat <= 1.05 is a good indicator of convergence. For detail results,
+#>       one can call 'rstan::monitor(beeSurvValidation$hbfit) 
+#> 
+#> Results for hb: 
+#>  parameters      median         Q2.5       Q97.5
+#>          hb 0.002403875 0.0006760675 0.006101959
 #> Note that computing can be quite long (several minutes).
 #>   Tips: To reduce that time you can reduce Number of MCMC chains (default mcmc_size is set to 1000).
 plot(validation) # plot the validation results

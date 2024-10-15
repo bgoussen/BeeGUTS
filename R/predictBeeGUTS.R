@@ -18,8 +18,8 @@
 #'  the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
 #'  is 1000. If all MCMC is wanted, set argument to \code{NULL}.
 #'  \code{hb_value  = FALSE} the background mortality \code{hb} is set to a fixed value.
-#' If \code{TRUE}, parameter \code{hb} taken from the posterior (only works if
-#' one \code{hb} value was estimated. The default is \code{FALSE}.
+#' If \code{TRUE}, parameter \code{hb} taken from the posterior (If more than one dataset
+#' is present, use the optional argument hb_dataset to specify which hb to use). The default is \code{FALSE}.
 #'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
 #'
 #' @return A \code{beeSurvPred} object containing the results of the forwards prediction

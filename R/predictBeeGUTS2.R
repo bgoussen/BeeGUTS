@@ -1,6 +1,6 @@
 #' Predict method for \code{beeSurvFit} objects
 #'
-#' @description This is the generic \code{predict} S3 method for the \code{beeSurvFit}
+#' @description This is an updated \code{predict} method for the \code{beeSurvFit}
 #' class. It predict the survival over time for the concentration profiles entered by the user.
 #' No concentration reconstructions are performed here. Functions [odeGUTS::predict_ode()]
 #' from the \code{morse} package is used. This might be changed in a future update
@@ -13,14 +13,19 @@
 #'     \item \code{conc}: A vector of number of survivors of same length
 #'     \item \code{replicate} A vector replicate name
 #' }
+#' @param userhb_value User defined background mortality rate parameter.
+#' If a single value is provided, a single fixed value is used. If an array of
+#' two elements is give, the first element is the \code{hb} value and the second
+#' element is the approximate value of the desired 97.5% upperlimit on \code{hb}.
+#' @param calib_hb Logical argument. If \code{TRUE} uses for the predictions the background mortality
+#' value of the calibration dataset. Default value is \code{FALSE}.
+#' @param ndatahb Used in combination with \code{calib_hb=TRUE} in case the calibration
+#' object has multiple datasets. The value dictates which \code{hb} value to use
+#' (between the different dataset).
 #' @param ... Additional arguments to be parsed to the  \code{predict.survFit} method from \code{odeGUTS} (e.g.
 #'  \code{mcmc_size = 1000} is to be used to reduce the number of mcmc samples in order to speed up
 #'  the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
 #'  is 1000. If all MCMC is wanted, set argument to \code{NULL}.
-#'  \code{hb_value  = FALSE} the background mortality \code{hb} is set to a fixed value.
-#' If \code{TRUE}, parameter \code{hb} taken from the posterior (only works if
-#' one \code{hb} value was estimated. The default is \code{FALSE}.
-#'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
 #'
 #' @return A \code{beeSurvPred} object containing the results of the forwards prediction
 #' @export
@@ -34,10 +39,11 @@
 #' prediction <- predict2(fitBetacyfluthrin_Chronic, dataPredict)
 #' }
 predict2 <- function(object,
-                                dataPredict,
-                                userhb_value=0,
-                                calib_hb=FALSE,
-                                ndatahb=1) {
+                     dataPredict,
+                     userhb_value=0,
+                     calib_hb=FALSE,
+                     ndatahb=1,
+                     ...) {
 
   # Check for correct class
   if (!is(object,"beeSurvFit")) {
@@ -69,7 +75,7 @@ predict2 <- function(object,
         stop("Wrong model type. Model type should be 'SD' or 'IT'")
       }
 
-      outMorse <- odeGUTS::predict_ode(morseObject, dataPredict, hb_value = TRUE)
+      outMorse <- odeGUTS::predict_ode(morseObject, dataPredict, hb_value = TRUE, ...)
   } else {
       if (length(userhb_value)==1){
 
@@ -95,12 +101,29 @@ predict2 <- function(object,
 
         outMorse <- odeGUTS::predict_ode(morseObject, dataPredict,
                                          hb_value = FALSE,
-                                         hb_valueFORCED = userhb_value)
+                                         hb_valueFORCED = userhb_value,
+                                         ...)
 
 
       } else if (length(userhb_value) == 2){
+        # do some error handling
+        if (userhb_value[1]==0){
+          stop("Transformations to logarithms are used here.
+               Please consider setting userhb_value[1] to a very small number
+               instead (e.g. 1e-6)")
+        } else if (userhb_value[2]==0) {
+          stop("Value not allowed. If you aim for no simulated uncertainties
+               on the hb value, simply use a single value for the userhb_value
+               argument.")
+        } else if (any(userhb_value<0)){
+          stop("Negative hb values do not make sense.")
+        } else if (userhb_value[2]<userhb_value[1]){
+          stop("Second userhb_value element should be greater than the first element")
+        }
+        # making a lognormal distribution for hb using the values provided by the
+        # user
         hbMed_log10  = log10(userhb_value[1])
-        hbSD_log10   = abs( log10(userhb_value[1] * (1+userhb_value[2])) - log10(userhb_value[1]) )
+        hbSD_log10   = abs( (log10(userhb_value[2])  - log10(userhb_value[1]))/2 )
 
         simhb = data.frame(hb_log10 = rnorm(object$setupMCMC$nIter-object$setupMCMC$nWarmup,
                                             hbMed_log10,
@@ -129,7 +152,7 @@ predict2 <- function(object,
         }
 
         outMorse <- odeGUTS::predict_ode(morseObject, dataPredict,
-                                         hb_value = TRUE)
+                                         hb_value = TRUE,...)
 
       }
       else {
@@ -151,6 +174,9 @@ predict2 <- function(object,
                   setupMCMC = object$setupMCMC,
                   sim = outMorse$df_quantile
     )
+    if (length(userhb_value) == 2){
+      lsOut <- append(lsOut, simhb)
+    }
     class(lsOut) <- c("beeSurvPred", class(lsOut))
 
     return(lsOut)

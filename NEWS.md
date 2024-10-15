@@ -1,5 +1,6 @@
 # BeeGUTS 1.3
 * Parallelization of LC/LD calculations
+* Improved handling of hb values for validation and predictions
 * Minor fixes to Short time of Effect calculations
 
 # BeeGUTS 1.2.1

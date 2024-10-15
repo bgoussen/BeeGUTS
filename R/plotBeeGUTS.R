@@ -311,7 +311,7 @@ plot.beeSurvPred <- function(x,
     facet_grid(~replicate) +
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank())+
-    expand_limits(y=0)
+    expand_limits(y=0) # set lower limit to 0 for concentration panel
 
   ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
   return(ggOut)

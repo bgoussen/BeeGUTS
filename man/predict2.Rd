@@ -4,7 +4,14 @@
 \alias{predict2}
 \title{Predict method for \code{beeSurvFit} objects}
 \usage{
-predict2(object, dataPredict, userhb_value = 0, calib_hb = FALSE, ndatahb = 1)
+predict2(
+  object,
+  dataPredict,
+  userhb_value = 0,
+  calib_hb = FALSE,
+  ndatahb = 1,
+  ...
+)
 }
 \arguments{
 \item{object}{An object of class \code{beeSurvFit}}
@@ -17,20 +24,28 @@ following column:
 \item \code{replicate} A vector replicate name
 }}
 
+\item{userhb_value}{User defined background mortality rate parameter.
+If a single value is provided, a single fixed value is used. If an array of
+two elements is give, the first element is the \code{hb} value and the second
+element is the approximate value of the desired 97.5\% upperlimit on \code{hb}.}
+
+\item{calib_hb}{Logical argument. If \code{TRUE} uses for the predictions the background mortality
+value of the calibration dataset. Default value is \code{FALSE}.}
+
+\item{ndatahb}{Used in combination with \code{calib_hb=TRUE} in case the calibration
+object has multiple datasets. The value dictates which \code{hb} value to use
+(between the different dataset).}
+
 \item{...}{Additional arguments to be parsed to the  \code{predict.survFit} method from \code{odeGUTS} (e.g.
 \code{mcmc_size = 1000} is to be used to reduce the number of mcmc samples in order to speed up
 the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
-is 1000. If all MCMC is wanted, set argument to \code{NULL}.
-\code{hb_value  = FALSE} the background mortality \code{hb} is set to a fixed value.
-If \code{TRUE}, parameter \code{hb} taken from the posterior (only works if
-one \code{hb} value was estimated. The default is \code{FALSE}.
-\code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}}
+is 1000. If all MCMC is wanted, set argument to \code{NULL}.}
 }
 \value{
 A \code{beeSurvPred} object containing the results of the forwards prediction
 }
 \description{
-This is the generic \code{predict} S3 method for the \code{beeSurvFit}
+This is an updated \code{predict} method for the \code{beeSurvFit}
 class. It predict the survival over time for the concentration profiles entered by the user.
 No concentration reconstructions are performed here. Functions \code{\link[odeGUTS:predict]{odeGUTS::predict_ode()}}
 from the \code{morse} package is used. This might be changed in a future update
