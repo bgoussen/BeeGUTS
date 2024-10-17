@@ -25,23 +25,42 @@ the validation object, and they are summarized in the output of the validation
 function.
 
 ``` r
-file1 = "./../inst/extdata/betacyfluthrin_chronic_ug.txt"
-dataval <- dataGUTS(file_location = file1,
+> file1 = "./../inst/extdata/betacyfluthrin_chronic_ug.txt"
+> dataval <- dataGUTS(file_location = file1,
                       test_type = "Chronic_Oral",
                       bee_species = "Honey_Bee",
                       cstConcCal = FALSE)
 
 
-valres <- validate(object = fitSD,
+> valres <- validate(object = fitSD,
                    dataValidate = dataval,
                    fithb = TRUE)
-#> Note that computing can be quite long (several minutes).
-#>   Tips: To reduce that time you can reduce Number of MCMC chains (default mcmc_size is set to 1000).
-plot(valres)
+Fitting the background mortality parameter on the control data of the
+        validation dataset. 
+Bayesian Inference performed with Stan.
+ MCMC sampling setup (select with '$setupMCMC')
+ Iterations: 1000 
+ Warmup iterations: 500 
+ Thinning interval: 1 
+ Number of chains: 3 
+
+Maximum Rhat computed (na.rm = TRUE): 1.013769 
+ Minimum Bulk_ESS: 381 
+ Minimum Tail_ESS: 355 
+ Bulk_ESS and Tail_ESS are crude measures of effecting sampling size for
+      bulk and tail quantities respectively. An ESS > 100 per chain can be
+      considered as a good indicator. Rhat is an indicator of chains convergence.
+      A Rhat <= 1.05 is a good indicator of convergence. For detail results,
+      one can call 'rstan::monitor(beeSurvValidation$hbfit) 
+
+Results for hb: 
+ parameters      median         Q2.5       Q97.5
+         hb 0.002441133 0.0006911102 0.006267937
+
+> plot(valres)
 ```
 
-<img src="figures/DOCS-unnamed-chunk-3-1.png" width="75%" />
-
+<img src="figures/valres_hbfit.png" width="75%" />
 
 
 The criteria to assess the validation are reported in the table below
