@@ -18,6 +18,25 @@ for bee species. It can be used to fit a Toxicokinetic-Toxicodynamic
 contact, and chronic oral studies). The TKTD model used is the General
 Unified Threshold model of Survival (GUTS).
 
+The model is based on the following publications:
+
+- Baas, J., Goussen, B., Taenzler, V., Roeben, V., Miles, M., Preuss,
+  T.G., van den Berg, S. and Roessink, I. (2024), Comparing Sensitivity
+  of Different Bee Species to Pesticides: A TKTD modeling approach.
+  Environ Toxicol Chem, 43: 1431-1441.
+  <https://doi.org/10.1002/etc.5871>
+
+- Baas, J., Goussen, B., Miles, M., Preuss, T.G. and Roessink, I.
+  (2022), BeeGUTS—A Toxicokinetic–Toxicodynamic Model for the
+  Interpretation and Integration of Acute and Chronic Honey Bee Tests.
+  Environ Toxicol Chem, 41: 2193-2201.
+  <https://doi.org/10.1002/etc.5423>
+
+- Jager T, Albert C, Preuss TG, Ashauer R. General unified threshold
+  model of survival–a toxicokinetic-toxicodynamic framework for
+  ecotoxicology. Environ Sci Technol. 2011 Apr 1;45(7):2529-40. doi:
+  10.1021/es103092a. Epub 2011 Mar 2. PMID: 21366215.
+
 ## Installation
 
 You can install the released version of BeeGUTS from
@@ -45,7 +64,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(BeeGUTS)
-#> BeeGUTS (Version 1.3.0, packaged on the: )
+#> BeeGUTS (Version 1.3.0, packaged on the: 2024-10-16 11:04:37 UTC)
 #> - For execution on a local, multicore CPU with excess RAM we recommend calling
 #>       options(mc.cores = parallel::detectCores()-1)
 #> - In addition to the functions provided by 'BeeGUTS', we recommend using the packages:
@@ -66,8 +85,8 @@ fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 3000, nChains = 1) # Fit a S
 #> 
 #> SAMPLING FOR MODEL 'GUTS_SD' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000401 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 4.01 seconds.
+#> Chain 1: Gradient evaluation took 0.005427 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 54.27 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -84,9 +103,9 @@ fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 3000, nChains = 1) # Fit a S
 #> Chain 1: Iteration: 2700 / 3000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 3000 / 3000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 141.899 seconds (Warm-up)
-#> Chain 1:                106.124 seconds (Sampling)
-#> Chain 1:                248.023 seconds (Total)
+#> Chain 1:  Elapsed Time: 123.736 seconds (Warm-up)
+#> Chain 1:                95.622 seconds (Sampling)
+#> Chain 1:                219.358 seconds (Total)
 #> Chain 1:
 traceplot(fit) # Produce a diagnostic plot of the fit
 ```
@@ -125,16 +144,16 @@ summary(fit) # Gives a summary of the results
 #> Posteriors of the parameters (quantiles) (select with '$Qposteriors'):
 #> 
 #>  parameters      median        Q2.5       Q97.5
-#>       hb[1] 7.01822e-03 4.11649e-03 1.02855e-02
+#>       hb[1] 6.80591e-03 2.01196e-03 1.02061e-02
 #>  parameters      median        Q2.5       Q97.5
-#>          kd 9.84329e-01 7.11145e-01 1.62671e+00
-#>          zw 9.47394e+00 6.69596e+00 1.06831e+01
-#>          bw 8.94078e-03 7.11622e-03 1.06966e-02
+#>          kd 1.02593e+00 7.29306e-01 2.83339e+00
+#>          zw 9.35887e+00 5.04829e+00 1.07897e+01
+#>          bw 8.74272e-03 5.95570e-03 1.07498e-02
 #> 
 #> 
-#>  Maximum Rhat computed (na.rm = TRUE): 1.009446 
-#>  Minimum Bulk_ESS: 324 
-#>  Minimum Tail_ESS: 171 
+#>  Maximum Rhat computed (na.rm = TRUE): 1.009871 
+#>  Minimum Bulk_ESS: 110 
+#>  Minimum Tail_ESS: 100 
 #>  Bulk_ESS and Tail_ESS are crude measures of effecting sampling size for
 #>       bulk and tail quantities respectively. An ESS > 100 per chain can be
 #>       considered as a good indicator. Rhat is an indicator of chains convergence.
@@ -149,8 +168,8 @@ validation <- validate(fit, lsData, fithb = TRUE) # produce a validation of the 
 #> 
 #> SAMPLING FOR MODEL 'GUTS_hb_only' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 1.3e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#> Chain 1: Gradient evaluation took 1.4e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -167,9 +186,9 @@ validation <- validate(fit, lsData, fithb = TRUE) # produce a validation of the 
 #> Chain 1: Iteration: 2700 / 3000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 3000 / 3000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 0.088 seconds (Warm-up)
-#> Chain 1:                0.07 seconds (Sampling)
-#> Chain 1:                0.158 seconds (Total)
+#> Chain 1:  Elapsed Time: 0.099 seconds (Warm-up)
+#> Chain 1:                0.084 seconds (Sampling)
+#> Chain 1:                0.183 seconds (Total)
 #> Chain 1: 
 #> Bayesian Inference performed with Stan.
 #>  MCMC sampling setup (select with '$setupMCMC')
@@ -178,9 +197,9 @@ validation <- validate(fit, lsData, fithb = TRUE) # produce a validation of the 
 #>  Thinning interval: 1 
 #>  Number of chains: 1 
 #> 
-#> Maximum Rhat computed (na.rm = TRUE): 1.002137 
-#>  Minimum Bulk_ESS: 487 
-#>  Minimum Tail_ESS: 522 
+#> Maximum Rhat computed (na.rm = TRUE): 1.002364 
+#>  Minimum Bulk_ESS: 257 
+#>  Minimum Tail_ESS: 410 
 #>  Bulk_ESS and Tail_ESS are crude measures of effecting sampling size for
 #>       bulk and tail quantities respectively. An ESS > 100 per chain can be
 #>       considered as a good indicator. Rhat is an indicator of chains convergence.
@@ -188,8 +207,8 @@ validation <- validate(fit, lsData, fithb = TRUE) # produce a validation of the 
 #>       one can call 'rstan::monitor(beeSurvValidation$hbfit) 
 #> 
 #> Results for hb: 
-#>  parameters      median         Q2.5       Q97.5
-#>          hb 0.002403875 0.0006760675 0.006101959
+#>  parameters      median        Q2.5       Q97.5
+#>          hb 0.002577455 0.000734436 0.006801764
 #> Note that computing can be quite long (several minutes).
 #>   Tips: To reduce that time you can reduce Number of MCMC chains (default mcmc_size is set to 1000).
 plot(validation) # plot the validation results

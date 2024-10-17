@@ -26,6 +26,14 @@ bee species. It can be used to fit a Toxicokinetic-Toxicodynamic (TKTD) model
 adapted for bee standard studies (acute oral, acute contact, and chronic oral studies).
 The TKTD model used is the General Unified Threshold model of Survival (GUTS).
 
+The model is based on the following publications:
+
+* Baas, J., Goussen, B., Taenzler, V., Roeben, V., Miles, M., Preuss, T.G., van den Berg, S. and Roessink, I. (2024), Comparing Sensitivity of Different Bee Species to Pesticides: A TKTD modeling approach. Environ Toxicol Chem, 43: 1431-1441. https://doi.org/10.1002/etc.5871
+
+* Baas, J., Goussen, B., Miles, M., Preuss, T.G. and Roessink, I. (2022), BeeGUTS—A Toxicokinetic–Toxicodynamic Model for the Interpretation and Integration of Acute and Chronic Honey Bee Tests. Environ Toxicol Chem, 41: 2193-2201. https://doi.org/10.1002/etc.5423
+
+* Jager T, Albert C, Preuss TG, Ashauer R. General unified threshold model of survival--a toxicokinetic-toxicodynamic framework for ecotoxicology. Environ Sci Technol. 2011 Apr 1;45(7):2529-40. doi: 10.1021/es103092a. Epub 2011 Mar 2. PMID: 21366215.
+
 ## Installation
 
 You can install the released version of BeeGUTS from [CRAN](https://CRAN.R-project.org) with:
