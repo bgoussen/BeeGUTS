@@ -1,6 +1,6 @@
 Short time of effect check
 ================
-2024-05-21
+2024-10-17
 
 Back to [home](./home.md)
 
@@ -73,12 +73,13 @@ The function also returns the message of the assessment as a string.
 
 The optional parameter `concRange` is inherited from the function 
 [`LCx`](./lc_x_calculation.md), that is called internally by
-`ShortTimeEffects`. If a range is not given, the default option is to use
-the maximum range of the data with the default 100 steps for the 
-concentration interval. If a range is given, the number of steps will
-be automatically adjusted to maintain the default resolution (e.g.,
-doubling the range implies a doubling of the number of steps for the 
-calculation of the LDD50).
+`ShortTimeEffects` and allows to define a concentration range. If a range is not
+given, the default option is to use the maximum range of the data.
+
+The number of concentration steps is controlled by the other optional argument
+`nPoints`. If this argument is not present, the default is that there will be
+at least 100 concentrations steps between the minimum and the maximum 
+concentration.
 
 As the LDD50 value at very early times can be significantly larger than
 the range of concentrations in the experiment, even without the specifying 

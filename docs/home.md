@@ -1,6 +1,6 @@
 Additional Documentation for BeeGUTS
 ================
-2023-10-13
+2024-10-17
 
 ## Documentation
 
@@ -11,7 +11,8 @@ contact, and chronic oral studies). The TKTD model used is the General
 Unified Threshold model of Survival (GUTS).
 
 The links below point towards specific pages that will guide you through
-the various aspects of the BeeGUTS package
+the various aspects of the BeeGUTS package (These pages refer to package version
+1.3)
 
 - [Datasets and Data read](./dataset_loading.md)
 - [Model calibration](./calibration.md)
