@@ -57,6 +57,10 @@ plot(pred_res)
 
 <img src="figures/prediction_userhb.png" width="75%" />
 
+Using the internal `BeeGUTS` functions `concCst`, `concAC`, `concAO`, 
+it is also possible to generate concentration profiles to predict the outcome 
+of new standard tests.
+
 
 [Back to top](#model-predictions)
 
