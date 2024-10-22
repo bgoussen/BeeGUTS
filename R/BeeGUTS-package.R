@@ -5,7 +5,7 @@
 #' adapted for bee standard studies (acute oral, acute contact, and chronic oral studies).
 #' The TKTD model used is the General Unified Threshold model of Survival (GUTS).
 #'
-#' The package follows the concept and assumptions presented in Baas et al (submitted)
+#' The package follows the concept and assumptions presented in Baas et al. (2022)
 #'
 #' @docType package
 #' @name BeeGUTS-package
