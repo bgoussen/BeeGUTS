@@ -47,3 +47,31 @@ ppc.beeSurvFit <- function(x){
   class(Nsurv_ppc) <- c("ppc", class(Nsurv_ppc))
   return(Nsurv_ppc)
 }
+
+
+#' Posterior predictive check method for \code{beeSurvValidation} objects
+#'
+#' @param x an object of class \code{beeSurvValidation}
+#'
+#'
+#' @return a \code{data.frame} of class \code{ppc}
+#'
+#' @examples
+#' data(fitBetacyfluthrin_Chronic)
+#' data(betacyfluthrinChronic)
+#' valid <- validate(fitBetacyfluthrin_Chronic,betacyfluthrinChronic)
+#' out <- ppc(valid)
+#'
+#' @export
+#'
+ppc.beeSurvValidation <- function(x){
+  NSurv_ppc = data.frame(median = x$sim$Nsurv_q50_valid,
+                         q_0.025= x$sim$Nsurv_qinf95_valid,
+                         q_0.975= x$sim$Nsurv_qsup95_valid,
+                         value  = x$sim$Nsurv,
+                         data   = rep("Survival",length(x$sim$Nsurv_q50_valid)))
+
+  NSurv_ppc = NSurv_ppc %>% dplyr::mutate(col = ifelse(value<q_0.025|value>q_0.975, "red", "green"))
+  class(NSurv_ppc) <- c("ppc", class(NSurv_ppc))
+  return(NSurv_ppc)
+}

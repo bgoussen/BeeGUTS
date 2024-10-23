@@ -310,7 +310,8 @@ plot.beeSurvPred <- function(x,
     ggtitle(main) +
     facet_grid(~replicate) +
     theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank())
+          axis.text.x=element_blank())+
+    expand_limits(y=0) # set lower limit to 0 for concentration panel
 
   ggOut <- cowplot::plot_grid(ggConc, ggSurv, align = "v", nrow = 2)
   return(ggOut)
@@ -385,6 +386,163 @@ traceplot.beeSurvFit <- function(object, ..., incWarmup_trace = TRUE, incWarmup_
 }
 
 
+
+#' Plotting of correlation plots for \code{beeSurvFit} objects
+#'
+#' @description It plots the correlations between the parameters of
+#' the GUTS IT or GUTS SD. The plots do not include warmup iterations
+#'
+#' @param object An object of class \code{beeSurvFit} to be plotted
+#'
+#' @return A graphic with the plot of the correlations between parameters or a
+#' a list of graphics in case multiple datasets are present. If a list is
+#' returned, the first graphic is the correlation between hb values and the
+#' second is the correlation between all other parameters
+#' @export
+#'
+#' @examples
+#' data(fitBetacyfluthrin_Chronic)
+#' correlation_plot(fitBetacyfluthrin_Chronic)
+correlation_plot = function(object){
+  if(!is(object,"beeSurvFit")){
+    stop("function expects an object of class 'beeSurvFit'")
+  }
+  if (object$modelType == "SD"){
+    pars = c("zw_log10", "bw_log10")
+  } else if (object$modelType == "IT") {
+    pars = c("mw_log10", "beta_log10")
+  }
+  color = "darkorchid"
+  p1 = list()
+  p2 = list()
+  p3 = list()
+  for (i in 1:object$dataFit$nDatasets){
+    p1 = append(p1,list(rstan::stan_scat(object$stanFit,
+                                         pars = c( paste0("hb_log10[",i,"]"),
+                                                   "kd_log10"),
+                                         color=color, alpha=0.2 ) ) )
+    p2 = append(p2,list(rstan::stan_scat(object$stanFit,
+                                         pars = c( paste0("hb_log10[",i,"]"),
+                                                   pars[1]),
+                                         color=color, alpha=0.2 ) ) )
+    p3 = append(p3,list(rstan::stan_scat(object$stanFit,
+                                         pars = c( paste0("hb_log10[",i,"]"),
+                                                   pars[2]),
+                                         color=color, alpha=0.2 ) ) )
+  }
+  p4 = rstan::stan_scat(object$stanFit, pars = c("kd_log10",pars[1]),
+                        color=color, alpha=0.2 )
+  p5 = rstan::stan_scat(object$stanFit, pars = c("kd_log10",pars[2]),
+                        color=color, alpha=0.2 )
+  p6 = rstan::stan_scat(object$stanFit, pars = c(pars[1],pars[2]),
+                        color=color, alpha=0.2 )
+
+  corr1 = cowplot::plot_grid(cowplot::plot_grid(plotlist=append(p1,list(NULL,NULL)),
+                                                ncol=object$dataFit$nDatasets+2),
+                             cowplot::plot_grid(plotlist=append(p2,list(p4,NULL)),
+                                                ncol=object$dataFit$nDatasets+2),
+                             cowplot::plot_grid(plotlist=append(p3,list(p5,p6)),
+                                                ncol=object$dataFit$nDatasets+2),
+                             nrow=3)
+
+  if(object$dataFit$nDatasets>1){
+    combi = combn(c(1:object$dataFit$nDatasets),
+                            m = 2, simplify = FALSE)
+    plist = list()
+    for (i in 1:length(combi)){
+      plist = append(plist,
+                     list(rstan::stan_scat(object$stanFit,
+                                           pars = c(paste0("hb_log10[",combi[[i]][1],"]"),
+                                                    paste0("hb_log10[",combi[[i]][2],"]")),
+                                           color=color, alpha=0.2)))
+    }
+    corr2 = cowplot::plot_grid(plotlist = plist)
+    return(list(corr1,corr2))
+  }
+  return(corr1)
+}
+
+
+#' Plotting of prior and posterior plots for \code{beeSurvFit} objects
+#'
+#' @description It plots the comparison between the prior and the posterior
+#' distributions of the parameters of the GUTS IT or GUTS SD models.
+#' The plots do not include warmup iterations
+#'
+#' @param object An object of class \code{beeSurvFit} to be plotted
+#'
+#' @return A list of graphic objects with the plot of the comparison between
+#' prior and posterior distribution of the parameters. The first entry of the
+#' list is dedicated to the hb value (multiple plots in case of multiple
+#' datasets), the second element of the list is dedicated to the other model
+#' parameters
+#' @export
+#'
+#' @examples
+#' data(fitBetacyfluthrin_Chronic)
+#' priorposterior_plot(fitBetacyfluthrin_Chronic)
+priorposterior_plot = function(object){
+  if(!is(object,"beeSurvFit")){
+    stop("function expects an object of class 'beeSurvFit'")
+  }
+
+  shb = data.frame(samples=rnorm(100000,
+                                 as.numeric(object$dataFit$hbMean_log10),
+                                 as.numeric(object$dataFit$hbSD_log10)))
+  skd = data.frame(samples=rnorm(100000,
+                                 as.numeric(object$dataFit$kdMean_log10),
+                                 as.numeric(object$dataFit$kdSD_log10)))
+
+  if (object$modelType == "SD"){
+    pars=c("zw_log10","bw_log10")
+    s_p1 = data.frame(samples=rnorm(100000,
+                                    as.numeric(object$dataFit$zwMean_log10),
+                                    as.numeric(object$dataFit$zwSD_log10)))
+    s_p2 = data.frame(samples=rnorm(100000,
+                                    as.numeric(object$dataFit$bwMean_log10),
+                                    as.numeric(object$dataFit$bwSD_log10)))
+
+  } else if (object$modelType == "IT") {
+    pars=c("mw_log10","beta_log10")
+    s_p1 = data.frame(samples=rnorm(100000,
+                                    as.numeric(object$dataFit$mwMean_log10),
+                                    as.numeric(object$dataFit$mwSD_log10)))
+    s_p2 = data.frame(samples=runif(100000,
+                                    min = object$dataFit$betaMin_log10,
+                                    max = object$dataFit$betaMax_log10))
+
+  }
+  color = "darkorchid"
+
+  plist = list()
+
+  #rstan::stan_dens(fitBetacyfluthrin_Chronic$stanFit, pars = "hb_log10[1]") + geom_density(data = shb_df, aes(x=samples), alpha=0.2, fill='black')
+
+  phb = rstan::stan_dens(object$stanFit, pars = "hb_log10",fill=color) +
+    geom_density(aes(color="post"), fill=color)+
+    geom_density(data = shb, aes(x=samples,color="prior"), alpha=0.2, fill='black')+
+    scale_color_manual(values=c(color,"black"),labels = c("post","prior"))+
+    theme(legend.title = element_blank())
+
+
+  pkd = rstan::stan_dens(object$stanFit, pars = "kd_log10",fill=color) +
+    geom_density(data = skd, aes(x=samples), alpha=0.2, fill='black')
+
+  pp1 = rstan::stan_dens(object$stanFit, pars = pars[1],fill=color) +
+    geom_density(data = s_p1, aes(x=samples), alpha=0.2, fill='black')
+
+  pp2 = rstan::stan_dens(object$stanFit, pars = pars[2],fill=color) +
+    geom_density(aes(color="post"), fill=color) +
+    geom_density(data = s_p2, aes(x=samples, color="prior"),
+                 alpha=0.2, fill='black')+
+    scale_color_manual(values=c(color,"black"),labels = c("post","prior"))+
+    theme(legend.title = element_blank())
+
+
+  otherpars = cowplot::plot_grid(pkd,pp1,pp2,nrow=1)
+
+  return(list(phb,otherpars))
+}
 
 
 

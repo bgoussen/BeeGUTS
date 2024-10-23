@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+![GitHub R package version](https://img.shields.io/github/r-package/v/bgoussen/BeeGUTS)
 [![CRAN status](https://www.r-pkg.org/badges/version/BeeGUTS)](https://CRAN.R-project.org/package=BeeGUTS)
 [![R-CMD-check](https://github.com/bgoussen/BeeGUTS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bgoussen/BeeGUTS/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
@@ -25,6 +26,14 @@ The goal of BeeGUTS is to analyse the survival toxicity tests performed for
 bee species. It can be used to fit a Toxicokinetic-Toxicodynamic (TKTD) model
 adapted for bee standard studies (acute oral, acute contact, and chronic oral studies).
 The TKTD model used is the General Unified Threshold model of Survival (GUTS).
+
+The model is based on the following publications:
+
+* Baas, J., Goussen, B., Taenzler, V., Roeben, V., Miles, M., Preuss, T.G., van den Berg, S. and Roessink, I. (2024), Comparing Sensitivity of Different Bee Species to Pesticides: A TKTD modeling approach. Environ Toxicol Chem, 43: 1431-1441. https://doi.org/10.1002/etc.5871
+
+* Baas, J., Goussen, B., Miles, M., Preuss, T.G. and Roessink, I. (2022), BeeGUTS—A Toxicokinetic–Toxicodynamic Model for the Interpretation and Integration of Acute and Chronic Honey Bee Tests. Environ Toxicol Chem, 41: 2193-2201. https://doi.org/10.1002/etc.5423
+
+* Jager T, Albert C, Preuss TG, Ashauer R. General unified threshold model of survival--a toxicokinetic-toxicodynamic framework for ecotoxicology. Environ Sci Technol. 2011 Apr 1;45(7):2529-40. doi: 10.1021/es103092a. Epub 2011 Mar 2. PMID: 21366215.
 
 ## Installation
 
@@ -40,6 +49,11 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("bgoussen/BeeGUTS")
 ```
+
+## Documentation
+Detailed documentation is available [here](https://github.com/bgoussen/BeeGUTS/blob/dev-docs/docs/home.md)
+
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
@@ -49,11 +63,11 @@ library(BeeGUTS)
 file_location <- system.file("extdata", "betacyfluthrin_chronic_ug.txt", package = "BeeGUTS") # Load the path to one of the example file
 lsData <- dataGUTS(file_location = file_location, test_type = 'Chronic_Oral', cstConcCal = FALSE) # Read the example file
 plot(lsData) # Plot the data
-fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 3000) # Fit a SD model. This can take some time...
+fit <- fitBeeGUTS(lsData, modelType = "SD", nIter = 3000, nChains = 1) # Fit a SD model. This can take some time...
 traceplot(fit) # Produce a diagnostic plot of the fit
 plot(fit) # Plot the fit results
 summary(fit) # Gives a summary of the results
-validation <- validate(fit, lsData) # produce a validation of the fit (here it uses the same dataset as calibration as an example, so not relevant…)
+validation <- validate(fit, lsData, fithb = TRUE) # produce a validation of the fit after refitting background mortality from the control data (here it uses the same dataset as calibration as an example, so not relevant…)
 plot(validation) # plot the validation results
 dataPredict <- data.frame(time = c(1:5, 1:15), conc = c(rep(5, 5), rep(15, 15)),  replicate = c(rep("rep1", 5), rep("rep3", 15))) # Prepare data for forwards prediction
 prediction <- predict(fit, dataPredict) # Perform forwards prediction. At the moment, no concentration recalculation is performed in the forwards prediction. The concentrations are taken as in a chronic test

@@ -53,9 +53,12 @@ LCx.beeSurvFit <- function(object,
                            concRange = NULL,
                            nPoints = 100,
                            ...) {
+
+  # library(doParallel)
+  # how to do this properly?? is it enough to have imports in BeeGUTS-package.R
   # Check for correct class
   if (!is(object,"beeSurvFit")) {
-    stop("predict.beeSurvFit: an object of class 'beeSurvFit' is expected")
+    stop("LCx.beeSurvFit: an object of class 'beeSurvFit' is expected")
   }
 
   # Set concentration range to test
@@ -100,42 +103,60 @@ LCx.beeSurvFit <- function(object,
     stop("Wrong model type. Model type should be 'SD' or 'IT'")
   }
 
+  # start the parallel cluster
+  chcr <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+  if (nzchar(chcr) && chcr == "TRUE") {
+    # this is needed in order to pass CRAN checks
+    # use 2 cores in CRAN/Travis/AppVeyor
+    ncores <- 2L
+  } else {
+    # use all cores in devtools::test()
+    ncores = parallel::detectCores(logical = FALSE)-1L
+  }
+  cl <- parallel::makeCluster(mc <- getOption("cl.cores",ncores))
+  doParallel::registerDoParallel(cl)
+
   # Perform predictions using the odeGUTS package
-  k <- 1:length(concRange)
+  # binding the results with cbind can become a bottleneck for large values of
+  # elements, but for this case it is pretty safe to use
   if(testType == "Chronic_Oral") {
-    dtheo <- lapply(k, function(kit) { # conc
-      tmp <- odeGUTS::predict_ode(morseObject, data.frame(time = c(0,timeLCx),
-                                                          conc = concRange[kit],
-                                                          replicate = "rep")
-      )
-      tmp <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
-    })
-  } else if(testType == "Acute_Oral") {
+    dtheo <- foreach::foreach(i=1:length(concRange),.combine="cbind") %dopar% {
+      tmp = odeGUTS::predict_ode(morseObject, data.frame(time = c(0,timeLCx),
+                                                conc = concRange[i],
+                                                replicate = "rep"))
+      val <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
+      list(val)
+    }
+    parallel::stopCluster(cl)
+    } else if(testType == "Acute_Oral") {
     warning("Calculating LCx for 'Acute_Oral' reconstructed concentrations is
             not in line with guidelines and might not make sense. Prefer to use
             'Chronic_Oral' for the accepted way of calculating LCx")
-    dtheo <- lapply(k, function(kit) { # conc
-      tmpConc <- concAO(as.data.frame(concRange[kit]), expTime = timeLCx, ...)
-      tmp <- odeGUTS::predict_ode(morseObject, data.frame(time = tmpConc[,1],
-                                                          conc = tmpConc[,2],
-                                                          replicate = rep("rep", nrow(tmpConc)))
-      )
-      tmp <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
-    })
+      dtheo <- foreach::foreach(i=1:length(concRange),.combine="cbind") %dopar% {
+        tmpConc <- concAO(as.data.frame(concRange[i]), expTime = timeLCx, ...)
+        tmp = odeGUTS::predict_ode(morseObject, data.frame(time = tmpConc[,1],
+                                                           conc = tmpConc[,2],
+                                                           replicate = "rep", nrow(tmpConc)))
+        val <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
+        list(val)
+      }
+      parallel::stopCluster(cl)
   } else if(testType == "Acute_Contact") {
     warning("Calculating LCx for 'Acute_Contact' reconstructed concentrations is
             not in line with guidelines and might not make sense. Prefer to use
             'Chronic_Oral' for the accepted way of calculating LCx")
-    dtheo <- lapply(k, function(kit) { # conc
-      tmpConc <- concAC(as.data.frame(concRange[kit]), expTime = timeLCx, ...)
-      tmp <- odeGUTS::predict_ode(morseObject, data.frame(time = tmpConc[,1],
-                                                          conc = tmpConc[,2],
-                                                          replicate = rep("rep", nrow(tmpConc)))
-      )
-      tmp <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
-    })
+    dtheo <- foreach::foreach(i=1:length(concRange),.combine="cbind") %dopar% {
+      tmpConc <- concAC(as.data.frame(concRange[i]), expTime = timeLCx, ...)
+      tmp = odeGUTS::predict_ode(morseObject, data.frame(time = tmpConc[,1],
+                                                         conc = tmpConc[,2],
+                                                         replicate = "rep", nrow(tmpConc)))
+      val <- tmp$df_quantile[tmp$df_quantile[,"time"] == timeLCx,]
+      list(val)
+    }
+    parallel::stopCluster(cl)
   } else {
-    stop("You need to specifiy a correct data 'test_type' amongst 'Acute_Oral', 'Acute_Contact', or 'Chronic_Oral'.")
+    stop("You need to specifiy a correct data 'test_type' amongst 'Acute_Oral',
+         'Acute_Contact', or 'Chronic_Oral'.")
   }
 
   dtheo <- do.call(rbind.data.frame, dtheo)

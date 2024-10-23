@@ -11,21 +11,41 @@ bee species. It can be used to fit a Toxicokinetic-Toxicodynamic (TKTD) model
 adapted for bee standard studies (acute oral, acute contact, and chronic oral studies).
 The TKTD model used is the General Unified Threshold model of Survival (GUTS).
 
-The package follows the concept and assumptions presented in Baas et al (submitted)
+The package follows the concept and assumptions presented in Baas et al. (2022)
 }
 \references{
-Baas, J., Goussen, B., Miles, M., Preuss, T.G., Roessing, I. (submitted).
-BeeGUTS – new integrative TKTD model for honey bees approach moving from single point estimates of toxicity and exposure to a holistic link between exposure and effect.
+Baas, J., Goussen, B., Taenzler, V., Roeben, V., Miles, M., Preuss,
+T.G., van den Berg, S. and Roessink, I. (2024), Comparing Sensitivity
+of Different Bee Species to Pesticides: A TKTD modeling approach.
+Environ Toxicol Chem, 43: 1431-1441.
+\doi{10.1002/etc.5871}
 
-Jager, T., Albert, C., Preuss, T.G. and Ashauer, R. (2011). General Unified Threshold model of Survival - a toxicokinetic-toxicodynamic framework for ecotoxicology.
+Baas, J., Goussen, B., Miles, M., Preuss, T.G., Roessing, I. (2022).
+BeeGUTS—A Toxicokinetic–Toxicodynamic Model for the Interpretation and
+Integration of Acute and Chronic Honey Bee Tests.
+\doi{10.1002/etc.5423}
+
+Jager, T., Albert, C., Preuss, T.G. and Ashauer, R. (2011). General Unified
+Threshold model of Survival - a toxicokinetic-toxicodynamic framework for ecotoxicology.
 \doi{10.1021/es103092a}
 
-Jager, T. and Ashauer, R. (2018). Modelling survival under chemical stress. A comprehensive guide to the GUTS framework. Version 1.0
+Jager, T. and Ashauer, R. (2018). Modelling survival under chemical stress.
+A comprehensive guide to the GUTS framework. Version 1.0
 \url{https://leanpub.com/guts_book}
 
-EFSA PPR Scientific Opinion (2018). Scientific Opinion on the state of the art of Toxicokinetic/Toxicodynamic (TKTD) effect models for regulatory risk assessment of pesticides for aquatic organisms.
+EFSA PPR Scientific Opinion (2018). Scientific Opinion on the state of the
+art of Toxicokinetic/Toxicodynamic (TKTD) effect models for regulatory risk
+assessment of pesticides for aquatic organisms.
 \url{https://www.efsa.europa.eu/en/efsajournal/pub/5377}
 
-Stan Development Team (2020). RStan: the R interface to Stan. R package version 2.21.2.
+EFSA (European Food Safety Authority), Adriaanse P, Arce A, Focks A,
+Ingels B, Jölli D, Lambin S, Rundlöf M, Süßenbach D, Del Aguila M, Ercolano V,
+Ferilli F, Ippolito A, Szentes Cs, Neri FM, Padovani L, Rortais A,
+Wassenberg J and Auteri D, (2023). Revised guidance on the risk assessment
+of plant protection products on bees (Apis mellifera, Bombus spp. and
+solitary bees). EFSA Journal \doi{10.2903/j.efsa.2023.7989}
+
+Stan Development Team (2020). RStan: the R interface to Stan. R package
+version 2.21.2.
 \url{https://mc-stan.org}
 }

@@ -18,8 +18,8 @@
 #'  the computation. \code{mcmc_size} is the number of selected iterations for one chain. Default
 #'  is 1000. If all MCMC is wanted, set argument to \code{NULL}.
 #'  \code{hb_value  = FALSE} the background mortality \code{hb} is set to a fixed value.
-#' If \code{TRUE}, parameter \code{hb} taken from the posterior (only works if
-#' one \code{hb} value was estimated. The default is \code{FALSE}.
+#' If \code{TRUE}, parameter \code{hb} taken from the posterior (If more than one dataset
+#' is present, use the optional argument hb_dataset to specify which hb to use). The default is \code{FALSE}.
 #'  \code{hb_valueFORCED  = 0} hb_valueFORCED If \code{hb_value} is \code{FALSE}, it fix \code{hb}. The default is \code{0}
 #'
 #' @return A \code{beeSurvPred} object containing the results of the forwards prediction
@@ -91,10 +91,19 @@ predict.beeSurvFit <- function(object,
       }
     } else if (hb_value == TRUE) {
 
-      ## TODO Need to include a check for hb_log10 length == 1
+      if (object$data$nDatasets>1){
+        if (!exists(hb_dataset)){
+          stop("There are multiple datasets in the calibration results.
+               Provide the dataset from which to take the hb value using the
+               argument `hb_dataset` inside the function call
+               (e.g. hb_dataset = 1).")
+        }
+        ndata = hb_dataset # additional parameter to be passed to the function
+        parhb = paste0("hb_log10[",ndata,"]")
+      }
 
       if(object$modelType == "SD"){
-        morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "zw_log10", "bw_log10")),
+        morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c(parhb, "kd_log10", "zw_log10", "bw_log10")),
                             model_type = object$modelType)
         class(morseObject) <- "survFit"
 
@@ -102,7 +111,7 @@ predict.beeSurvFit <- function(object,
           colnames(morseObject$mcmc[[i]]) <- c("hb_log10", "kd_log10", "z_log10", "kk_log10")
         }
       } else if(object$modelType == "IT") {
-        morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c("hb_log10", "kd_log10", "mw_log10", "beta_log10")),
+        morseObject <- list(mcmc = rstan::As.mcmc.list(object$stanFit, pars = c(parhb, "kd_log10", "mw_log10", "beta_log10")),
                             model_type = object$modelType)
         class(morseObject) <- "survFit"
 

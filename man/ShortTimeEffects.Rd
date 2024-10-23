@@ -5,15 +5,23 @@
 \title{Perform comparison between LLD50 at 2 days and at 10 days
 as for EFSA revised guideline (2023) - Section 6.6}
 \usage{
-ShortTimeEffects(object, concRange = NULL, fullcalculation = FALSE)
+ShortTimeEffects(
+  object,
+  fullcalculation = FALSE,
+  concRange = NULL,
+  nPoints = NULL
+)
 }
 \arguments{
 \item{object}{An object used to select a method}
 
-\item{concRange}{Argument of LCx, range of concentrations to find LDD50}
-
 \item{fullcalculation}{Compute the LDD50 from day 1 to day 10 of the Chronic test.
 This can increase the computation time}
+
+\item{concRange}{Argument of LCx, range of concentrations to find LDD50}
+
+\item{nPoints}{Argument of LCx, Number of time point in \code{concRange} between 0 and the
+maximal concentration. 100 by default.}
 }
 \value{
 A object of class \code{ggplot} containing the graph of the comparison
