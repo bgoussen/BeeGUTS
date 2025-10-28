@@ -5,7 +5,7 @@ Authors@R:
     c(
     person(given = "Benoit",
            family = "Goussen",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "benoit.goussen@ibacon.com",
            comment = c(ORCID = "0000-0001-7204-7981")),
     person(given = "Liubov",
@@ -14,10 +14,10 @@ Authors@R:
            email = "liubov.zakharova@ibacon.com"),
     person(given = "Romoli",
            family = "Carlo",
-           role = c("ctb"),
+           role = c("aut", "cre"),
            email = "carlo.romoli@ibacon.com"),
     person("Bayer AG",
-           role = "cph"),
+           role = c("cph", "fnd")),
     person("ibacon GmbH",
            role = "cph")
      )
